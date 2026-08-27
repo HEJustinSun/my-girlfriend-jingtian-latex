@@ -1,0 +1,3 @@
+interface:
+  display_name: "Inspect PDF"
+  short_description: "Check the rendered book for PDF regressions"
