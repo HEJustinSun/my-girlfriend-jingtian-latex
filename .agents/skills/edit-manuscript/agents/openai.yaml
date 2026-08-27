@@ -1,0 +1,3 @@
+interface:
+  display_name: "Edit Manuscript"
+  short_description: "Edit Chinese prose safely in the TeX manuscript"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Build XeLaTeX"
+  short_description: "Compile and troubleshoot the XeLaTeX book"
