@@ -1,3 +1,5 @@
+![封面图](figs/Introduction.png)
+
 # 我的女友景甜
 
 这是一个 5 x 8 英寸的 XeLaTeX 排版工程。
