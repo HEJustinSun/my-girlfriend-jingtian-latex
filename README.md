@@ -10,4 +10,5 @@
 mkdir -p build
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
+cp build/main.pdf ./我的女友景甜.pdf
 ```
