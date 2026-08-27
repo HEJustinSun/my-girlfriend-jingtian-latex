@@ -11,3 +11,7 @@ mkdir -p build
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 ```
+
+## 网页版本
+
+`my-girlfriend-jingtian/` 目录包含与 aPaper 网页版对应的静态阅读页面，可直接作为静态站点目录发布。
