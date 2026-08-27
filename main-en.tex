@@ -1,0 +1,675 @@
+% !TEX program = xelatex
+% XeLaTeX source for the English 5 x 8 inch edition.
+\documentclass[10pt,twoside,openany]{book}
+
+\usepackage{geometry}
+\geometry{
+  paperwidth=5in,
+  paperheight=8in,
+  top=0.7in,
+  bottom=0.7in,
+  inner=0.5in,
+  outer=0.5in,
+  headheight=10pt,
+  headsep=20pt,
+  footskip=25.2pt
+}
+\addtolength{\textheight}{-12pt}
+
+\usepackage{fontspec}
+\usepackage[american]{babel}
+\usepackage{setspace}
+\usepackage{microtype}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont[
+  BoldFont=lmroman10-bold.otf,
+  ItalicFont=lmroman10-italic.otf,
+  BoldItalicFont=lmroman10-bolditalic.otf
+]{lmroman10-regular.otf}
+\setsansfont[
+  BoldFont=lmsans10-bold.otf,
+  ItalicFont=lmsans10-oblique.otf,
+  BoldItalicFont=lmsans10-boldoblique.otf
+]{lmsans10-regular.otf}
+\newfontfamily\SeparatorFont{lmroman10-regular.otf}
+
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage[unicode=true,hidelinks]{hyperref}
+\definecolor{PrimaryInk}{HTML}{161618}
+\definecolor{SecondaryInk}{HTML}{5C5C62}
+\definecolor{CoverAccent}{HTML}{E4002B}
+\color{PrimaryInk}
+\hypersetup{
+  pdftitle={My Girlfriend Jing Tian},
+  pdfauthor={Justin Sun},
+  pdfsubject={English translation, 5 x 8 inch XeLaTeX edition},
+  pdflang={en-US}
+}
+
+% Body paragraphs begin flush with the text block.
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\topskip}{10pt}
+\setlength{\emergencystretch}{1em}
+\renewcommand{\baselinestretch}{1}
+\frenchspacing
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\raggedbottom
+
+\fancypagestyle{bodyrunning}{
+  \fancyhf{}
+  \fancyhead[LO]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}My Girlfriend Jing Tian}
+  \fancyhead[RO]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
+  \fancyhead[LE]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
+  \fancyhead[RE]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}My Girlfriend Jing Tian}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\fancypagestyle{bodyopening}{
+  \fancyhf{}
+  \fancyfoot[C]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\newcommand{\BodySingleLeading}{17.3076923}
+\newcommand{\StoryParagraph}[2]{%
+  \begingroup
+  \rmfamily
+  \setstretch{1.3}%
+  \fontsize{9.5}{\BodySingleLeading}\selectfont
+  #2\par
+  \vspace{#1pt}
+  \endgroup
+}
+
+\newcommand{\NarrativeBreak}{%
+  \par\penalty10000
+  \vspace{37.4pt}
+  \noindent\hbox to \textwidth{\hfil\SeparatorFont\setstretch{1.3}\fontsize{9.5}{\BodySingleLeading}\selectfont\char"002D\kern0.12em\char"002D\kern0.12em\char"002D\hfil}\par
+  \vspace{31.4pt}
+  \penalty10000
+}
+
+\newcommand{\UnprintedPause}{%
+  \par\penalty10000\vspace{22pt}\penalty10000
+}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+\input{assets/cover-en.tex}
+
+\hypersetup{pageanchor=true}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{bodyrunning}
+\thispagestyle{bodyopening}
+% Opening-page breathing room.
+\vspace*{70.817pt}
+
+\StoryParagraph{3}{The weight of a single ovum: 3.5 micrograms.}
+
+\StoryParagraph{3}{The weight of fifty million dollars in cash: 2.5 tons.}
+
+\StoryParagraph{3}{On the phone from Montage Laguna Beach, Jing Tian asked me for the latter, with the former as collateral.}
+
+\StoryParagraph{3}{She had gone there to have her eggs retrieved. The baby, to be carried by a surrogate, was expected in 2027. If things moved quickly enough, it could still be born in the Year of the Horse. She was the one who brought it up. At the clinic, she said: no fifty million, no retrieval.}
+
+\UnprintedPause
+
+
+\StoryParagraph{0}{Montage Laguna Beach sits on a sea cliff above the Pacific. We booked out the entire floor---thirty days, one million dollars---for her privacy. She left after eight days.}
+
+\StoryParagraph{0}{For the remaining twenty-two days, the hotel's housekeepers kept going up every day as usual. My assistant told me about it. She saw it once when she went back to hand over the key: a Mexican woman pushing a cart, going from room to room, changing the towels, wiping down the counters, tucking in the sheets, stepping back out, and pulling each door shut behind her. Two hours to do the entire floor.}
+
+\StoryParagraph{0}{My assistant asked her why she still did it when no one was staying there.}
+
+\StoryParagraph{0}{She said the register showed someone was.}
+
+\StoryParagraph{0}{A Versailles that had lost its queen.}
+
+\StoryParagraph{0}{It struck me then that Jing Tian liked this. Jing Tian liked a place to stand empty because of her. Nothing happening.}
+
+\StoryParagraph{3}{Empty along with Montage Laguna Beach was a Gulfstream G700, sitting awkwardly at Van Nuys while its crew reported for duty every day as usual.}
+
+\StoryParagraph{3}{On the eighth day, she made that call. No one saw her again after that.}
+
+\NarrativeBreak
+
+
+\StoryParagraph{0}{By 2007, someone was already burning money for her. That was the year I had just started at Peking University.}
+
+\StoryParagraph{3}{Of course, the one burning money was not me.}
+
+\StoryParagraph{3}{QQ popped up a window with her as the spokesperson. It was on that old Lenovo IBM machine, the resolution a blur. I saved the image.}
+
+\StoryParagraph{3}{In my Peking University dorm, where a year's rent was one thousand yuan, I went online, found her on Xiaonei, and sent a friend request. Xiaonei made you add a message. I wrote and deleted, deleted and rewrote, for about forty minutes. In the end I sent: ``Hello.''}
+
+\StoryParagraph{3}{She did not accept.}
+
+\StoryParagraph{3}{Maybe she had never used Xiaonei at all.}
+
+\StoryParagraph{3}{In the years that followed, whatever I did, I kept thinking about one question: how far would I have to get before she accepted? I thought about it at my first billion. I thought about it at ten billion.}
+
+\StoryParagraph{3}{Eventually I stopped thinking about it. Renren had gone bust years before.}
+
+\StoryParagraph{3}{I never sent a second request.}
+
+\StoryParagraph{3}{In 2011, Beijing was cold. I bought a down jacket for 150 yuan. I remember the price because I hesitated for three days.}
+
+\StoryParagraph{3}{That same year she starred in a 150-million-yuan film, \textit{The Warring States}. Sun Honglei, Francis Ng, Kim Hee-sun, Kiichi Nakai, and Jiang Wu had been brought in as supporting scenery, just like Montage Laguna Beach and the Gulfstream G700 nineteen years later. They had no idea why they were there. They had come all that way, so surely something had to happen. Nothing did.}
+
+\StoryParagraph{3}{Then came \textit{The Great Wall}, at 150 million dollars. Zhang Yimou. Andy Lau. Matt Damon. Then Jackie Chan. The roster of the Jing Tian universe kept growing.}
+
+\StoryParagraph{3}{I was already in the United States by then, studying, starting a company, getting busier and busier. The only thing that never changed was that every time I switched devices, no matter how much trouble it took, I transferred that QQ image.}
+
+\StoryParagraph{3}{Nineteen years later, my name joined the list.}
+
+\NarrativeBreak
+
+\StoryParagraph{3}{We met for the first time at Rosewood Hong Kong. I had always thought I would be nervous the day I met her.}
+
+\StoryParagraph{3}{I was not.}
+
+\StoryParagraph{3}{She was thinner than in the photos, casually dressed, leaning back on a sofa. I looked at her and suddenly could not remember what exactly I had been waiting for.}
+
+\StoryParagraph{3}{I took her to see Cattelan's banana. She looked at it for a long time, then asked me, ``How much is this?''}
+
+\StoryParagraph{3}{Six point two million dollars.}
+
+\StoryParagraph{3}{She said, ``What happens when it rots?''}
+
+\StoryParagraph{3}{I said nothing. She said, ``Forget it. Let's go see a movie.''}
+
+\StoryParagraph{3}{I said, ``Okay.''}
+
+\StoryParagraph{3}{She said no one but the two of us could be in the auditorium.}
+
+\StoryParagraph{3}{I said, ``Okay.''}
+
+\StoryParagraph{3}{I went out to make a phone call. When I came back, she was still standing in front of the banana.}
+
+\StoryParagraph{3}{The movie was \textit{Zootopia 2}.}
+
+\StoryParagraph{3}{A screening room for two. That kind of setup is usually reserved for the Central Propaganda Department reviewing a film.}
+
+\StoryParagraph{3}{I had my assistant buy every seat in the theater.}
+
+\StoryParagraph{3}{I had read articles attacking fake box office numbers: all the tickets sold, only two people in the theater. Now I understood. Maybe it was not always about the box office.}
+
+\StoryParagraph{3}{Buying out all the seats was not hard. The trouble was the tickets already sold. My assistants and bodyguards arrived early and waited at the entrance. Whenever someone with a ticket showed up, they handed them cash.}
+
+\StoryParagraph{3}{A couple arrived with their child. The child was already at the door, holding a tub of popcorn high in the air.}
+
+\StoryParagraph{3}{An assistant held out a wad of cash. The child did not understand why they could not go in. The parents took the money, said thank you, asked nothing, and left.}
+
+\StoryParagraph{3}{Twenty-six people took the money that day.}
+
+\StoryParagraph{3}{After the movie, she changed her WeChat profile picture to Officer Judy Hopps.}
+
+\StoryParagraph{3}{That night I fondled her tits with my hand. She pushed me away.}
+
+\StoryParagraph{3}{I thought she did not want me to. I pulled my hand back and was about to say something.}
+
+\StoryParagraph{3}{She said nothing. She sat up, dug a little pouch out of her bag, and unzipped it. Inside was a row of things like a miniature set of tools.}
+
+\StoryParagraph{3}{She said, ``Your nails hurt me.''}
+
+\StoryParagraph{3}{I looked. I had always just clipped them any old way with nail clippers. The edges were sharp. Normally I never noticed.}
+
+\StoryParagraph{3}{She said, ``Come here.''}
+
+\StoryParagraph{3}{She placed my hand on her lap and filed each nail one by one.}
+
+\StoryParagraph{3}{First the coarse side. When she was done with that, she changed sides, then changed sides again. Every so often she held a finger up to the light, looked, and went on filing.}
+
+\StoryParagraph{3}{I asked, ``How long is this going to take?''}
+
+\StoryParagraph{3}{She said, ``Until they stop scratching people.''}
+
+\StoryParagraph{3}{Ten fingers. It took her almost an hour.}
+
+\StoryParagraph{3}{As she worked, she taught me: this side shapes, this side buffs, and with the last side, do not rub back and forth. Go in one direction.}
+
+\StoryParagraph{3}{I said, ``Okay.''}
+
+\StoryParagraph{3}{When she was done, she turned my hand over, looked at it, and ran her fingers across it.}
+
+\StoryParagraph{3}{She said, ``All right.''}
+
+\StoryParagraph{3}{``Go ahead. Touch wherever you want.''}
+
+\StoryParagraph{3}{At one point she said something. She said, ``If one day I'm gone, no one will ever buff your nails for you again.''}
+
+\StoryParagraph{3}{I smiled. I said nothing.}
+
+\StoryParagraph{0}{Three months after I met her, I had someone put together a file. Her projects over the years, business partners, equity holdings, Jing Guoqing, Tian Xin'ai, all the related accounts, the place rented in Beijing, the place bought in Shanghai, and some other things. It took a week. Forty-some pages in all. There were things about men and women, too. I thought those mattered least.}
+
+\StoryParagraph{0}{Some things in it she later told me about. What she told me was not quite the same as what was written there. I said nothing.}
+
+\StoryParagraph{0}{Some things she never told me. I never asked.}
+
+\StoryParagraph{0}{I believed everything she said.}
+
+\StoryParagraph{0}{I kept that file. I still have it.}
+
+\StoryParagraph{3}{But I did not believe a word.}
+
+\NarrativeBreak
+
+\StoryParagraph{3}{She said, ``Hong Kong is too crowded. People will recognize me. Let's go somewhere.''}
+
+\StoryParagraph{3}{I said, ``Okay.''}
+
+\StoryParagraph{3}{She pointed to Tenerife on the map.}
+
+\StoryParagraph{3}{I said, ``Okay.''}
+
+\StoryParagraph{3}{I went out to make a phone call. It was only when I came back that I learned the place was in the Atlantic, off the northwest coast of Africa. At noon the next day, our party of thirty set off. An A330 was waiting at the airport.}
+
+\StoryParagraph{3}{In the plane's bedroom, she asked me, ``Does my name sound nice?''}
+
+\StoryParagraph{3}{I said, ``It does.''}
+
+\StoryParagraph{3}{She said, ``It's my dad's surname and my mom's surname put together. Isn't that a funny coincidence?''}
+
+\StoryParagraph{3}{I said, ``I remembered it the very first day.''}
+
+\StoryParagraph{3}{She put her arms around me and said, ``Don't call me Jing Tian anymore. Call me Mommy.''}
+
+\StoryParagraph{3}{``Okay, Mommy.''}
+
+\StoryParagraph{3}{After we landed, the captain came over and told me, ``Boss, the island wouldn't let us land at first. They'd never seen a private jet this big.''}
+
+\StoryParagraph{3}{The rules on the island were the same: no one could be around us. My assistants took care of it. No one asked why. This time I did not ask how many.}
+
+\StoryParagraph{3}{The Ritz-Carlton faced the Atlantic, its floor-to-ceiling windows too large. She could not sleep with even a trace of light. The assistants covered the entire room in black tape. Outside was bright daylight; inside was dark as solitary confinement. The tape peeled off in the sun and had to be reapplied every day.}
+
+\StoryParagraph{3}{There were eleven assistants in all. They arrived at 6:30 every morning and did not leave until after we fell asleep. Two girls handled the tape: one took the window frames; the other, the indicator lights on the air conditioner and outlets. When they finished, they checked everything three times. They bought thirty rolls of tape, then another twenty. They found that tape applied after three in the afternoon came off most easily because the glass was hottest then, so they switched to mornings. No one taught them this. They figured it out themselves. They discussed it as if it were a craft.}
+
+\StoryParagraph{3}{She knew those two girls' names. I did not.}
+
+\StoryParagraph{3}{We stopped by the roadside in Teide National Park to watch the sunset. The assistants unloaded roses from the car and opened champagne.}
+
+\StoryParagraph{3}{Mommy looked out over the sea of clouds and said, ``Beautiful. But not as beautiful as the sunset in Delingha, Qinghai.''}
+
+\StoryParagraph{3}{I am from Qinghai.}
+
+\StoryParagraph{3}{I did not say so.}
+
+\StoryParagraph{3}{At night we watched the stars from the mountaintop. We were in padded coats and still cold.}
+
+\StoryParagraph{3}{Mommy said, ``Make a wish.''}
+
+\StoryParagraph{3}{I asked, ``What did you wish for?''}
+
+\StoryParagraph{3}{Mommy said, ``I'm not telling.''}
+
+\StoryParagraph{3}{Mommy said, ``It's so beautiful. But it's just too cold. Can we go to the Maldives?''}
+
+\StoryParagraph{3}{I said, ``All right.''}
+
+\StoryParagraph{3}{It was fifteen degrees below zero in Tenerife and twenty-seven above in the Maldives. Nine thousand five hundred kilometers apart in a straight line. An eleven-hour flight. But the airport in the Maldives was too small, so partway there we had to switch from our wide-body jet to a smaller plane.}
+
+\StoryParagraph{3}{Mommy said, ``Small planes are so loud. Big planes are better.''}
+
+\StoryParagraph{3}{In the bedroom on the plane to the Maldives, Mommy told me her wish had been to have a child with me. It had to be through surrogacy.}
+
+\StoryParagraph{3}{I never asked why. I thought she was afraid of pain.}
+
+\StoryParagraph{3}{Midflight, Mommy suddenly sat up and searched for her phone. She connected to Starlink and said, ``Oh no.''}
+
+\StoryParagraph{3}{I asked, ``What is it?''}
+
+\StoryParagraph{3}{She said, ``Someone is threatening me. He's been after me for three days, and I haven't answered.''}
+
+\StoryParagraph{3}{I said, ``How much do they want?''}
+
+\StoryParagraph{3}{She said, ``You don't need to get involved.''}
+
+\StoryParagraph{3}{She typed for a long time, deleting and changing, changing and deleting. When she finished, she placed the phone facedown on her lap. A while later she turned it over to look again.}
+
+\StoryParagraph{3}{I asked who it was.}
+
+\StoryParagraph{0}{She said, ``Someone who used to work with me. Finance. Went to prison. Took the fall.''}
+
+\StoryParagraph{3}{``Now he's out, nowhere to go, and he insists on coming to me.''}
+
+\StoryParagraph{3}{I said, ``Then call the police and have him arrested.''}
+
+\StoryParagraph{3}{She looked at me. ``You don't understand.''}
+
+\StoryParagraph{3}{I said, ``Did you pay him?''}
+
+\StoryParagraph{3}{She said, ``Yes.''}
+
+\StoryParagraph{3}{``How much?''}
+
+\StoryParagraph{3}{``Eighty thousand.''}
+
+\StoryParagraph{3}{I said, ``That took you three days to think about?''}
+
+\StoryParagraph{3}{She said nothing.}
+
+\StoryParagraph{3}{She barely spoke for the rest of the day. She did not fall asleep until we landed.}
+
+\StoryParagraph{0}{Mommy's suitcase was the first thing to reach Soneva Jani. The luggage for thirty people would not fit on one small plane, so it was split among three. Mommy had only one suitcase. It got a plane of its own. She said not to put it with anyone else's.}
+
+\StoryParagraph{0}{Soneva Jani was famous for ``no news, no shoes.'' Mommy could relax.}
+
+\StoryParagraph{3}{The hotel butlers, bodyguards, and assistants totaled twenty-six, with another two drone operators following at a distance. The assistants started taping things up again: the light on the air conditioner, the lights on the outlets, over and over.}
+
+\StoryParagraph{0}{At night we traded stories of our exes like exchanging code words, like a dynasty cross-checking its era names. Mommy would tolerate no discrepancy. But Mommy had one forbidden word: the athlete was not to be mentioned.}
+
+\StoryParagraph{0}{I did not mention him, even though I knew the tattoo on Mommy's back had been for the athlete.}
+
+\StoryParagraph{3}{Maybe it was too big to remove.}
+
+\StoryParagraph{0}{She said, ``Now we're a family. It wasn't easy for my parents to raise me. You owe them a bride price.''}
+
+\StoryParagraph{0}{I said, ``Okay.''}
+
+\StoryParagraph{0}{She gave me two names, Jing Guoqing and Tian Xin'ai, and two account numbers.}
+
+\StoryParagraph{0}{Thirty million. Renminbi.}
+
+\StoryParagraph{0}{I wired it. I had first seen those two names in the forty-some pages.}
+
+\StoryParagraph{3}{A while later, she handed me her phone. Tian Xin'ai had replied with one word: Received.}
+
+\StoryParagraph{0}{Once Mommy said, ``Do you know what I think about when I ask for these things?''}
+
+\StoryParagraph{0}{I said, ``What?''}
+
+\StoryParagraph{0}{She said, ``I wonder if one day you'll say no.''}
+
+\StoryParagraph{0}{I said, ``I won't.''}
+
+\StoryParagraph{0}{She said, ``Then it's no fun.''}
+
+\StoryParagraph{3}{I thought, What could there possibly be that I could not do?}
+
+\StoryParagraph{0}{When I got too bored, I fiddled with the 2007 QQ image, trying to transfer it to a new device. Mommy leaned over. ``Why are you secretly keeping a picture of another woman? Who is this?''}
+
+\StoryParagraph{0}{I was silent. I said nothing.}
+
+\StoryParagraph{0}{The picture was too blurry, so she went off to do something else.}
+
+\StoryParagraph{0}{That night I deleted the image.}
+
+\StoryParagraph{3}{The next day I recovered it from an old phone.}
+
+\StoryParagraph{0}{Mommy kept scrolling on her phone, too. I asked what she was looking at.}
+
+\StoryParagraph{0}{She said, ``Nothing. Just all that bullshit about fighting over billing.''}
+
+\StoryParagraph{0}{Fighting over billing: a film can have only one star listed first. Even between the male and female leads, only one can come first.}
+
+\StoryParagraph{0}{I said, ``Boring.''}
+
+\StoryParagraph{0}{She said, ``Yeah. What makes it worse is that sometimes you get on-set couples. You're on a shoot for forty or fifty days, usually acting opposite one man. You have sex at night and fight over top billing during the day.''}
+
+\StoryParagraph{0}{I said, ``That's inhuman.''}
+
+\StoryParagraph{0}{She said, ``Yeah.''}
+
+\StoryParagraph{0}{``But once filming wraps, no matter how many times you had sex before, you act like none of it ever happened.''}
+
+\StoryParagraph{3}{Then she kept reading for another half hour.}
+
+\StoryParagraph{0}{A new year. On January 2, 2026, at Soneva Jani, I proposed to Mommy.}
+
+\StoryParagraph{0}{I had decided on the morning of January 1. The ring was in Hong Kong. There was nowhere on the island to buy one, so an assistant took a seaplane to Mal\'e. She came back that afternoon with the ring inside a hotel envelope.}
+
+\StoryParagraph{0}{Mommy said, ``The diamond is too small.''}
+
+\StoryParagraph{0}{Mommy said, ``It's fine. You can make it up with a bigger one later.''}
+
+\StoryParagraph{0}{``Also, can you come to Beijing?''}
+
+\StoryParagraph{0}{I was silent.}
+
+\StoryParagraph{0}{She thought I did not want to go.}
+
+\StoryParagraph{0}{Mommy said, ``Why are you so good to me?''}
+
+\StoryParagraph{0}{I said, ``Because I like you.''}
+
+\StoryParagraph{0}{She said, ``Were you like this with other people before?''}
+
+\StoryParagraph{0}{I said, ``No.''}
+
+\StoryParagraph{3}{She smiled and said nothing.}
+
+\StoryParagraph{0}{One morning I woke up early. She was not in bed.}
+
+\StoryParagraph{0}{I went outside and found her sitting on the terrace, facing the sea. The whole sea was black. No lights were on. Dawn had not come.}
+
+\StoryParagraph{0}{I asked why she was up so early.}
+
+\StoryParagraph{0}{She said, ``I'm counting the days.''}
+
+\StoryParagraph{0}{I said, ``Counting what?''}
+
+\StoryParagraph{0}{She said, ``Go back to sleep.''}
+
+\StoryParagraph{0}{I sat beside her for a while, not knowing what to say. Later I went back to sleep.}
+
+\StoryParagraph{3}{When I woke again, her makeup was already done.}
+
+\StoryParagraph{0}{In fourteen days in the Maldives, not one person recognized her.}
+
+\StoryParagraph{0}{On the thirteenth night, at the restaurant, she took off her sunglasses. After a while she took off her hat, too, and set it on the table. She sat through the entire meal that way. At the next table was an elderly German couple. The server was Sri Lankan. No one gave her a second look.}
+
+\StoryParagraph{0}{After dinner, she put her hat back on.}
+
+\StoryParagraph{0}{Mommy said, ``Let's go back.''}
+
+\StoryParagraph{0}{I said, ``Aren't we supposed to stay longer?''}
+
+\StoryParagraph{3}{She said, ``It's too quiet.''}
+
+\UnprintedPause
+
+\StoryParagraph{0}{Back in Hong Kong, Mommy met my parents.}
+
+\StoryParagraph{0}{That evening she said her family had to prepare for the meeting between our families and for the wedding. I should send as much as possible. Still Jing Guoqing and Tian Xin'ai.}
+
+\StoryParagraph{0}{I did not ask why.}
+
+\StoryParagraph{0}{I said, ``The daily limit on each card is one million.''}
+
+\StoryParagraph{0}{Mommy said, ``Too slow.''}
+
+\StoryParagraph{0}{``Use five cards.''}
+
+\StoryParagraph{0}{Five cards, two accounts, alternating between them. On the third card, I hesitated. I still finished all the transfers.}
+
+\StoryParagraph{3}{Mommy said, ``Too inefficient.''}
+
+\StoryParagraph{0}{I said, ``Let's bring all our parents to Hong Kong for the New Year and spend it together.''}
+
+\StoryParagraph{0}{Mommy said, ``We're already set to spend this year in Hainan. Next year.''}
+
+\StoryParagraph{0}{At Spring Festival, fireworks over Victoria Harbour drew a million people. She was not among them.}
+
+\StoryParagraph{0}{At three in the morning, I took my parents home.}
+
+\StoryParagraph{0}{The roads were empty. There was not another car waiting at the red light. I stopped anyway.}
+
+\StoryParagraph{0}{Mommy said we should not see each other for now. She was about to go to Los Angeles for the egg retrieval. She had things to finish first.}
+
+\StoryParagraph{0}{Mommy asked again, ``Can you come to Beijing?''}
+
+\StoryParagraph{0}{I was silent.}
+
+\StoryParagraph{3}{She never said what was in Beijing. I never asked.}
+
+\StoryParagraph{0}{Mommy said we had to buy a home in Hong Kong and put it in her name.}
+
+\StoryParagraph{0}{I said, ``All right.''}
+
+\StoryParagraph{3}{We did not see each other on Valentine's Day either.}
+
+\StoryParagraph{0}{Once, on the phone, she said, ``They drew eight tubes of blood this morning.''}
+
+\StoryParagraph{0}{I said, ``That many?''}
+
+\StoryParagraph{0}{She said, ``It was fine.''}
+
+\StoryParagraph{0}{I said, ``That must have been hard.''}
+
+\StoryParagraph{0}{Then we talked about something else.}
+
+\StoryParagraph{0}{Only later did I learn that for that kind of blood draw you had to fast. It had to be on the second or third day of the menstrual cycle; the day could not be wrong. She probably left around six that morning. Winter in Beijing. Still dark. More and more tests came later. I knew because a new line item appeared in my assistant's monthly payment summary. It first appeared last year. Not much, a few thousand yuan. After that it was there every month, sometimes two or three charges. I approved them quickly. Amounts like those did not require me to see the details. Only later did I learn they were blood draws, a six-hormone panel, ultrasounds, AMH. To see how much ovarian reserve she had left, how many eggs they could retrieve, whether it was worth continuing.}
+
+\StoryParagraph{0}{All of it was done in Beijing.}
+
+\StoryParagraph{3}{I do not know which hospital. I do not know whether she went alone or someone went with her.}
+
+\StoryParagraph{0}{On February 25, she landed in Hong Kong.}
+
+\StoryParagraph{0}{She said she would not go to Los Angeles unless she saw the home in Hong Kong first.}
+
+\StoryParagraph{0}{I sent her the dozen or so homes we had looked at over the past six months. She thought every one was ugly. I had not visited a single one. My assistants had spent six months going through them one by one. They sent them to me; I sent them to her. One was in the Mid-Levels. In the video you could see Victoria Harbour. It was filmed at dusk. For a moment the camera swayed and caught the shadow of the person filming on the wall. I looked at that shadow and thought: Who is this person? How far has he walked today? How many homes has he seen? Does he know who this one is being shown to?}
+
+\StoryParagraph{3}{There was too little time. She boarded the G700 for Los Angeles anyway and flew to Montage Laguna Beach on February 28.}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{On the eighth day, Mommy called. It was afternoon for her and the middle of the night for me.}
+
+\StoryParagraph{0}{She said, ``Fifty million. US dollars.''}
+
+\StoryParagraph{0}{I said, ``Let me think.''}
+
+\StoryParagraph{0}{She said nothing. I could hear the ocean where she was.}
+
+\StoryParagraph{0}{After a while she said, ``Okay.''}
+
+\StoryParagraph{0}{She hung up.}
+
+\StoryParagraph{3}{In all the time I had known her, I had never said ``let me think.''}
+
+\StoryParagraph{0}{I used Claude Code to query the APIs and run the numbers on all my cash holdings. The conclusion was that it would have no effect on me. I checked again. I typed the question into Claude Code. Claude said, ``Do not give her the fifty million dollars.''}
+
+\StoryParagraph{3}{I asked, ``Doesn't she love me anymore?''}
+
+\StoryParagraph{3}{Claude said, ``When it comes to love, I neither care nor understand. But you cannot give her the fifty million dollars.''}
+
+\StoryParagraph{3}{I had never refused her. Not from generosity. From fear. Fear of the answer in the next second.}
+
+\StoryParagraph{0}{And now someone had said it for me.}
+
+\StoryParagraph{0}{I stared at that line for a long time. What terrified me was not that Claude was intelligent. It was that Claude did not hesitate at all.}
+
+\StoryParagraph{0}{It was not conflicted.}
+
+\StoryParagraph{0}{I thought this must be some higher form of existence. Humans could not do it.}
+
+\StoryParagraph{3}{She did not love me anymore.}
+
+\StoryParagraph{3}{The next day she called back.}
+
+\StoryParagraph{3}{Mommy said, ``The ocean is so big.''}
+
+\StoryParagraph{3}{I said, ``Is it?''}
+
+\StoryParagraph{3}{She said, ``This floor is too big. It echoes. Someone came to clean this morning. I hid in the bathroom and waited for them to leave.''}
+
+\StoryParagraph{3}{I said, ``I can tell them not to come.''}
+
+\StoryParagraph{3}{She said, ``No need.''}
+
+\StoryParagraph{3}{She said, ``The clinic asked when the baby's father would arrive.''}
+
+\StoryParagraph{3}{I said, ``I can send someone over.''}
+
+\StoryParagraph{3}{She said, ``No need.''}
+
+\StoryParagraph{3}{Then she said, ``Have you decided?''}
+
+\StoryParagraph{3}{I did not speak. Not because I was thinking. I was not thinking about anything. On the phone there was the ocean at her end and Victoria Harbour at mine. Neither side spoke. I counted. Eleven seconds.}
+
+\StoryParagraph{3}{Jing Tian said, ``Fine.''}
+
+\StoryParagraph{3}{Jing Tian said, ``I understand.''}
+
+\StoryParagraph{3}{She hung up.}
+
+\StoryParagraph{3}{I have thought back countless times to what else she said in those two days besides fifty million. The ocean is so big. This floor is too big. She hid in the bathroom. That was all. I remember every word. What I cannot remember is her voice---the tone she used when she said, ``I understand.''}
+
+\StoryParagraph{0}{I cannot remember. Eventually I stopped trying.}
+
+\StoryParagraph{0}{I put the phone facedown on the nightstand. Then I did something I still do not understand: I put my hand on my chest and counted.}
+
+\StoryParagraph{0}{My heartbeat was steady.}
+
+\StoryParagraph{0}{I counted again. Still steady. A little over sixty beats a minute, no different from usual. I sat there with my hand pressed to my chest, like a doctor examining someone else.}
+
+\StoryParagraph{3}{I thought, So this is what it is like.}
+
+\StoryParagraph{0}{I did nothing for the rest of that day. I stayed in the room until it grew dark and then light again, watching Victoria Harbour turn from blue to gray to black. At six in the morning, the financial towers across the harbor began to light up one by one. An assistant knocked once to ask what to arrange for dinner. I said there was no need.}
+
+\StoryParagraph{3}{I did not cry. I kept waiting for myself to cry.}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{Later, when my assistant settled the accounts with me, one item was compensation for the hotel in Tenerife. After we left, the tape kept going up for several more days. No one told the girls they could stop. The hotel said it had been applied for too long, too many times. The residue on the window frame would not come off. The entire pane of glass had to be replaced.}
+
+\StoryParagraph{0}{I said, ``Approved.''}
+
+\StoryParagraph{3}{That pane of glass faced the Atlantic.}
+
+\StoryParagraph{0}{The aircraft fuel on the bill cost more than the entire floor at Montage. I asked about it. My assistant said the A330 was designed for two hundred people. With only thirty of us, it was too light, and the balance was wrong for takeoff. So every time, they had to add fuel until it was heavy enough. Once we arrived, the extra fuel could not be left aboard. It had to be dumped.}
+
+\StoryParagraph{0}{I said, ``Every time?''}
+
+\StoryParagraph{3}{He said, ``Every time.''}
+
+\StoryParagraph{0}{There was also a box sent back from the clinic in Los Angeles. Eight days of ovarian stimulation injections. They had to be refrigerated. Not one had been opened.}
+
+\StoryParagraph{3}{There was also the deposit for the surrogacy agency: two hundred thousand dollars, nonrefundable. The surrogate had been chosen in January. From California, thirty-four years old, two children. Her photograph was in the file. I never looked at it. She had been ready since January.}
+
+\StoryParagraph{3}{After Jing Tian left, I dug out the photograph from 2007 and looked at it once. Nineteen years had passed. The pixels in every device kept getting better, while the pixels in that image seemed to get worse. Her face was a blur. I enlarged it and looked for a long time, trying to find any difference between her then and her later self. I could not find a single one. The photograph had never been clear enough to see.}
+
+\StoryParagraph{0}{One day I clipped my nails. When I was done, I ran a finger over them. They were sharp.}
+
+\StoryParagraph{0}{I remembered that thing was still in the drawer, the one she had left behind.}
+
+\StoryParagraph{0}{I took it out and ran it across my nails twice. It didn't feel right. She had said to go in one direction. I had forgotten which direction.}
+
+\StoryParagraph{0}{I put it back.}
+
+\StoryParagraph{3}{My nails still scratch people.}
+
+\StoryParagraph{0}{One morning a reminder appeared on my phone. My assistant had set it the year before while arranging the schedule: three months before the due date, prepare the room.}
+
+\StoryParagraph{3}{I swiped it away.}
+
+\StoryParagraph{0}{Since she left, I have kept thinking about one question.}
+
+\StoryParagraph{0}{If I had given it to her that day, would she have stayed?}
+
+\StoryParagraph{0}{I thought about it for a long time.}
+
+\StoryParagraph{3}{Later I took out the file and read it again. Forty-some pages.}
+
+\StoryParagraph{0}{Then I remembered the fireworks over Victoria Harbour on the night of Spring Festival, seen from the top floor.}
+
+\StoryParagraph{0}{A million people surged in like the tide. The fireworks ended. A million people receded.}
+
+\StoryParagraph{0}{A million people.}
+
+\StoryParagraph{0}{Every year is the same.}
+
+\StoryParagraph{0}{Hong Kong at three in the morning---}
+
+\StoryParagraph{3}{Nothing happened.}
+
+\end{document}

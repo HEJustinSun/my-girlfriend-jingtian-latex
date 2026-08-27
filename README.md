@@ -11,3 +11,15 @@ mkdir -p build
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 ```
+
+## English edition
+
+The English edition is available in `main-en.tex`.
+
+Build the English edition with XeLaTeX:
+
+```bash
+mkdir -p build
+xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main-en.tex
+xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main-en.tex
+```
