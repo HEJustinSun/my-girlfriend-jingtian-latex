@@ -1,0 +1,445 @@
+% !TEX program = xelatex
+% XeLaTeX source for the 5 x 8 inch edition.
+\documentclass[10pt,twoside,openany]{book}
+
+\usepackage{geometry}
+\geometry{
+  paperwidth=5in,
+  paperheight=8in,
+  top=0.7in,
+  bottom=0.7in,
+  inner=0.5in,
+  outer=0.5in,
+  headheight=10pt,
+  headsep=20pt,
+  footskip=25.2pt
+}
+\addtolength{\textheight}{-12pt}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage{setspace}
+\usepackage{needspace}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont[Path=fonts/]{SourceHanSerifCN-Regular.otf}
+\setCJKmainfont[Path=fonts/]{SourceHanSerifCN-Regular.otf}
+\setsansfont[Path=fonts/]{SourceHanSansCN-Medium.otf}
+\setCJKsansfont[Path=fonts/]{SourceHanSansCN-Medium.otf}
+\newfontfamily\SeparatorFont{lmroman10-regular.otf}
+\xeCJKsetup{PunctStyle=plain}
+
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage[unicode=true,hidelinks]{hyperref}
+\definecolor{PrimaryInk}{HTML}{161618}
+\definecolor{SecondaryInk}{HTML}{5C5C62}
+\definecolor{CoverRed}{HTML}{DF0029}
+\color{PrimaryInk}
+\hypersetup{
+  pdftitle={我的爸爸孙宇晨},
+  pdfauthor={AI},
+  pdfsubject={5 x 8 inch XeLaTeX edition}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\topskip}{10pt}
+\renewcommand{\baselinestretch}{1}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\raggedbottom
+
+\fancypagestyle{bodyrunning}{
+  \fancyhf{}
+  \fancyhead[LO]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}我的爸爸孙宇晨}
+  \fancyhead[RO]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
+  \fancyhead[LE]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
+  \fancyhead[RE]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}我的爸爸孙宇晨}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\fancypagestyle{bodyopening}{
+  \fancyhf{}
+  \fancyfoot[C]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\newcommand{\BodySingleLeading}{17.3076923}
+\newcommand{\StoryParagraph}[2]{%
+  \begingroup
+  \rmfamily
+  \setstretch{1.3}%
+  \fontsize{9.5}{\BodySingleLeading}\selectfont
+  #2\par
+  \vspace{#1pt}
+  \endgroup
+}
+
+\newcommand{\NarrativeBreak}{%
+  \Needspace{125pt}%
+  \par\penalty10000
+  \vspace{37.4pt}
+  \noindent\hbox to \textwidth{\hfil\SeparatorFont\setstretch{1.3}\fontsize{9.5}{\BodySingleLeading}\selectfont\char"002D\kern0.12em\char"002D\kern0.12em\char"002D\hfil}\par
+  \vspace{31.4pt}
+  \penalty10000
+}
+
+\begin{document}
+
+\begin{titlepage}
+  \thispagestyle{empty}
+  \sffamily
+  \vspace*{0.18in}
+  {\color{CoverRed}\rule{0.9in}{2.2pt}}\par
+  \vspace{0.42in}
+  {\fontsize{34}{42}\selectfont\bfseries 我的爸爸\par}
+  \vspace{0.08in}
+  {\fontsize{34}{42}\selectfont\bfseries\color{CoverRed}孙宇晨\par}
+\end{titlepage}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{bodyrunning}
+\thispagestyle{bodyopening}
+\vspace*{70.817pt}
+
+\StoryParagraph{3}{一颗卵子的重量，三点五微克。}
+
+\StoryParagraph{3}{五千万美元现金的重量，两点五吨。}
+
+\StoryParagraph{3}{景甜去洛杉矶，是为了把我取出来。}
+
+\StoryParagraph{0}{医生交代过流程。麻醉以后，用一根针从阴道进去，把卵泡里的东西吸出来。二十分钟，不留伤口。}
+
+\StoryParagraph{0}{她只问醒来会不会疼。}
+
+\StoryParagraph{0}{会有一点。}
+
+\StoryParagraph{3}{她点头。那没什么。}
+
+\StoryParagraph{0}{第八天，她给孙宇晨打电话。没有五千万，不取。}
+
+\StoryParagraph{0}{那时候他还不是我爸爸。}
+
+\StoryParagraph{0}{我也还不是孩子。}
+
+\StoryParagraph{3}{不过他们已经替我定好了属相。}
+
+\StoryParagraph{0}{快一点的话，2027年出生，属马。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{景甜出生的时候，我已经在她身体里。}
+
+\StoryParagraph{0}{那时候我们很多，没人一个个数。}
+
+\StoryParagraph{0}{后来每个月少一些，医生开始使用“储备”这个词。}
+
+\StoryParagraph{3}{储备是现在不用，以后可能有用的东西。}
+
+\StoryParagraph{0}{她拍戏的时候我也在。}
+
+\StoryParagraph{0}{工作人员替她穿衣服、脱衣服，把粉扑按在她脸上，把灯照进她眼睛。导演喊开始，她去喜欢一个男人。导演喊停，她松开手，助理拿着外套过来。}
+
+\StoryParagraph{0}{收工以后，人很快走光。}
+
+\StoryParagraph{0}{她坐在化妆镜前卸睫毛。胶粘得紧，扯下来时眼皮会红。}
+
+\StoryParagraph{0}{我一直在里面。}
+
+\StoryParagraph{3}{没人需要我演什么。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{她认识孙宇晨以后，有一天晚上，他把手伸进她衣服。}
+
+\StoryParagraph{0}{她很快拿开了。}
+
+\StoryParagraph{3}{不是不让碰。指甲边缘有毛刺。}
+
+\StoryParagraph{0}{她从包里找出锉条，把他的手放在腿上，一根根修。先磨边缘，再换一面抛光。磨完摸一下，还是扎手，就继续。}
+
+\StoryParagraph{3}{一只可以转几千万的手，十根指甲弄了快一个小时。}
+
+\StoryParagraph{0}{中间孙宇晨想把手抽回去。}
+
+\StoryParagraph{0}{她按住了。}
+
+\StoryParagraph{3}{“别动。”}
+
+\StoryParagraph{0}{弄完以后，她把那只手重新放回原来的地方。}
+
+\StoryParagraph{0}{这次没有拿开。}
+
+\StoryParagraph{0}{后来她提到，如果有一天自己不在，就没人再替他弄这些了。}
+
+\StoryParagraph{0}{孙宇晨笑了一下。}
+
+\StoryParagraph{0}{她等了几秒。}
+
+\StoryParagraph{3}{他没有问她要去哪里。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{他们去了特纳里费。}
+
+\StoryParagraph{0}{她睡觉不能有光。助理用黑胶带贴住窗框、空调和插座。下午太阳晒过以后，胶带容易掉，每天早上都要重新贴。}
+
+\StoryParagraph{0}{夜里房间很黑。}
+
+\StoryParagraph{0}{她翻了几次身。}
+
+\StoryParagraph{0}{孙宇晨醒过一次，她闭着眼睛，呼吸放慢，像已经睡着。}
+
+\StoryParagraph{3}{第二天在飞机上，她把孩子和代孕提了出来，语气和临时改去马尔代夫差不多。}
+
+\StoryParagraph{0}{孙宇晨没有追问。}
+
+\StoryParagraph{0}{她也没有解释。}
+
+\StoryParagraph{0}{她不想怀孕。}
+
+\StoryParagraph{0}{但她想要孩子。}
+
+\StoryParagraph{0}{所以要先把我从身体里弄出来，和孙宇晨的精子放在一起，再送进另一个女人的身体。}
+
+\StoryParagraph{0}{他们做爱的时候不需要我。}
+
+\StoryParagraph{3}{真正要孩子时，做爱反而没有用。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{飞机落地以前，她抱着孙宇晨，让他以后叫自己妈妈。}
+
+\StoryParagraph{3}{“好，妈妈。”}
+
+\StoryParagraph{0}{那时候我就在她身体里。}
+
+\StoryParagraph{0}{我要是出生，也应该叫她妈妈。}
+
+\StoryParagraph{0}{我要叫孙宇晨爸爸。}
+
+\StoryParagraph{0}{孙宇晨还是叫她妈妈。}
+
+\StoryParagraph{0}{我和他叫的是同一个人。}
+
+\StoryParagraph{3}{只是他比我早叫了几个月。}
+
+\StoryParagraph{0}{后来她也叫他好大儿。}
+
+\StoryParagraph{0}{医院表格有一栏，孩子父亲与患者的关系。}
+
+\StoryParagraph{0}{她没有填好大儿。}
+
+\StoryParagraph{3}{填的是伴侣。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{代孕的人一月就定好了。}
+
+\StoryParagraph{0}{加州人，三十四岁，生过两个。}
+
+\StoryParagraph{0}{档案照片里，她穿蓝色连衣裙，站在一棵树前，手放在腰上。}
+
+\StoryParagraph{0}{景甜把照片放大，主要问了身高和前两次生产是否顺利。}
+
+\StoryParagraph{0}{答案都没有问题。}
+
+\StoryParagraph{0}{如果计划继续，我要在那个女人身体里住十个月。}
+
+\StoryParagraph{0}{出生以后，我不叫她妈妈。}
+
+\StoryParagraph{3}{合同里写了。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{在马尔代夫，孙宇晨向景甜求婚。}
+
+\StoryParagraph{0}{戒指装在酒店的信封里。她戴上看了很久，觉得钻石小，没有摘。}
+
+\StoryParagraph{0}{然后她问他能不能来北京。}
+
+\StoryParagraph{0}{孙宇晨沉默了。}
+
+\StoryParagraph{0}{那天她很早躺下，天没亮又一个人去了露台。}
+
+\StoryParagraph{0}{手机日历往后翻了几个月。数完一次，重新从头数。}
+
+\StoryParagraph{0}{孙宇晨出来时，她把屏幕锁上，让他回去睡。}
+
+\StoryParagraph{0}{她一个人坐到天亮。}
+
+\StoryParagraph{3}{回房间以后开始化妆。眼线画歪了一次，擦掉，重新画。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{北京的检查从早上六点开始。}
+
+\StoryParagraph{0}{需要空腹。}
+
+\StoryParagraph{0}{她抽了八管血。采血管一根根插进去，装满，拔下，再换下一根。到第六管时血流得慢，护士让她握拳。}
+
+\StoryParagraph{0}{检查结束，她在电话里提了一句八管血。}
+
+\StoryParagraph{0}{孙宇晨觉得多，说了句辛苦。}
+
+\StoryParagraph{0}{后面聊的是午饭。}
+
+\StoryParagraph{0}{电话挂断以后，她还按着针眼。}
+
+\StoryParagraph{0}{护士要求五分钟。}
+
+\StoryParagraph{3}{她按了十几分钟。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{后面的项目是激素六项、B超和AMH。}
+
+\StoryParagraph{0}{探头压下去，屏幕上出现几个黑色的圆。医生用鼠标测量，报左边几个，右边几个，哪个太小，哪个可以。}
+
+\StoryParagraph{0}{报告没有名字。}
+
+\StoryParagraph{0}{只有数量。}
+
+\StoryParagraph{0}{她想知道能取几个。}
+
+\StoryParagraph{0}{要看促排结果。}
+
+\StoryParagraph{0}{质量呢。}
+
+\StoryParagraph{0}{取出来才知道。}
+
+\StoryParagraph{3}{她没有再问。}
+
+\StoryParagraph{0}{离开医院时，她在便利店买了一瓶水。瓶盖拧了两次没有开。助理伸手过来，她避开了。}
+
+\StoryParagraph{3}{第三次拧开。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{2月28日，她到了蒙太奇拉古纳海滩。}
+
+\StoryParagraph{0}{酒店包下一整层。}
+
+\StoryParagraph{0}{每天晚上打针。}
+
+\StoryParagraph{0}{针从肚皮进去，药推得太快会疼。后面几针是她自己打的。捏起一块肉，推进去，停几秒，再拔出来。}
+
+\StoryParagraph{0}{针眼附近出现几块青色。}
+
+\StoryParagraph{0}{洗澡时，她会对着镜子按一按。}
+
+\StoryParagraph{3}{第八天，原来的裤子有些紧。她换了一条宽松的。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{那天早上，清洁工来打扫。}
+
+\StoryParagraph{0}{她躲进卫生间，没有开灯，也没有开水。}
+
+\StoryParagraph{0}{外面有人换毛巾，擦桌子，铺没有睡过的床。两个清洁工用西班牙语讲了什么，其中一个笑了一声。}
+
+\StoryParagraph{0}{她站在门后。}
+
+\StoryParagraph{0}{手机亮了两次。}
+
+\StoryParagraph{0}{她没有看。}
+
+\StoryParagraph{0}{等外面的门关上，她才出来，在床边坐下，拨通孙宇晨的电话。}
+
+\StoryParagraph{3}{“五千万，美元。”}
+
+\StoryParagraph{0}{对面停了一会儿。}
+
+\StoryParagraph{3}{“让我想想。”}
+
+\StoryParagraph{0}{她没有问要想多久。}
+
+\StoryParagraph{0}{电话挂断以后，下午的针剂照常送到。护士把冰袋和药放进冰箱。}
+
+\StoryParagraph{0}{到了注射时间，她打开冰箱看了一次。}
+
+\StoryParagraph{3}{没有打。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{第二天，她又打过去。}
+
+\StoryParagraph{0}{先提了海，又提了空荡荡的楼层和早上的清洁工。}
+
+\StoryParagraph{0}{诊所还在问孩子父亲什么时候到。}
+
+\StoryParagraph{0}{孙宇晨可以派人过去。}
+
+\StoryParagraph{0}{不是自己过去。}
+
+\StoryParagraph{0}{她没有接受，也没有继续追问，只剩下原来的问题。}
+
+\StoryParagraph{0}{想好了吗。}
+
+\StoryParagraph{0}{她把手放在小腹上。拇指按住一块淤青，颜色暂时变浅，松开以后又恢复。}
+
+\StoryParagraph{0}{十一秒。}
+
+\Needspace{55pt}
+\StoryParagraph{3}{“行。”}
+
+\StoryParagraph{3}{“我知道了。”}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{挂断以后，她去洗手。}
+
+\StoryParagraph{0}{水很凉。}
+
+\StoryParagraph{0}{她洗了很久。}
+
+\StoryParagraph{0}{回来把手机屏幕朝下，开始收拾箱子。}
+
+\StoryParagraph{0}{护照第一次放进了化妆包。拉链已经拉上，她又打开，把护照拿出来，放回平时的位置。}
+
+\StoryParagraph{0}{针剂还在冰箱。}
+
+\StoryParagraph{0}{助理准备一起带走。}
+
+\StoryParagraph{0}{她看了一眼，改成寄回诊所。}
+
+\StoryParagraph{3}{衣服叠完，箱子合上。她坐在上面压了一次，才把拉链拉好。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{我没有被取出来。}
+
+\StoryParagraph{0}{她把我带离了洛杉矶。}
+
+\StoryParagraph{0}{飞机起飞以后，她把座椅放平，侧着躺。促排让小腹发胀，一只手一直放在那里。}
+
+\StoryParagraph{0}{空乘送来一碗面。}
+
+\StoryParagraph{0}{她吃了两口，让人拿走。}
+
+\StoryParagraph{0}{剩下十几个小时，大部分时间都在睡。}
+
+\StoryParagraph{0}{中途醒过一次，摸到手机，看了一眼。}
+
+\StoryParagraph{0}{没有消息。}
+
+\StoryParagraph{0}{手机被塞到枕头下面。}
+
+\StoryParagraph{3}{她继续睡。}
+
+\NarrativeBreak
+
+\StoryParagraph{0}{代孕的孩子原来预计2027年出生。}
+
+\StoryParagraph{0}{快一点的话，还能属马。}
+
+\StoryParagraph{0}{2027年还没有来。}
+
+\StoryParagraph{3}{我先没有了。}
+
+\end{document}
