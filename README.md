@@ -1,5 +1,7 @@
 # 我的女友景甜
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/HEJustinSun/my-girlfriend-jingtian-latex)
+
 这是一个 5 x 8 英寸的 XeLaTeX 排版工程。
 
 ## 编译
