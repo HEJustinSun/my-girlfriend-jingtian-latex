@@ -4,6 +4,8 @@
 
 One story, twelve language editions, and one reproducible 5 × 8 inch PDF pipeline. Every edition includes a localized live-text cover, running title, PDF language tag and metadata, plus embedded fonts selected for its writing system.
 
+![Twelve localized covers for the international editions](assets/multilingual-cover-grid.png)
+
 ## Editions
 
 | Locale | Language | Edition source | Release PDF |
