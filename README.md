@@ -11,3 +11,7 @@ mkdir -p build
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 ```
+
+## 许可证
+
+本项目采用 [CC0 1.0 通用许可协议](https://creativecommons.org/publicdomain/zero/1.0/deed.zh-hans)。
