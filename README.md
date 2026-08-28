@@ -8,18 +8,18 @@ One story, twelve language editions, and one reproducible 5 × 8 inch PDF pipeli
 
 | Locale | Language | Edition source | Release PDF |
 | --- | --- | --- | --- |
-| `zh-CN` | 简体中文 | `editions/zh-CN.tex` | `my-girlfriend-jing-tian-zh-CN.pdf` |
-| `zh-Hant` | 繁體中文 | `editions/zh-Hant.tex` | `my-girlfriend-jing-tian-zh-Hant.pdf` |
-| `en-US` | English | `editions/en-US.tex` | `my-girlfriend-jing-tian-en-US.pdf` |
-| `es-ES` | Español | `editions/es-ES.tex` | `my-girlfriend-jing-tian-es-ES.pdf` |
-| `fr-FR` | Français | `editions/fr-FR.tex` | `my-girlfriend-jing-tian-fr-FR.pdf` |
-| `ru-RU` | Русский | `editions/ru-RU.tex` | `my-girlfriend-jing-tian-ru-RU.pdf` |
-| `ar` | العربية | `editions/ar.tex` | `my-girlfriend-jing-tian-ar.pdf` |
-| `ja-JP` | 日本語 | `editions/ja-JP.tex` | `my-girlfriend-jing-tian-ja-JP.pdf` |
-| `ko-KR` | 한국어 | `editions/ko-KR.tex` | `my-girlfriend-jing-tian-ko-KR.pdf` |
-| `de-DE` | Deutsch | `editions/de-DE.tex` | `my-girlfriend-jing-tian-de-DE.pdf` |
-| `pt-BR` | Português do Brasil | `editions/pt-BR.tex` | `my-girlfriend-jing-tian-pt-BR.pdf` |
-| `hi-IN` | हिन्दी | `editions/hi-IN.tex` | `my-girlfriend-jing-tian-hi-IN.pdf` |
+| `zh-CN` | 简体中文 | `editions/zh-CN.tex` | `dist/my-girlfriend-jing-tian-zh-CN.pdf` |
+| `zh-Hant` | 繁體中文 | `editions/zh-Hant.tex` | `dist/my-girlfriend-jing-tian-zh-Hant.pdf` |
+| `en-US` | English | `editions/en-US.tex` | `dist/my-girlfriend-jing-tian-en-US.pdf` |
+| `es-ES` | Español | `editions/es-ES.tex` | `dist/my-girlfriend-jing-tian-es-ES.pdf` |
+| `fr-FR` | Français | `editions/fr-FR.tex` | `dist/my-girlfriend-jing-tian-fr-FR.pdf` |
+| `ru-RU` | Русский | `editions/ru-RU.tex` | `dist/my-girlfriend-jing-tian-ru-RU.pdf` |
+| `ar` | العربية | `editions/ar.tex` | `dist/my-girlfriend-jing-tian-ar.pdf` |
+| `ja-JP` | 日本語 | `editions/ja-JP.tex` | `dist/my-girlfriend-jing-tian-ja-JP.pdf` |
+| `ko-KR` | 한국어 | `editions/ko-KR.tex` | `dist/my-girlfriend-jing-tian-ko-KR.pdf` |
+| `de-DE` | Deutsch | `editions/de-DE.tex` | `dist/my-girlfriend-jing-tian-de-DE.pdf` |
+| `pt-BR` | Português do Brasil | `editions/pt-BR.tex` | `dist/my-girlfriend-jing-tian-pt-BR.pdf` |
+| `hi-IN` | हिन्दी | `editions/hi-IN.tex` | `dist/my-girlfriend-jing-tian-hi-IN.pdf` |
 
 This set covers all six official UN languages and major East Asian, European, South Asian, and Latin American readerships.
 
@@ -42,6 +42,15 @@ Build and verify the complete release set:
 
 Set `TECTONIC=/absolute/path/to/tectonic` when the executable is not on `PATH`. PDFs are written to `dist/`; intermediate files and logs go to `build/editions/`.
 
+The complete QA pass also requires Python 3, [Poppler](https://poppler.freedesktop.org/), qpdf, and the pinned `pypdf` dependency. On macOS, install the native tools with `brew install poppler qpdf`; on Ubuntu, use `sudo apt-get install poppler-utils qpdf python3-venv`. Then create the isolated verifier environment once:
+
+```bash
+python3 -m venv .tools/pdf-qa
+.tools/pdf-qa/bin/pip install --require-hashes --requirement scripts/requirements-pdf-qa.txt
+TECTONIC=/absolute/path/to/tectonic ./scripts/build-all.sh
+.tools/pdf-qa/bin/python scripts/verify-editions.py
+```
+
 ## Quality contract
 
 `scripts/verify-editions.py` treats the Simplified Chinese source as the structural reference and checks that every locale preserves exactly:
@@ -50,7 +59,7 @@ Set `TECTONIC=/absolute/path/to/tectonic` when the executable is not on `PATH`. 
 - 5 printed narrative breaks and 2 unprinted pauses;
 - the same semantic block order across all twelve editions.
 
-For a complete PDF set it additionally checks PDF integrity, exact 360 × 576 point page size, searchable text, embedded subset fonts with Unicode maps, language metadata, localized cover labels, a unique body-page-1 destination, and clean build logs without missing glyphs, duplicate destinations, font substitutions, or overflow warnings. GitHub Actions runs the same build and verification from a clean Linux environment.
+For a complete PDF set it additionally checks PDF integrity; every page's MediaBox, CropBox, and rotation; searchable text on every body page; embedded subset fonts with Unicode maps; language metadata; the exact localized cover label; a unique body-page-1 destination; and both TeX and engine logs for missing glyphs, duplicate destinations, font substitutions, or overflow warnings. GitHub Actions runs the same build and verification from a clean Linux environment.
 
 ## Translation and review status
 

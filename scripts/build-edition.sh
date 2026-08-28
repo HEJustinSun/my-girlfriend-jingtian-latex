@@ -43,7 +43,7 @@ fi
     --keep-logs \
     --keep-intermediates \
     --outdir "$build_directory" \
-    "$source_file"
+    "$source_file" 2>&1 | tee "$build_directory/$edition.build.log"
 )
 
 install -m 0644 \

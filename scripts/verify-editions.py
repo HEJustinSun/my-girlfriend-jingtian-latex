@@ -11,7 +11,7 @@ from pathlib import Path
 
 try:
     from pypdf import PdfReader
-except ImportError:  # CI can use qpdf when pypdf is unavailable.
+except ImportError:
     PdfReader = None
 
 
@@ -90,6 +90,11 @@ def verify_sources(edition_ids: list[str]) -> None:
 
 
 def verify_pdf(edition: str, pdf_path: Path) -> None:
+    if PdfReader is None:
+        raise AssertionError(
+            "PDF metadata and per-page QA require pypdf; install scripts/requirements-pdf-qa.txt"
+        )
+
     qpdf = shutil.which("qpdf")
     pdfinfo = shutil.which("pdfinfo")
     pdffonts = shutil.which("pdffonts")
@@ -98,9 +103,6 @@ def verify_pdf(edition: str, pdf_path: Path) -> None:
     missing = [name for name, path in required.items() if path is None]
     if missing:
         raise AssertionError("missing PDF QA tools: " + ", ".join(missing))
-    if qpdf is None and PdfReader is None:
-        raise AssertionError("PDF structure QA requires qpdf or pypdf")
-
     if qpdf is not None:
         run([qpdf, "--check", str(pdf_path)])
     info = run([pdfinfo, str(pdf_path)])
@@ -123,28 +125,68 @@ def verify_pdf(edition: str, pdf_path: Path) -> None:
     if len(extracted.strip()) < 500:
         raise AssertionError(f"too little extractable text for {edition}")
 
-    if PdfReader is not None:
-        reader = PdfReader(pdf_path)
-        language = str(reader.trailer["/Root"].get("/Lang", ""))
-        if language != edition:
-            raise AssertionError(f"wrong PDF language for {edition}: {language!r}")
-        if str(reader.trailer["/Root"].get("/PageMode", "")) != "/UseNone":
-            raise AssertionError(f"wrong PDF page mode for {edition}")
-        labels = reader.page_labels
-        if len(labels) < 2 or labels[0] == "1" or labels[1] != "1":
-            raise AssertionError(f"wrong cover/body page labels for {edition}: {labels[:2]}")
-        page_destinations = [
-            reader.get_destination_page_number(destination)
-            for name, destination in reader.named_destinations.items()
-            if name.startswith("page.")
-        ]
-        if page_destinations.count(1) != 1 or 0 in page_destinations:
-            raise AssertionError(f"cover/body page destinations are not unique for {edition}")
+    reader = PdfReader(pdf_path, strict=True)
+    language = str(reader.trailer["/Root"].get("/Lang", ""))
+    if language != edition:
+        raise AssertionError(f"wrong PDF language for {edition}: {language!r}")
+    if str(reader.trailer["/Root"].get("/PageMode", "")) != "/UseNone":
+        raise AssertionError(f"wrong PDF page mode for {edition}")
 
-    log_path = ROOT / "build" / "editions" / edition / f"{edition}.log"
-    if not log_path.is_file():
-        raise AssertionError(f"missing build log for {edition}")
-    log = log_path.read_text(encoding="utf-8", errors="replace")
+    locale_source = (ROOT / "tex" / "locales" / f"{edition}.tex").read_text(
+        encoding="utf-8"
+    )
+    cover_label_match = re.search(
+        r"\\newcommand\{\\CoverPageLabel\}\{([^{}]+)\}", locale_source
+    )
+    if cover_label_match is None:
+        raise AssertionError(f"cannot read cover label for {edition}")
+    expected_cover_label = cover_label_match.group(1)
+    labels = reader.page_labels
+    if (
+        len(labels) < 2
+        or labels[0] != expected_cover_label
+        or labels[1] != "1"
+    ):
+        raise AssertionError(f"wrong cover/body page labels for {edition}: {labels[:2]}")
+
+    for page_number, page in enumerate(reader.pages, 1):
+        for box_name, box in (("MediaBox", page.mediabox), ("CropBox", page.cropbox)):
+            page_size = (float(box.width), float(box.height))
+            if any(
+                abs(actual - expected) > 0.1
+                for actual, expected in zip(page_size, EXPECTED_SIZE)
+            ):
+                raise AssertionError(
+                    f"wrong {box_name} on {edition} page {page_number}: {page_size}"
+                )
+        rotation = int(page.get("/Rotate", 0)) % 360
+        if rotation != 0:
+            raise AssertionError(
+                f"unexpected rotation on {edition} page {page_number}: {rotation}"
+            )
+        if page_number > 1 and not re.sub(r"\s+", "", page.extract_text() or ""):
+            raise AssertionError(
+                f"body page has no searchable text for {edition}: {page_number}"
+            )
+
+    page_destinations = [
+        reader.get_destination_page_number(destination)
+        for name, destination in reader.named_destinations.items()
+        if name.startswith("page.")
+    ]
+    if page_destinations.count(1) != 1 or 0 in page_destinations:
+        raise AssertionError(f"cover/body page destinations are not unique for {edition}")
+
+    log_paths = (
+        ROOT / "build" / "editions" / edition / f"{edition}.log",
+        ROOT / "build" / "editions" / edition / f"{edition}.build.log",
+    )
+    missing_logs = [str(path) for path in log_paths if not path.is_file()]
+    if missing_logs:
+        raise AssertionError(f"missing build logs for {edition}: {', '.join(missing_logs)}")
+    log = "\n".join(
+        path.read_text(encoding="utf-8", errors="replace") for path in log_paths
+    )
     violations = [pattern for pattern in FORBIDDEN_LOG_PATTERNS if pattern in log]
     if violations:
         raise AssertionError(f"{edition} log warnings: {', '.join(violations)}")
