@@ -7,7 +7,7 @@ The multilingual editions embed locale-appropriate, unmodified open-source fonts
 The Traditional Chinese, Japanese, and Korean editions use the official regional SubsetOTF builds from Adobe's `release` branches:
 
 - Source Han Serif TW/JP/KR Regular 2.003
-- Source Han Sans TW/JP/KR Medium 2.005
+- Source Han Sans TW/JP/KR Medium and Bold 2.005
 
 Source repositories: [Source Han Serif](https://github.com/adobe-fonts/source-han-serif) and [Source Han Sans](https://github.com/adobe-fonts/source-han-sans). The existing `SourceHanSerif-LICENSE.txt` and `SourceHanSans-LICENSE.txt` files cover these unmodified font binaries.
 
@@ -29,8 +29,11 @@ The Arabic body text uses the complete Regular, Bold, Italic, and Bold Italic fa
 
 ```text
 5d39f8eaaa9ad2aed93166b0a4fc4a43ac82de8a5c6112992446c24d88b595f9  SourceHanSansJP-Medium.otf
+3a2722f94c97a53b172579a10ef8fc34b3fa8a6bb4f7947a2ec709ab647fb755  SourceHanSansJP-Bold.otf
 b2a86d076a1bd8ff964ff55fd2419b78a80af3f8e21d8d3a38f0aa484aedcf94  SourceHanSansKR-Medium.otf
+f678def86be3d973e85fb0e34513b93b9ec7d6a478380d93fe79d43d1ad9f797  SourceHanSansKR-Bold.otf
 6d73ddebf247891262bedc01fb7a4b52ed93ca1c7f48d28593dc7a4dc85af8f0  SourceHanSansTW-Medium.otf
+a586990078d8fe4e97202e38fa3c2e0a61ce54009affdd9e2cfe59351ad3f5c7  SourceHanSansTW-Bold.otf
 e5f502bb193c28829895b098498f0f9dd8f658c760b0f83656ad41c1137a8785  SourceHanSerifJP-Regular.otf
 b2b310255186ce92de2909f96522b9183a9f6c323dbe5663f205f02d6ece08b7  SourceHanSerifKR-Regular.otf
 45f730307894dbe594366ed022efee4f9c4dcc0f41dc5db87c9ef8b8c0588bde  SourceHanSerifTW-Regular.otf
