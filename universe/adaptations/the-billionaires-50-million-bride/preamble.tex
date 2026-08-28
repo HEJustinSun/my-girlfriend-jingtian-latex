@@ -1,0 +1,325 @@
+% !TEX program = xelatex
+% Typography for the showrunner draft. Injected verbatim by build.py.
+% Fonts are shared with the canon volume at the repository root.
+\documentclass[11pt,oneside]{book}
+
+\usepackage{geometry}
+\geometry{
+  paperwidth=8.5in,
+  paperheight=11in,
+  top=0.95in,
+  bottom=1.0in,
+  left=1.15in,
+  right=1.05in,
+  headheight=14pt,
+  headsep=22pt,
+  footskip=30pt
+}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[unicode=true,hidelinks]{hyperref}
+
+% Latin fonts carry +pwid: Source Han CN draws U+2019 full-width by CJK
+% convention, which wrecks every English apostrophe in the dialogue. pwid
+% selects the proportional form. The CJK fonts below deliberately omit it,
+% so Chinese quotation marks keep their full-width shape.
+% Ligatures=TeX is likewise dropped: the source already carries real
+% Unicode dashes and quotes, so the TeX ligature set buys nothing.
+\defaultfontfeatures{Ligatures=NoCommon}
+\setmainfont[
+  Path=../../../fonts/, RawFeature={+pwid},
+  BoldFont=SourceHanSerifCN-Regular.otf, BoldFeatures={FakeBold=2.2},
+  ItalicFont=SourceHanSerifCN-Regular.otf, ItalicFeatures={FakeSlant=0.15}
+]{SourceHanSerifCN-Regular.otf}
+\setsansfont[
+  Path=../../../fonts/, RawFeature={+pwid},
+  BoldFont=SourceHanSansCN-Medium.otf, BoldFeatures={FakeBold=2.0},
+  ItalicFont=SourceHanSansCN-Medium.otf, ItalicFeatures={FakeSlant=0.15}
+]{SourceHanSansCN-Medium.otf}
+\setCJKmainfont[Path=../../../fonts/,AutoFakeBold=2.2,AutoFakeSlant=0.15]{SourceHanSerifCN-Regular.otf}
+\setCJKsansfont[Path=../../../fonts/,AutoFakeBold=2.0,AutoFakeSlant=0.15]{SourceHanSansCN-Medium.otf}
+\setCJKmonofont[Path=../../../fonts/]{SourceHanSansCN-Medium.otf}
+\xeCJKsetup{PunctStyle=plain}
+% U+2014 does double duty here: 257 of its 277 uses are English em dashes
+% in sluglines and episode titles, where xeCJK's CJK class swallows the
+% following space ("CLINIC —DAY"). Class it as Latin, and let \CNdash
+% re-enter the CJK class for the 10 Chinese 破折号.
+\xeCJKDeclareCharClass{Default}{"2014}
+\newcommand{\CNdash}{\begingroup\xeCJKDeclareCharClass{CJK}{"2014}——\endgroup}
+
+\definecolor{PrimaryInk}{HTML}{161618}
+\definecolor{SecondaryInk}{HTML}{5C5C62}
+\definecolor{AccentInk}{HTML}{B04A1E}
+\definecolor{RuleInk}{HTML}{DCDCE0}
+\definecolor{CoverInk}{HTML}{101013}
+\definecolor{CoverPaper}{HTML}{F4F2EE}
+\definecolor{CoverAccent}{HTML}{E0672C}
+\definecolor{CoverRule}{HTML}{3A3A40}
+\color{PrimaryInk}
+
+\hypersetup{
+  pdftitle={五千万美元新娘 The Billionaire's \$50 Million Bride},
+  pdfauthor={孙哥宇宙 SUN GE UNIVERSE},
+  pdfsubject={60 集海外竖屏短剧 Showrunner Development Draft v1.0},
+  bookmarksnumbered=false
+}
+
+% Flush-left paragraphs; vertical rhythm is carried by the macros below.
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\tolerance=2000
+\emergencystretch=2em
+\raggedbottom
+
+% Dialogue block geometry, measured from the left text edge.
+\newlength{\CueIndent}\setlength{\CueIndent}{1.05in}
+\newlength{\DlgIndent}\setlength{\DlgIndent}{0.62in}
+\newlength{\DlgRight}\setlength{\DlgRight}{0.62in}
+
+\fancypagestyle{scriptmain}{
+  \fancyhf{}
+  \fancyhead[L]{\sffamily\fontsize{7.6}{10}\selectfont\color{SecondaryInk}\leftmark}
+  \fancyhead[R]{\sffamily\fontsize{7.6}{10}\selectfont\color{SecondaryInk}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\fancypagestyle{plainfoot}{
+  \fancyhf{}
+  \fancyfoot[C]{\sffamily\fontsize{7.6}{10}\selectfont\color{SecondaryInk}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\makeatletter
+
+% Reserve vertical space so a heading is never orphaned at a page bottom.
+% Stands in for the needspace package, which this TeX Live cannot install.
+\newcommand{\KeepTogether}[1]{%
+  \begingroup
+  \setlength{\dimen@}{#1}%
+  \vskip 0pt plus \dimen@
+  \penalty -100
+  \vskip 0pt plus -\dimen@
+  \vskip 0.0001pt
+  \endgroup
+}
+
+% --- Front matter ---------------------------------------------------------
+
+% \CoverPage{kicker}{title}{chinese title}{format line}{tagline}
+\newcommand{\CoverPage}[5]{%
+  \pagecolor{CoverInk}\color{CoverPaper}\thispagestyle{empty}%
+  \sffamily
+  \vspace*{0.30in}
+  {\fontsize{8.4}{12}\selectfont\color{CoverAccent}#1\par}
+  \vspace{7pt}
+  {\color{CoverRule}\hrule height 0.5pt}
+  \vfill
+  {\bfseries\fontsize{34}{41}\selectfont\raggedright #2\par}
+  \vspace{20pt}
+  {\bfseries\fontsize{20}{27}\selectfont\color{CoverAccent}#3\par}
+  \vspace{16pt}
+  {\fontsize{9.6}{15}\selectfont\color{CoverPaper}#4\par}
+  \vfill
+  {\color{CoverRule}\hrule height 0.5pt}
+  \vspace{9pt}
+  {\fontsize{9}{13}\selectfont\color{CoverAccent}#5\par}
+  \vspace*{0.30in}
+  \clearpage
+  \pagecolor{white}\color{PrimaryInk}\rmfamily
+}
+
+\newenvironment{SpecPage}{%
+  \thispagestyle{empty}%
+  \vspace*{0.55in}
+  {\noindent\sffamily\fontsize{8.4}{12}\selectfont\color{AccentInk}PROJECT SPECIFICATION\par}
+  \vspace{7pt}
+  {\color{RuleInk}\hrule height 0.5pt}
+  \vspace{18pt}
+}{%
+  \clearpage
+}
+
+\newcommand{\SpecRow}[2]{%
+  \par\addvspace{10pt}%
+  {\parindent=0pt \hangindent=76pt \hangafter=1 \noindent
+   \hb@xt@ 76pt{\sffamily\bfseries\fontsize{9}{14}\selectfont\color{SecondaryInk}#1\hfil}%
+   {\rmfamily\fontsize{9.6}{15.4}\selectfont\color{PrimaryInk}#2}\par}%
+}
+
+\newcommand{\TableOfContents}{%
+  \clearpage
+  \pagenumbering{roman}
+  \pagestyle{plainfoot}\thispagestyle{plainfoot}%
+  \vspace*{0.15in}
+  {\noindent\sffamily\bfseries\fontsize{19}{25}\selectfont\color{PrimaryInk}目录\par}
+  \vspace{8pt}
+  {\color{AccentInk}\hrule height 1.6pt width 34pt}
+  \vspace{16pt}
+  \setcounter{tocdepth}{1}%
+  {\sffamily\fontsize{9.4}{14}\selectfont\@starttoc{toc}}%
+  \clearpage
+}
+
+\newcommand{\StartBody}{%
+  \clearpage
+  \pagenumbering{arabic}
+  \pagestyle{scriptmain}%
+}
+
+% --- Structure ------------------------------------------------------------
+
+\newcommand{\PartPage}[2]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{#1　#2}%
+  \markboth{#1　#2}{}%
+  \thispagestyle{empty}%
+  \vspace*{2.5in}
+  {\noindent\sffamily\fontsize{9.5}{13}\selectfont\color{AccentInk}#1\par}
+  \vspace{12pt}
+  {\noindent\sffamily\bfseries\fontsize{27}{34}\selectfont\color{PrimaryInk}#2\par}
+  \vspace{16pt}
+  {\color{AccentInk}\hrule height 2pt width 54pt}
+  \clearpage
+}
+
+\newcommand{\Episode}[2]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{section}{EP#1\texorpdfstring{\quad}{ }#2}%
+  \markboth{EPISODE #1 — #2}{}%
+  \thispagestyle{plainfoot}%
+  \vspace*{0.10in}
+  {\noindent\sffamily\fontsize{8.6}{12}\selectfont\color{AccentInk}EPISODE #1\par}
+  \vspace{5pt}
+  {\noindent\sffamily\bfseries\fontsize{20}{26}\selectfont\color{PrimaryInk}#2\par}
+  \vspace{10pt}
+  {\color{AccentInk}\hrule height 1.6pt width 34pt}
+  \vspace{15pt}
+}
+
+\newcommand{\SectionHead}[1]{%
+  \par\addvspace{20pt}%
+  \KeepTogether{5\baselineskip}%
+  \phantomsection
+  \addcontentsline{toc}{section}{#1}%
+  {\noindent\sffamily\bfseries\fontsize{13}{18}\selectfont\color{PrimaryInk}#1\par}%
+  \nobreak\vspace{9pt}\nobreak
+}
+
+\newcommand{\SubHead}[1]{%
+  \par\addvspace{14pt}%
+  \KeepTogether{4\baselineskip}%
+  {\noindent\sffamily\bfseries\fontsize{10.6}{15}\selectfont\color{AccentInk}#1\par}%
+  \nobreak\vspace{6pt}\nobreak
+}
+
+% --- Screenplay elements --------------------------------------------------
+
+\newcommand{\Scene}[2]{%
+  \par\addvspace{16pt}%
+  \KeepTogether{5\baselineskip}%
+  {\noindent\sffamily\bfseries\fontsize{9.6}{13.5}\selectfont\color{PrimaryInk}%
+   \textcolor{AccentInk}{#1}\hspace{8pt}#2\par}%
+  \nobreak\vspace{3pt}%
+  {\color{RuleInk}\hrule height 0.5pt}%
+  \nobreak\vspace{10pt}\nobreak
+}
+
+\newcommand{\Action}[1]{%
+  \par{\rmfamily\fontsize{10}{16.6}\selectfont\color{PrimaryInk}#1\par}%
+  \addvspace{6.5pt}%
+}
+
+\newcommand{\CueBody}[2]{%
+  \par\addvspace{8pt}%
+  \KeepTogether{3\baselineskip}%
+  {\leftskip=\CueIndent
+   \noindent\sffamily\bfseries\fontsize{9}{13}\selectfont\color{AccentInk}#1#2\par}%
+  \nobreak\vspace{1.5pt}\nobreak
+}
+\newcommand{\Cue}[1]{\CueBody{#1}{}}
+\newcommand{\CueP}[2]{%
+  \CueBody{#1}{\normalfont\sffamily\fontsize{8.2}{13}\selectfont\color{SecondaryInk}（#2）}%
+}
+
+\newcommand{\Dialogue}[1]{%
+  {\leftskip=\DlgIndent \rightskip=\DlgRight
+   \noindent\rmfamily\fontsize{10}{15.2}\selectfont\color{PrimaryInk}#1\par}%
+  \addvspace{6.5pt}%
+}
+
+\newcommand{\Transition}[1]{%
+  \par\addvspace{12pt}%
+  {\raggedleft\sffamily\bfseries\fontsize{8.4}{12}\selectfont\color{SecondaryInk}#1\par}%
+  \addvspace{4pt}%
+}
+
+\newcommand{\Insert}[1]{%
+  \par\addvspace{11pt}%
+  \KeepTogether{3\baselineskip}%
+  {\centering\sffamily\bfseries\fontsize{9.6}{14}\selectfont\color{AccentInk}#1\par}%
+  \addvspace{11pt}%
+}
+
+\newcommand{\EpisodeMeta}[2]{%
+  \par\addvspace{4pt}%
+  {\leftskip=12pt
+   \sffamily\fontsize{8.8}{13.8}\selectfont\color{SecondaryInk}%
+   \noindent\llap{\raisebox{0.4pt}{\textcolor{AccentInk}{\rule{2pt}{8.4pt}}}\hspace{6pt}}%
+   \textbf{#1}\hspace{5pt}#2\par}%
+  \addvspace{4pt}%
+}
+
+\newcommand{\Beat}[2]{%
+  \par\addvspace{6pt}%
+  \KeepTogether{2\baselineskip}%
+  {\rmfamily\fontsize{9.7}{15.8}\selectfont\color{PrimaryInk}%
+   \hangindent=15pt \hangafter=1 \noindent
+   {\sffamily\bfseries\fontsize{9.3}{15.8}\selectfont\color{AccentInk}#1}\hspace{7pt}#2\par}%
+  \addvspace{6pt}%
+}
+
+% --- Lists (plain LaTeX; enumitem is unavailable in this TeX Live) ---------
+
+\newenvironment{Bullets}{%
+  \begin{list}{\raisebox{1.4pt}{\textcolor{AccentInk}{\rule{3.4pt}{3.4pt}}}}{%
+    \setlength{\leftmargin}{17pt}%
+    \setlength{\labelwidth}{9pt}%
+    \setlength{\labelsep}{8pt}%
+    \setlength{\itemsep}{4pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{7pt}%
+    \setlength{\partopsep}{0pt}%
+    \setlength{\itemindent}{0pt}%
+    \setlength{\listparindent}{0pt}%
+    \rmfamily\fontsize{9.7}{15.6}\selectfont\color{PrimaryInk}}%
+}{\end{list}}
+
+\newcounter{NumItem}
+\newenvironment{Numbers}{%
+  \begin{list}{\sffamily\bfseries\color{AccentInk}\arabic{NumItem}.}{%
+    \usecounter{NumItem}%
+    \setlength{\leftmargin}{20pt}%
+    \setlength{\labelwidth}{14pt}%
+    \setlength{\labelsep}{6pt}%
+    \setlength{\itemsep}{4pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{7pt}%
+    \setlength{\partopsep}{0pt}%
+    \setlength{\itemindent}{0pt}%
+    \setlength{\listparindent}{0pt}%
+    \rmfamily\fontsize{9.7}{15.6}\selectfont\color{PrimaryInk}}%
+}{\end{list}}
+
+\makeatother
