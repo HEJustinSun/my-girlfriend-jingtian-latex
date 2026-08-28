@@ -1,0 +1,58 @@
+name: Multilingual PDFs
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: multilingual-pdfs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install PDF verification tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes poppler-utils python3-venv qpdf
+          python3 -m venv .tools/pdf-qa
+          .tools/pdf-qa/bin/pip install --require-hashes --requirement scripts/requirements-pdf-qa.txt
+
+      - name: Install Tectonic 0.17.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tools/tectonic
+          curl --fail --location --retry 3 \
+            --output .tools/tectonic/tectonic.tar.gz \
+            https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.17.0/tectonic-0.17.0-x86_64-unknown-linux-musl.tar.gz
+          echo "8533d07f9ccbd7a65824b9e0459041bca34af1eb33daba48f59215593753a3b7  .tools/tectonic/tectonic.tar.gz" | sha256sum --check
+          tar --extract --gzip --file .tools/tectonic/tectonic.tar.gz --directory .tools/tectonic
+          .tools/tectonic/tectonic --version
+
+      - name: Build all twelve editions
+        env:
+          TECTONIC: ${{ github.workspace }}/.tools/tectonic/tectonic
+        run: ./scripts/build-all.sh
+
+      - name: Verify sources and PDFs
+        run: .tools/pdf-qa/bin/python scripts/verify-editions.py
+
+      - name: Upload verified PDFs
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: my-girlfriend-jing-tian-multilingual
+          path: dist/*.pdf
+          if-no-files-found: error
+          retention-days: 14

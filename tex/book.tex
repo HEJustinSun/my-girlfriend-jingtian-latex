@@ -1,0 +1,134 @@
+% Shared 5 x 8 inch book architecture for every language edition.
+\documentclass[10pt,twoside,openany]{book}
+
+\newif\ifEditionRTL
+\newif\ifEditionOriginalCover
+\EditionRTLfalse
+\EditionOriginalCoverfalse
+
+\usepackage{geometry}
+\geometry{
+  paperwidth=5in,
+  paperheight=8in,
+  top=0.7in,
+  bottom=0.7in,
+  inner=0.5in,
+  outer=0.5in,
+  headheight=10pt,
+  headsep=20pt,
+  footskip=25.2pt
+}
+\addtolength{\textheight}{-12pt}
+
+\usepackage{fontspec}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage[unicode=true,hidelinks]{hyperref}
+\defaultfontfeatures{Ligatures=TeX}
+
+% Each locale owns its language engine, font choices, metadata, and cover copy.
+\input{../tex/locales/\EditionLocale.tex}
+\newfontfamily\CoverLatinFont{lmsans10-regular.otf}
+
+\definecolor{PrimaryInk}{HTML}{161618}
+\definecolor{SecondaryInk}{HTML}{5C5C62}
+\definecolor{CoverAccent}{HTML}{E4002B}
+\color{PrimaryInk}
+\hypersetup{
+  pdftitle={\BookTitle},
+  pdfauthor={\BookAuthor},
+  pdfsubject={\BookSubject},
+  pdflang={\EditionLocale},
+  pdfdisplaydoctitle=true,
+  pdfpagemode=UseNone
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\topskip}{10pt}
+\setlength{\emergencystretch}{1.5em}
+\renewcommand{\baselinestretch}{1}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\raggedbottom
+
+\newcommand{\RunningTitleStyle}{%
+  \sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}%
+}
+
+\fancypagestyle{bodyrunning}{
+  \fancyhf{}
+  \ifEditionRTL
+    \fancyhead[LO]{\RunningTitleStyle\thepage}
+    \fancyhead[RO]{\RunningTitleStyle\BookRunningTitle}
+    \fancyhead[LE]{\RunningTitleStyle\BookRunningTitle}
+    \fancyhead[RE]{\RunningTitleStyle\thepage}
+  \else
+    \fancyhead[LO]{\RunningTitleStyle\BookRunningTitle}
+    \fancyhead[RO]{\RunningTitleStyle\thepage}
+    \fancyhead[LE]{\RunningTitleStyle\thepage}
+    \fancyhead[RE]{\RunningTitleStyle\BookRunningTitle}
+  \fi
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\fancypagestyle{bodyopening}{
+  \fancyhf{}
+  \fancyfoot[C]{\RunningTitleStyle\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\newcommand{\BodySingleLeading}{17.3076923}
+\newcommand{\StoryParagraph}[2]{%
+  \begingroup
+  \rmfamily
+  \setstretch{1.3}%
+  \fontsize{9.5}{\BodySingleLeading}\selectfont
+  #2\par
+  \vspace{#1pt}
+  \endgroup
+}
+
+\newcommand{\NarrativeBreak}{%
+  \par\penalty10000
+  \vspace{37.4pt}
+  \noindent\hbox to \textwidth{\hfil\SeparatorFont\setstretch{1.3}\fontsize{9.5}{\BodySingleLeading}\selectfont\char"2014\kern0.12em\char"2014\kern0.12em\char"2014\hfil}\par
+  \vspace{31.4pt}
+  \penalty10000
+}
+
+\newcommand{\UnprintedPause}{%
+  \par\penalty10000\vspace{22pt}\penalty10000
+}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+\pagenumbering{gobble}
+\thispdfpagelabel{\CoverPageLabel}
+\ifEditionOriginalCover
+  \includepdf[
+    pages=1,
+    fitpaper=true,
+    noautoscale=true,
+    pagecommand={\thispagestyle{empty}}
+  ]{../assets/cover.pdf}
+\else
+  \input{../tex/cover.tex}
+\fi
+
+\hypersetup{pageanchor=true}
+\pagenumbering{arabic}
+\pagestyle{bodyrunning}
+\thispagestyle{bodyopening}
+\vspace*{70.817pt}
+
+\input{../content/\EditionLocale.tex}
+
+\end{document}

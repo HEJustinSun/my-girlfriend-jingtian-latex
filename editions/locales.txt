@@ -1,0 +1,13 @@
+# BCP 47 locale identifiers, in release order.
+zh-CN
+zh-Hant
+en-US
+es-ES
+fr-FR
+ru-RU
+ar
+ja-JP
+ko-KR
+de-DE
+pt-BR
+hi-IN
