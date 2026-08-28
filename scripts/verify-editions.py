@@ -26,6 +26,9 @@ FORBIDDEN_LOG_PATTERNS = (
     "LaTeX Error:",
     "LaTeX Warning:",
     "LaTeX Font Warning:",
+    "Package fancyhdr Warning:",
+    "Package fontspec Warning:",
+    "Package hyperref Warning:",
     "Overfull \\hbox",
     "Overfull \\vbox",
 )
@@ -107,6 +110,10 @@ def verify_pdf(edition: str, pdf_path: Path) -> None:
     size = tuple(float(value) for value in size_match.groups())
     if any(abs(actual - expected) > 0.1 for actual, expected in zip(size, EXPECTED_SIZE)):
         raise AssertionError(f"wrong page size for {edition}: {size}")
+    if not re.search(r"^Title:\s+\S", info, re.MULTILINE):
+        raise AssertionError(f"missing PDF title for {edition}")
+    if not re.search(r"^Author:\s+\S", info, re.MULTILINE):
+        raise AssertionError(f"missing PDF author for {edition}")
 
     fonts = run([pdffonts, str(pdf_path)]).splitlines()[2:]
     if not fonts or any(line.split()[-5:-2] != ["yes", "yes", "yes"] for line in fonts):
@@ -121,12 +128,18 @@ def verify_pdf(edition: str, pdf_path: Path) -> None:
         language = str(reader.trailer["/Root"].get("/Lang", ""))
         if language != edition:
             raise AssertionError(f"wrong PDF language for {edition}: {language!r}")
+        if str(reader.trailer["/Root"].get("/PageMode", "")) != "/UseNone":
+            raise AssertionError(f"wrong PDF page mode for {edition}")
         labels = reader.page_labels
         if len(labels) < 2 or labels[0] == "1" or labels[1] != "1":
             raise AssertionError(f"wrong cover/body page labels for {edition}: {labels[:2]}")
-        page_one = reader.named_destinations.get("page.1")
-        if page_one is None or reader.get_destination_page_number(page_one) != 1:
-            raise AssertionError(f"body page.1 destination is not physical page 2 for {edition}")
+        page_destinations = [
+            reader.get_destination_page_number(destination)
+            for name, destination in reader.named_destinations.items()
+            if name.startswith("page.")
+        ]
+        if page_destinations.count(1) != 1 or 0 in page_destinations:
+            raise AssertionError(f"cover/body page destinations are not unique for {edition}")
 
     log_path = ROOT / "build" / "editions" / edition / f"{edition}.log"
     if not log_path.is_file():
