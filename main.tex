@@ -1,50 +1,55 @@
 % !TEX program = xelatex
-% XeLaTeX source for the 5 x 8 inch edition.
+% XeLaTeX source for the 5 x 8 inch romantic-fiction edition.
 \documentclass[10pt,twoside,openany]{book}
 
 \usepackage{geometry}
 \geometry{
   paperwidth=5in,
   paperheight=8in,
-  top=0.7in,
-  bottom=0.7in,
-  inner=0.5in,
-  outer=0.5in,
-  headheight=10pt,
-  headsep=20pt,
-  footskip=25.2pt
+  top=0.72in,
+  bottom=0.68in,
+  inner=0.62in,
+  outer=0.52in,
+  headheight=12pt,
+  headsep=17pt,
+  footskip=25pt
 }
-\addtolength{\textheight}{-12pt}
 
 \usepackage{fontspec}
 \usepackage{xeCJK}
-\usepackage{setspace}
 \defaultfontfeatures{Ligatures=TeX}
 \setmainfont[Path=fonts/]{SourceHanSerifCN-Regular.otf}
 \setCJKmainfont[Path=fonts/]{SourceHanSerifCN-Regular.otf}
 \setsansfont[Path=fonts/]{SourceHanSansCN-Medium.otf}
 \setCJKsansfont[Path=fonts/]{SourceHanSansCN-Medium.otf}
-\newfontfamily\SeparatorFont{lmroman10-regular.otf}
-\xeCJKsetup{PunctStyle=plain}
+\newfontfamily\ZhuqueBodyLatin[Path=fonts/]{ZhuqueFangsong-Regular.ttf}
+\newCJKfontfamily\ZhuqueBodyCJK[Path=fonts/]{ZhuqueFangsong-Regular.ttf}
+\newCJKfontfamily\TitleFont[
+  Path=fonts/,
+  FakeBold=1.35
+]{SourceHanSerifCN-Regular.otf}
+\xeCJKsetup{PunctStyle=kaiming}
 
 \usepackage{fancyhdr}
 \usepackage{xcolor}
-\usepackage{pdfpages}
+\usepackage{tikz}
 \usepackage[unicode=true,hidelinks]{hyperref}
-\definecolor{PrimaryInk}{HTML}{161618}
-\definecolor{SecondaryInk}{HTML}{5C5C62}
+\definecolor{PrimaryInk}{HTML}{262326}
+\definecolor{SecondaryInk}{HTML}{777078}
+\definecolor{RomanceRose}{HTML}{A66F7C}
 \color{PrimaryInk}
 \hypersetup{
   pdftitle={我的女友景甜},
   pdfauthor={孙宇晨},
-  pdfsubject={5 x 8 inch XeLaTeX edition}
+  pdfsubject={5 x 8 inch romantic-fiction XeLaTeX edition}
 }
 
-% Body paragraphs begin flush with the text block.
+% Flush paragraphs and generous leading keep the compact 5 x 8 inch page
+% contemporary and easy to scan.
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
-\setlength{\topskip}{10pt}
-\renewcommand{\baselinestretch}{1}
+\setlength{\topskip}{10.2pt}
+\setlength{\emergencystretch}{1em}
 \clubpenalty=10000
 \widowpenalty=10000
 \displaywidowpenalty=10000
@@ -53,58 +58,120 @@
 
 \fancypagestyle{bodyrunning}{
   \fancyhf{}
-  \fancyhead[LO]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}我的女友景甜}
-  \fancyhead[RO]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
-  \fancyhead[LE]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
-  \fancyhead[RE]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}我的女友景甜}
+  \fancyhead[CE,CO]{%
+    \sffamily\fontsize{7.2}{9}\selectfont\color{SecondaryInk}%
+    我\hspace{0.42em}的\hspace{0.42em}女\hspace{0.42em}友\hspace{0.42em}景\hspace{0.42em}甜%
+  }
+  \fancyfoot[LE,RO]{%
+    \sffamily\fontsize{7.5}{9}\selectfont\color{SecondaryInk}\thepage%
+  }
   \renewcommand{\headrulewidth}{0pt}
   \renewcommand{\footrulewidth}{0pt}
 }
 
 \fancypagestyle{bodyopening}{
   \fancyhf{}
-  \fancyfoot[C]{\sffamily\fontsize{8}{10}\selectfont\color{SecondaryInk}\thepage}
+  \fancyfoot[C]{%
+    \sffamily\fontsize{7.5}{9}\selectfont\color{SecondaryInk}\thepage%
+  }
   \renewcommand{\headrulewidth}{0pt}
   \renewcommand{\footrulewidth}{0pt}
 }
 
-\newcommand{\BodySingleLeading}{17.3076923}
+\newcommand{\BodyFontSize}{10.2}
+\newcommand{\BodyLeading}{22}
 \newcommand{\StoryParagraph}[2]{%
   \begingroup
-  \rmfamily
-  \setstretch{1.3}%
-  \fontsize{9.5}{\BodySingleLeading}\selectfont
+  \ZhuqueBodyLatin\ZhuqueBodyCJK
+  \fontsize{\BodyFontSize}{\BodyLeading}\selectfont
   #2\par
-  \vspace{#1pt}
+  \endgroup
+}
+
+% Fixed dimensions keep both halves optically and mathematically symmetric;
+% they do not inherit different em widths across font-size changes.
+\newcommand{\RomanceDivider}[1]{%
+  \begingroup
+  \color{RomanceRose}\fontsize{6.5}{7}\selectfont
+  \rule[0.55ex]{#1}{0.35pt}%
+  \hspace{6pt}\makebox[7pt][c]{\char"25C7}\hspace{6pt}%
+  \rule[0.55ex]{#1}{0.35pt}%
   \endgroup
 }
 
 \newcommand{\NarrativeBreak}{%
   \par\penalty10000
-  \vspace{37.4pt}
-  \noindent\hbox to \textwidth{\hfil\SeparatorFont\setstretch{1.3}\fontsize{9.5}{\BodySingleLeading}\selectfont\char"002D\kern0.12em\char"002D\kern0.12em\char"002D\hfil}\par
-  \vspace{31.4pt}
+  \vspace{22pt}
+  \noindent\hbox to \textwidth{\hfil\RomanceDivider{17pt}\hfil}\par
+  \vspace{20pt}
   \penalty10000
 }
 
 \newcommand{\UnprintedPause}{%
-  \par\penalty10000\vspace{22pt}\penalty10000
+  \par\penalty10000\vspace{16pt}\penalty10000
+}
+
+\newcommand{\StoryOpening}{%
+  \vspace*{24pt}
+  \begin{center}
+    {\TitleFont\fontsize{17}{22}\selectfont 我的女友景甜\par}
+    \vspace{10pt}
+    {\RomanceDivider{22pt}\par}
+  \end{center}
+  \vspace{27pt}
+}
+
+\newcommand{\FrontCover}{%
+  \thispagestyle{empty}%
+  \begin{tikzpicture}[remember picture,overlay]
+    % The portrait is slightly wider than the page ratio, so fitting by height
+    % crops the sides without distorting either protagonist.
+    \node at (current page.center) {\includegraphics[height=\paperheight]{assets/cover-background.png}};
+    \fill[black,opacity=0.20]
+      (current page.south west) rectangle ([xshift=2.72in]current page.north west);
+    \node[
+      anchor=west,
+      text=white,
+      align=left,
+      inner sep=0pt
+    ] at ([xshift=0.48in,yshift=2.72in]current page.south west) {%
+      \TitleFont\fontsize{20}{26}\selectfont 我的女友\\[-1pt]
+      {\color{white}\fontsize{31}{36}\selectfont 景甜}%
+    };
+    \draw[RomanceRose,line width=1.1pt]
+      ([xshift=0.49in,yshift=2.55in]current page.south west) --
+      ([xshift=1.35in,yshift=2.55in]current page.south west);
+    \node[
+      anchor=west,
+      text=white,
+      inner sep=0pt
+    ] at ([xshift=0.49in,yshift=2.22in]current page.south west) {%
+      \sffamily\fontsize{8.5}{11}\selectfont
+      作\hspace{0.65em}者\hspace{1.05em}{\fontsize{10}{12}\selectfont 孙宇晨}%
+    };
+    \node[
+      anchor=south west,
+      text=white,
+      align=left,
+      text opacity=0.82,
+      inner sep=0pt
+    ] at ([xshift=0.49in,yshift=0.42in]current page.south west) {%
+      \rmfamily\fontsize{6.6}{10}\selectfont
+      本文纯属虚构，如果雷同实属巧合\\
+      {\color{RomanceRose}不设版权，请随意转发分享}%
+    };
+  \end{tikzpicture}%
+  \null\newpage
 }
 
 \begin{document}
-\includepdf[
-  pages=1,
-  fitpaper=true,
-  noautoscale=true,
-  pagecommand={\thispagestyle{empty}}
-]{assets/cover.pdf}
+\FrontCover
 
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \pagestyle{bodyrunning}
 \thispagestyle{bodyopening}
-% Opening-page breathing room.
-\vspace*{70.817pt}
+\StoryOpening
 
 \StoryParagraph{3}{一颗卵子的重量，三点五微克。}
 
