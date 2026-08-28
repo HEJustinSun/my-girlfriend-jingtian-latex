@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="《我的女友景甜》24 题五层互动测试：你有没有读懂孙哥？"
+    />
+    <title>你有没有读懂孙哥？｜五层互动测试</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true">
+      <span id="page-progress"></span>
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="返回测验首页">
+        <span class="brand-mark">孙</span>
+        <span>有没有读懂孙哥</span>
+      </a>
+      <div class="header-status" aria-live="polite">
+        <span id="answered-count">尚未开始</span>
+        <span class="status-dot"></span>
+        <span>满分 100</span>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" id="intro">
+        <div class="hero-copy">
+          <p class="eyebrow">现代文阅读 · 互动测验 2026</p>
+          <h1>
+            你有没有
+            <span>读懂孙哥？</span>
+          </h1>
+          <p class="hero-deck">
+            一套从事件证据逐步走向文笔修辞、社会结构、AI 判断与商业价值的五层阅读测验。
+            页面不收录原文，请在读完作品后开始作答。
+          </p>
+          <p class="melancholy-caption">
+            <span class="heartbeat-dot" aria-hidden="true"></span>
+            有些题考细节，有些题只问你有没有看见沉默。
+          </p>
+
+          <div class="hero-meta" aria-label="测验信息">
+            <div><strong>24</strong><span>题</span></div>
+            <div><strong>100</strong><span>分</span></div>
+            <div><strong>30</strong><span>分钟</span></div>
+          </div>
+
+          <div class="hero-actions">
+            <button class="button button-primary" id="start-button" type="button">
+              开始五层测试
+              <span aria-hidden="true">↘</span>
+            </button>
+            <a class="button button-secondary" href="../output/pdf/孙哥阅读理解测试.pdf" download>
+              下载试卷 PDF
+            </a>
+            <button class="text-button" id="resume-button" type="button" hidden>
+              继续上次进度
+            </button>
+          </div>
+        </div>
+
+        <aside class="hero-note">
+          <span class="note-number">01</span>
+          <p class="note-title">作答边界</p>
+          <p>
+            本测验只衡量你对虚构文本及其“孙哥”叙事形象的理解，不用于判断现实人物、现实关系或文章真伪。
+          </p>
+          <div class="note-rule"></div>
+          <p class="note-small">
+            各题分值见题面；多选题须全部选对且无多选方可得分。商业题讨论传播机制，不提供投资建议。
+          </p>
+        </aside>
+      </section>
+
+      <section class="quiz-shell" id="quiz" hidden>
+        <div class="quiz-heading">
+          <div>
+            <p class="eyebrow">答题区</p>
+            <h2>五层，一层一层读懂孙哥</h2>
+          </div>
+          <button class="text-button danger" id="clear-button" type="button">
+            清空答案
+          </button>
+        </div>
+
+        <form id="quiz-form" novalidate>
+          <div id="question-sections"></div>
+
+          <section class="submit-card" aria-labelledby="submit-title">
+            <div>
+              <p class="eyebrow">交卷</p>
+              <h2 id="submit-title">让分数说话</h2>
+              <p id="completion-copy">你还有 24 题没有作答。</p>
+            </div>
+            <button class="button button-primary" type="submit">
+              提交并查看得分
+              <span aria-hidden="true">→</span>
+            </button>
+          </section>
+        </form>
+      </section>
+
+      <section class="results" id="results" hidden aria-live="polite">
+        <div class="result-hero">
+          <div class="score-orbit" aria-label="总分">
+            <span id="score-value">0</span>
+            <small>/ 100</small>
+          </div>
+          <div class="result-copy">
+            <p class="eyebrow">测验结果</p>
+            <h2 id="result-level">刚刷到孙哥</h2>
+            <p id="result-description"></p>
+            <p class="result-boundary">
+              这个等级只反映你对本文叙事的理解，不代表你了解现实中的任何人。
+            </p>
+          </div>
+        </div>
+
+        <div class="breakdown" id="score-breakdown"></div>
+
+        <div class="result-actions">
+          <button class="button button-primary" id="review-button" type="button">
+            查看逐题解析
+          </button>
+          <button class="button button-secondary" id="copy-button" type="button">
+            复制成绩
+          </button>
+          <button class="text-button danger" id="restart-button" type="button">
+            重新答题
+          </button>
+        </div>
+
+        <section class="review" id="review" hidden>
+          <div class="review-heading">
+            <p class="eyebrow">答案与解析</p>
+            <h2>每一分从哪里来</h2>
+          </div>
+          <div id="review-list"></div>
+        </section>
+
+        <section class="support-card" aria-labelledby="support-title">
+          <div class="support-copy">
+            <p class="eyebrow">THANK YOU</p>
+            <h2 id="support-title">感谢完成这套读懂测试</h2>
+            <p>
+              如果这个互动版本让你多停留了一分钟，可以用一份自愿赞赏支持后续维护。
+              赞赏与测验分数无关，也不会解锁额外内容。
+            </p>
+          </div>
+          <figure class="qr-frame">
+            <img src="./assets/thank-you-qr.png" alt="比特币自愿赞赏二维码" />
+            <figcaption>BITCOIN · 自愿赞赏</figcaption>
+          </figure>
+        </section>
+      </section>
+
+      <section class="print-answer-key" id="print-answer-key" hidden>
+        <header class="print-answer-heading">
+          <p class="eyebrow">参考答案与解析</p>
+          <h2>读懂答案，也读懂那些没有说出口的话</h2>
+          <p>开放性理解允许存在差异；本答案按网页自动计分规则列出。</p>
+        </header>
+        <div id="print-answer-list"></div>
+        <section class="print-thanks">
+          <div>
+            <p class="eyebrow">THANK YOU</p>
+            <h2>谢谢读到这里</h2>
+            <p>如果这份互动试卷让你觉得有意思，可以扫码自愿赞赏。</p>
+          </div>
+          <figure class="qr-frame">
+            <img src="./assets/thank-you-qr.png" alt="比特币自愿赞赏二维码" />
+            <figcaption>BITCOIN · 自愿赞赏</figcaption>
+          </figure>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <span>《我的女友景甜》互动读懂测试</span>
+      <span>完成后即时计分与解析</span>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
