@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>结算报告 ·《我的女友景甜》账单附页</title>
+<style>
+@font-face{
+  font-family:"BookSerif";
+  src:url("../fonts/SourceHanSerifCN-Regular.otf");
+  font-display:swap;
+}
+:root{
+  --paper:#fbfaf7;
+  --desk:#efece4;
+  --ink:#21201c;
+  --sea:#2c4a5e;
+  --sea-soft:#5b7a8c;
+  --line:#d9d3c5;
+  --muted:#8a867c;
+  --waste:#a0413c;
+  --amber:#b07d2f;
+  --gray:#6e6a63;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--desk);
+  color:var(--ink);
+  font-family:"BookSerif","Songti SC","Noto Serif CJK SC","SimSun",serif;
+  font-size:15px;
+  line-height:1.75;
+}
+.page{
+  max-width:900px;
+  margin:24px auto 64px;
+  padding:56px clamp(18px,5vw,64px) 48px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  box-shadow:0 1px 3px rgba(33,32,28,.06);
+}
+.amt,.t-ref,.ref,.bar-val,.head-meta,.stat-num{
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- 报告抬头 ---------- */
+.head-row{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
+}
+h1{
+  margin:0;
+  font-size:clamp(26px,7vw,34px);
+  font-weight:600;
+  letter-spacing:.35em;
+  color:var(--ink);
+}
+.head-meta{
+  margin:0 0 4px;
+  text-align:right;
+  font-size:12px;
+  line-height:1.9;
+  color:var(--muted);
+  letter-spacing:.08em;
+}
+.subtitle{
+  margin:14px 0 0;
+  padding-bottom:18px;
+  font-size:13px;
+  color:var(--muted);
+  border-bottom:3px double var(--line);
+}
+.epigraph{
+  margin:22px 0 6px;
+  padding:14px 18px;
+  border-left:2px solid var(--sea);
+  background:rgba(44,74,94,.04);
+  font-size:14px;
+  color:var(--gray);
+}
+.epigraph p{margin:0}
+.epigraph .src{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
+
+/* ---------- 章节 ---------- */
+section{margin-top:52px}
+h2{
+  margin:0 0 20px;
+  font-size:17px;
+  font-weight:600;
+  letter-spacing:.14em;
+  border-bottom:1px solid var(--line);
+  padding-bottom:10px;
+}
+
+/* ---------- 一、汇总结论 ---------- */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+.stat{
+  background:var(--paper);
+  padding:16px 14px 14px;
+}
+.stat-label{
+  margin:0;
+  font-size:12px;
+  letter-spacing:.1em;
+  color:var(--muted);
+}
+.stat-num{
+  margin:8px 0 6px;
+  font-size:clamp(17px,3.2vw,21px);
+  font-weight:600;
+  color:var(--sea);
+  white-space:nowrap;
+}
+.stat-num.reject{color:var(--waste)}
+.stat-num .plus{color:var(--muted);font-weight:400}
+.stat-sub{
+  margin:0;
+  font-size:11.5px;
+  line-height:1.7;
+  color:var(--muted);
+}
+
+/* ---------- 二、时间线 ---------- */
+.timeline{
+  list-style:none;
+  margin:0;
+  padding:0 0 0 4px;
+  border-left:1px solid var(--line);
+}
+.timeline li{
+  position:relative;
+  margin:0 0 26px;
+  padding:0 0 0 22px;
+}
+.timeline li::before{
+  content:"";
+  position:absolute;
+  left:-4.5px;
+  top:9px;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--paper);
+  border:1.5px solid var(--sea);
+}
+.timeline li:last-child{margin-bottom:0}
+.t-date{
+  display:block;
+  font-size:12px;
+  letter-spacing:.06em;
+  color:var(--sea);
+}
+.t-body p{margin:2px 0 0;font-size:14px;max-width:640px}
+.t-ref{display:block;margin-top:2px;font-size:11px;color:var(--muted)}
+
+/* ---------- 三、流水明细 ---------- */
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+thead th{
+  text-align:left;
+  font-weight:600;
+  font-size:12px;
+  letter-spacing:.06em;
+  color:var(--muted);
+  border-top:2px solid var(--ink);
+  border-bottom:1px solid var(--ink);
+  padding:8px 8px;
+}
+tbody td{
+  border-bottom:1px solid var(--line);
+  padding:10px 8px;
+  vertical-align:top;
+}
+tbody tr:last-child td{
+  border-bottom:2px solid var(--ink);
+}
+td.idx,th.idx{width:26px;color:var(--muted)}
+td.amt{white-space:nowrap;font-size:12.5px}
+td.amt .und{color:var(--muted);font-family:inherit}
+td.status{white-space:nowrap}
+td.ref,th.ref{width:70px;color:var(--muted);font-size:11.5px}
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:1px;
+}
+.dot.paid{background:var(--sea)}
+.dot.wasted{background:var(--waste)}
+.dot.promised{background:var(--amber)}
+.dot.rejected{background:var(--gray)}
+.dot.undisclosed{background:transparent;border:1.5px solid var(--sea-soft)}
+.dot.context{background:#cfc8b8}
+.dot-gap{color:var(--muted);font-size:11px}
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 18px;
+  margin:14px 0 0;
+  font-size:11.5px;
+  color:var(--gray);
+}
+.legend span{white-space:nowrap}
+
+/* ---------- 四、对照 ---------- */
+.chart{padding:6px 0 0}
+.axis{
+  position:relative;
+  height:22px;
+  margin-bottom:8px;
+  border-bottom:1px solid var(--line);
+}
+.axis .tick{
+  position:absolute;
+  top:0;
+  height:100%;
+  font-size:10.5px;
+  color:var(--muted);
+  font-family:ui-monospace,"SF Mono",Menlo,monospace;
+}
+.axis .tick i{
+  display:block;
+  width:1px;
+  height:7px;
+  background:var(--line);
+  margin:0 0 1px -1px;
+}
+.bar-row{margin:0 0 18px}
+.bar-label{
+  margin:0 0 5px;
+  font-size:13px;
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:12px;
+}
+.bar-label .bar-val{
+  font-size:12.5px;
+  color:var(--sea);
+  white-space:nowrap;
+}
+.bar-track{
+  height:16px;
+  border:1px solid var(--line);
+  background:#f4f1e9;
+}
+.bar{
+  height:100%;
+  background:var(--sea);
+}
+.bar.reject{
+  background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(44,74,94,.30) 4px 8px);
+}
+.bar-row.reject .bar-val{color:var(--waste)}
+.chart-note{
+  margin:10px 0 0;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* ---------- 五、附注 ---------- */
+.notes{
+  margin:0;
+  padding-left:22px;
+  font-size:13px;
+  color:var(--gray);
+}
+.notes li{margin-bottom:10px;max-width:640px}
+.notes li:last-child{margin-bottom:0}
+
+/* ---------- 页脚 ---------- */
+footer{
+  margin-top:56px;
+  padding-top:24px;
+  border-top:3px double var(--line);
+}
+.audit{
+  margin:0;
+  font-size:14.5px;
+  line-height:2;
+  color:var(--ink);
+  max-width:640px;
+}
+.audit .src{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  color:var(--muted);
+}
+.declare{
+  margin:18px 0 0;
+  font-size:11.5px;
+  color:var(--muted);
+}
+
+/* ---------- 移动端 ---------- */
+@media (max-width:680px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .page{margin:0 0 32px;border-left:none;border-right:none}
+}
+@media (max-width:480px){
+  h1{letter-spacing:.2em}
+}
+@media (max-width:420px){
+  .stats{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tbody tr{
+    border-bottom:1px solid var(--line);
+    padding:10px 0 6px;
+  }
+  tbody tr:last-child{border-bottom:2px solid var(--ink)}
+  tbody td{
+    border:none;
+    padding:3px 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:16px;
+  }
+  tbody td::before{
+    content:attr(data-label);
+    flex:none;
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:.08em;
+  }
+  tbody td.idx{display:none}
+  td.amt,td.status,td.ref{text-align:right}
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+<header>
+  <div class="head-row">
+    <h1>结&#8195;算&#8195;报&#8195;告</h1>
+    <div class="head-meta">
+      账期&#8195;2007&#8211;2026<br>
+      编号&#8195;JT-2026-0228<br>
+      币种&#8195;CNY / USD
+    </div>
+  </div>
+  <p class="subtitle">《我的女友景甜》账单附页 &#183; 十七笔流水逐条核对自 <code>main.tex</code></p>
+  <blockquote class="epigraph">
+    <p>一颗卵子的重量，三点五微克。五千万美元现金的重量，两点五吨。</p>
+    <span class="src">&#8212;&#8212; main.tex 第 109&#8211;111 行</span>
+  </blockquote>
+</header>
+
+<section id="summary">
+  <h2>一、汇总结论</h2>
+  <div class="stats">
+    <div class="stat">
+      <p class="stat-label">已支付 &#183; 男主出账</p>
+      <p class="stat-num">&#165; 35,000,000<span class="plus">+</span></p>
+      <p class="stat-sub">另有 $1,200,000<br>折合约 606 万美元</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">被拒付 &#183; 最大单笔</p>
+      <p class="stat-num reject">$ 50,000,000</p>
+      <p class="stat-sub">全书唯一被拒的一笔<br>约为已支付总额的 8 倍</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">确认打水漂</p>
+      <p class="stat-num">$ 200,000</p>
+      <p class="stat-sub">代孕定金，不退<br>另有八天的促排针，一支未拆</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">已发生 &#183; 金额未披露</p>
+      <p class="stat-num">9 项</p>
+      <p class="stat-sub">账面之外<br>实际数字只会更高</p>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <h2>二、时间线</h2>
+  <ol class="timeline">
+    <li>
+      <span class="t-date">2007</span>
+      <div class="t-body">
+        <p>北大宿舍，一年房租一千块。校内网发好友申请，留言写了删、删了写，大概四十分钟，最后是一句「你好」。没有通过。</p>
+        <span class="t-ref">main.tex L137&#8211;145</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">2011</span>
+      <div class="t-body">
+        <p>北京冷。一件一百五十块的羽绒服，犹豫了三天。同年，她拍了一部一亿五千万的电影。</p>
+        <span class="t-ref">main.tex L155&#8211;157</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">认识她三个月</span>
+      <div class="t-body">
+        <p>让人做了一份东西：她的项目、股权、关联账户、京沪的房，四十几页，一周做完。我全部相信她说的。但是我一个字也不信。</p>
+        <span class="t-ref">main.tex L243&#8211;253</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">马尔代夫</span>
+      <div class="t-body">
+        <p>「你得给彩礼。」两个名字，两个账号。三千万，人民币，转了。回信两个字：收到。</p>
+        <span class="t-ref">main.tex L365&#8211;375</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">2026 &#183; 01 &#183; 02</span>
+      <div class="t-body">
+        <p>索尼娃贾尼，新年，他求婚。她说，钻戒太小了。又说，没事，以后补个大的。</p>
+        <span class="t-ref">main.tex L417&#8211;423</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">回到香港</span>
+      <div class="t-body">
+        <p>一天一张卡限额一百万。她说太慢，转五张。转到第三张，他犹豫了一下，还是转完了。</p>
+        <span class="t-ref">main.tex L471&#8211;483</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">春节</span>
+      <div class="t-body">
+        <p>维港放烟花，来了一百万人。没有她。</p>
+        <span class="t-ref">main.tex L491</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">02 &#183; 25</span>
+      <div class="t-body">
+        <p>她落地香港，说不去洛杉矶，除非先看到香港的房子。半年挑的十几套房，她都嫌不好看。</p>
+        <span class="t-ref">main.tex L527&#8211;531</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">02 &#183; 28</span>
+      <div class="t-body">
+        <p>她还是上了去洛杉矶的 G700，飞到蒙太奇拉古纳海滩。那一层包了三十天，一百万美元，她住了八天。</p>
+        <span class="t-ref">main.tex L533 &#183; L119</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">第八天</span>
+      <div class="t-body">
+        <p>她打了电话。她说，五千万，美元。他说，让我想想。&#8212;&#8212; 认识她以来，他没对她说过这四个字。电话里，她那边有海。</p>
+        <span class="t-ref">main.tex L537&#8211;549</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">次日</span>
+      <div class="t-body">
+        <p>她打回来。海很大，这层楼太大，她躲在卫生间里。然后她问，想好了吗。电话里她那边有海，他这边是维港，没有人说话，十一秒。她说，行。我知道了。</p>
+        <span class="t-ref">main.tex L569&#8211;595</span>
+      </div>
+    </li>
+    <li>
+      <span class="t-date">事后</span>
+      <div class="t-body">
+        <p>结账：特纳里费整面换掉的玻璃、为压配平每次都要多加再放掉的燃油、不退的定金、一支没拆的针。</p>
+        <span class="t-ref">main.tex L615&#8211;629</span>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section id="ledger">
+  <h2>三、流水明细</h2>
+  <table>
+    <thead>
+      <tr>
+        <th class="idx">#</th>
+        <th>情节 / 对象</th>
+        <th>金额</th>
+        <th>状态</th>
+        <th class="ref">出处</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="idx" data-label="序">01</td>
+        <td data-label="情节">蒙太奇拉古纳海滩整层包场三十天（实住八天，余二十二天空置，清洁工照常打扫）</td>
+        <td class="amt" data-label="金额">$ 1,000,000</td>
+        <td class="status" data-label="状态"><span class="dot paid"></span>已支付</td>
+        <td class="ref" data-label="出处">L119</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">02</td>
+        <td data-label="情节">湾流 G700 停 Van Nuys，机组每天照常报到待命</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot undisclosed"></span>已发生<span class="dot-gap">&#183;金额未披露</span></td>
+        <td class="ref" data-label="出处">L131</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">03</td>
+        <td data-label="情节">卡特兰的香蕉。她看了很久，问，这个多少钱</td>
+        <td class="amt" data-label="金额">$ 6,200,000</td>
+        <td class="status" data-label="状态"><span class="dot context"></span>仅问价 &#183; 非交易</td>
+        <td class="ref" data-label="出处">L173&#8211;175</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">04</td>
+        <td data-label="情节">《疯狂动物城2》包场：买断影厅全部座位</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot undisclosed"></span>已发生<span class="dot-gap">&#183;金额未披露</span></td>
+        <td class="ref" data-label="出处">L193</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">05</td>
+        <td data-label="情节">影院门口向已购票观众递现金，二十六人领钱；一对带孩子的夫妻也在其中，孩子举着爆米花</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot undisclosed"></span>已发生<span class="dot-gap">&#183;金额未披露</span></td>
+        <td class="ref" data-label="出处">L197&#8211;203</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">06</td>
+        <td data-label="情节">背景调查：认识她三个月时让人做的东西，项目、合作方、股权、关联账户、京沪的房，四十几页，一周做完</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot undisclosed"></span>已发生<span class="dot-gap">&#183;金额未披露</span></td>
+        <td class="ref" data-label="出处">L243</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">07</td>
+        <td data-label="情节">她的前财务出狱后走投无路，威胁纠缠了三天，她付了<sup>&#9317;</sup></td>
+        <td class="amt" data-label="金额">&#165; 80,000</td>
+        <td class="status" data-label="状态"><span class="dot paid"></span>已支付<sup>&#9317;</sup></td>
+        <td class="ref" data-label="出处">L321&#8211;345</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">08</td>
+        <td data-label="情节">彩礼。景国庆、田心爱，两个名字，两个账号。回信：收到</td>
+        <td class="amt" data-label="金额">&#165; 30,000,000</td>
+        <td class="status" data-label="状态"><span class="dot paid"></span>已支付</td>
+        <td class="ref" data-label="出处">L365&#8211;375</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">09</td>
+        <td data-label="情节">求婚戒指。戒指在香港，岛上没有卖的，助理坐水上飞机去马累，下午带回，装在一个酒店的信封里</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot undisclosed"></span>已发生<span class="dot-gap">&#183;金额未披露</span></td>
+        <td class="ref" data-label="出处">L419&#8211;421</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">10</td>
+        <td data-label="情节">见家长、筹备婚事打点：五张卡轮转，转到第三张他犹豫了一下</td>
+        <td class="amt" data-label="金额">&#165; 5,000,000+</td>
+        <td class="status" data-label="状态"><span class="dot paid"></span>已支付</td>
+        <td class="ref" data-label="出处">L477&#8211;483</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">11</td>
+        <td data-label="情节">香港一套房，写她的名字。助理半年看了十几套，她都嫌不好看</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot promised"></span>承诺 &#183; 未兑现</td>
+        <td class="ref" data-label="出处">L505, 529&#8211;531</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">12</td>
+        <td data-label="情节">孕前检查：抽血、激素六项、B 超、AMH，按月出现在他的汇总付款单里</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot paid"></span>已支付<span class="dot-gap">&#183;持续数月</span></td>
+        <td class="ref" data-label="出处">L521</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">13</td>
+        <td data-label="情节">特纳里费丽兹卡尔顿：黑胶带贴太久，窗框玻璃整块换掉</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot undisclosed"></span>已发生<span class="dot-gap">&#183;金额未披露</span></td>
+        <td class="ref" data-label="出处">L615</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">14</td>
+        <td data-label="情节">包机燃油超额：三十个人坐按两百人设计的 A330，为压配平每次都要多加油，加到够重为止，到了再放掉，「比那一层楼还贵」，且每次都这样</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot undisclosed"></span>已发生<span class="dot-gap">&#183;金额未披露</span></td>
+        <td class="ref" data-label="出处">L621</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">15</td>
+        <td data-label="情节">洛杉矶诊所寄回的箱子：八天的促排针，要冷藏的，一支没拆</td>
+        <td class="amt" data-label="金额"><span class="und">未披露</span></td>
+        <td class="status" data-label="状态"><span class="dot wasted"></span>已支付 &#183; 打水漂</td>
+        <td class="ref" data-label="出处">L627</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">16</td>
+        <td data-label="情节">代孕机构定金，不退。代孕的人一月就定好了，档案里有她的照片，他没看过</td>
+        <td class="amt" data-label="金额">$ 200,000</td>
+        <td class="status" data-label="状态"><span class="dot wasted"></span>已支付 &#183; 打水漂</td>
+        <td class="ref" data-label="出处">L629</td>
+      </tr>
+      <tr>
+        <td class="idx" data-label="序">17</td>
+        <td data-label="情节">洛杉矶取卵，最终要价。他把问题输进 Claude Code，Claude 说，不要给</td>
+        <td class="amt" data-label="金额">$ 50,000,000</td>
+        <td class="status" data-label="状态"><span class="dot rejected"></span>被拒付</td>
+        <td class="ref" data-label="出处">L539&#8211;555</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="legend">
+    <span><span class="dot paid"></span>已支付</span>
+    <span><span class="dot wasted"></span>已支付 &#183; 打水漂</span>
+    <span><span class="dot promised"></span>承诺 &#183; 未兑现</span>
+    <span><span class="dot rejected"></span>被拒付</span>
+    <span><span class="dot undisclosed"></span>已发生 &#183; 金额未披露</span>
+    <span><span class="dot context"></span>仅提及 &#183; 非交易</span>
+  </div>
+</section>
+
+<section id="scale">
+  <h2>四、对照 &#183; 从一百五十块到五千万美元</h2>
+  <div class="chart">
+    <div class="axis">
+      <div class="tick" style="left:0%"><i></i>&#165;100</div>
+      <div class="tick" style="left:30.5%"><i></i>&#165;1&#19975;</div>
+      <div class="tick" style="left:61%"><i></i>&#165;100&#19975;</div>
+      <div class="tick" style="left:91.5%"><i></i>&#165;1&#20159;</div>
+    </div>
+    <div class="bar-row">
+      <p class="bar-label"><span>羽绒服 &#183; 2011 &#183; 犹豫了三天</span><span class="bar-val">&#165; 150</span></p>
+      <div class="bar-track"><div class="bar" style="width:2.7%"></div></div>
+    </div>
+    <div class="bar-row">
+      <p class="bar-label"><span>北大宿舍 &#183; 2007 &#183; 一年房租</span><span class="bar-val">&#165; 1,000</span></p>
+      <div class="bar-track"><div class="bar" style="width:15.3%"></div></div>
+    </div>
+    <div class="bar-row">
+      <p class="bar-label"><span>见家长打点 &#183; 五张卡 &#183; 转到第三张犹豫了一下</span><span class="bar-val">&#165; 5,000,000+</span></p>
+      <div class="bar-track"><div class="bar" style="width:71.7%"></div></div>
+    </div>
+    <div class="bar-row">
+      <p class="bar-label"><span>彩礼 &#183; 两个账号 &#183; 我转了</span><span class="bar-val">&#165; 30,000,000</span></p>
+      <div class="bar-track"><div class="bar" style="width:83.5%"></div></div>
+    </div>
+    <div class="bar-row reject">
+      <p class="bar-label"><span>取卵要价 &#183; 他说「让我想想」&#183; Claude 说不</span><span class="bar-val">$ 50,000,000 &#8776; &#165; 3.6&#20159;</span></p>
+      <div class="bar-track"><div class="bar reject" style="width:100%"></div></div>
+    </div>
+    <p class="chart-note">柱长按对数刻度，相邻刻度线相差一百倍：最左 &#165;150 与最右 $50,000,000 之间相差约二百四十万倍。斜纹为被拒付款项，未计入任何合计。</p>
+  </div>
+</section>
+
+<section id="notes">
+  <h2>五、附注</h2>
+  <ol class="notes">
+    <li>口径：合计仅计「金额明确且由男主出账」的条目&#8212;&#8212;美元 $1,200,000（含已打水漂的 $200,000 定金）、人民币 &#165;30,000,000 与不低于 &#165;5,000,000；按 1 美元 = 7.2 人民币折算，约合 606 万美元量级。</li>
+    <li>被拒付的 $50,000,000（L539&#8211;555）是全书唯一被男主拒绝的一笔，也是金额最大的一笔，未计入任何合计；约为已支付总额的 8 倍。</li>
+    <li>金额未披露（或仅知零头）但确认已发生的支出共 9 项（表中 02、04、05、06、09、12、13、14、15），实际数字只会更高&#8212;&#8212;其中燃油一项，助理原话是「比蒙太奇那一层楼还贵」。</li>
+    <li>相对 issue #307 的十五笔，本表另补两笔：背景调查（06）与求婚戒指（09）。此外尚有未逐项列入的小额开销&#8212;&#8212;黑胶带前后五十卷、泰德公园的玫瑰与香槟、三十人行李分三架小飞机；她主演电影的制作费（《战国》一亿五千万、《长城》一亿五千万美元）为语境性金额，非男主支出，均未列入。</li>
+    <li>香港购房（11）为口头承诺：助理半年看了十几套房，她都嫌不好看，房子从未选定、从未过户。</li>
+    <li>敲诈款八万元（07）由她本人支付；原文未标注币种，按语境推断为人民币；资金来源原文未交代，未计入男主合计。</li>
+    <li>卡特兰香蕉（03）仅为观赏问价，未发生交易。</li>
+    <li>表中「出处」列为 main.tex 行号，金额与情节均可逐条回溯核对。</li>
+    <li>声明：《我的女友景甜》为虚构作品，涉及现实人物的部分不构成任何事实认定。本页为社区二次创作，数据全部转述自原文，由 AI 辅助整理。</li>
+  </ol>
+</section>
+
+<footer>
+  <blockquote class="audit">
+    「我用Claude Code读API把所有现金资产跑了一遍，结论是对我不会有任何影响。」
+    「对于爱情，我不关心，也不理解。但是你不能把这五千万美元给她。」
+    <span class="src">&#8212;&#8212; main.tex 第 551 行 &#183; 第 555 行</span>
+  </blockquote>
+  <p class="declare">本页为单文件零依赖静态页面，可离线打开。字体取自本仓库 fonts/ 目录。</p>
+</footer>
+
+</main>
+</body>
+</html>
