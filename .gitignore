@@ -1,7 +1,13 @@
 .DS_Store
 build/
+.tools/
+test-dist/
+__pycache__/
+*.pyc
 /*.pdf
 !my-girlfriend-jing-tian-en.pdf
+!dist/
+!dist/*.pdf
 *.aux
 *.fdb_latexmk
 *.fls
