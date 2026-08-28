@@ -24,6 +24,10 @@ fi
 
 mkdir -p "$build_directory" "$project_root/$output_directory"
 
+# Pin PDF timestamps and identifiers to the source-edition commit for repeatable output.
+export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1787833425}"
+export FORCE_SOURCE_DATE="${FORCE_SOURCE_DATE:-1}"
+
 if [[ -n "${TECTONIC:-}" ]]; then
   tectonic_command="$TECTONIC"
 elif command -v tectonic >/dev/null 2>&1; then

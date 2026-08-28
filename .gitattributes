@@ -1,0 +1,4 @@
+*.pdf binary
+*.otf binary linguist-vendored
+*.ttf binary linguist-vendored
+fonts/** linguist-vendored
