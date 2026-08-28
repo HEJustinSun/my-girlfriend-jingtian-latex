@@ -9,3 +9,7 @@ build/
 *.toc
 *.synctex.gz
 *.xdv
+
+# Intermediate PDF from texcompile; build.py renames it to the final title.
+universe/**/main.pdf
+.ruff_cache/

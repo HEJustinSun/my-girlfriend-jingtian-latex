@@ -1,0 +1,3266 @@
+% !TEX program = xelatex
+% Typography for the showrunner draft. Injected verbatim by build.py.
+% Fonts are shared with the canon volume at the repository root.
+\documentclass[11pt,oneside]{book}
+
+\usepackage{geometry}
+\geometry{
+  paperwidth=8.5in,
+  paperheight=11in,
+  top=0.95in,
+  bottom=1.0in,
+  left=1.15in,
+  right=1.05in,
+  headheight=14pt,
+  headsep=22pt,
+  footskip=30pt
+}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[unicode=true,hidelinks]{hyperref}
+
+% Latin fonts carry +pwid: Source Han CN draws U+2019 full-width by CJK
+% convention, which wrecks every English apostrophe in the dialogue. pwid
+% selects the proportional form. The CJK fonts below deliberately omit it,
+% so Chinese quotation marks keep their full-width shape.
+% Ligatures=TeX is likewise dropped: the source already carries real
+% Unicode dashes and quotes, so the TeX ligature set buys nothing.
+\defaultfontfeatures{Ligatures=NoCommon}
+\setmainfont[
+  Path=../../../fonts/, RawFeature={+pwid},
+  BoldFont=SourceHanSerifCN-Regular.otf, BoldFeatures={FakeBold=2.2},
+  ItalicFont=SourceHanSerifCN-Regular.otf, ItalicFeatures={FakeSlant=0.15}
+]{SourceHanSerifCN-Regular.otf}
+\setsansfont[
+  Path=../../../fonts/, RawFeature={+pwid},
+  BoldFont=SourceHanSansCN-Medium.otf, BoldFeatures={FakeBold=2.0},
+  ItalicFont=SourceHanSansCN-Medium.otf, ItalicFeatures={FakeSlant=0.15}
+]{SourceHanSansCN-Medium.otf}
+\setCJKmainfont[Path=../../../fonts/,AutoFakeBold=2.2,AutoFakeSlant=0.15]{SourceHanSerifCN-Regular.otf}
+\setCJKsansfont[Path=../../../fonts/,AutoFakeBold=2.0,AutoFakeSlant=0.15]{SourceHanSansCN-Medium.otf}
+\setCJKmonofont[Path=../../../fonts/]{SourceHanSansCN-Medium.otf}
+\xeCJKsetup{PunctStyle=plain}
+% U+2014 does double duty here: 257 of its 277 uses are English em dashes
+% in sluglines and episode titles, where xeCJK's CJK class swallows the
+% following space ("CLINIC —DAY"). Class it as Latin, and let \CNdash
+% re-enter the CJK class for the 10 Chinese 破折号.
+\xeCJKDeclareCharClass{Default}{"2014}
+\newcommand{\CNdash}{\begingroup\xeCJKDeclareCharClass{CJK}{"2014}——\endgroup}
+
+\definecolor{PrimaryInk}{HTML}{161618}
+\definecolor{SecondaryInk}{HTML}{5C5C62}
+\definecolor{AccentInk}{HTML}{B04A1E}
+\definecolor{RuleInk}{HTML}{DCDCE0}
+\definecolor{CoverInk}{HTML}{101013}
+\definecolor{CoverPaper}{HTML}{F4F2EE}
+\definecolor{CoverAccent}{HTML}{E0672C}
+\definecolor{CoverRule}{HTML}{3A3A40}
+\color{PrimaryInk}
+
+\hypersetup{
+  pdftitle={五千万美元新娘 The Billionaire's \$50 Million Bride},
+  pdfauthor={孙哥宇宙 SUN GE UNIVERSE},
+  pdfsubject={60 集海外竖屏短剧 Showrunner Development Draft v1.0},
+  bookmarksnumbered=false
+}
+
+% Flush-left paragraphs; vertical rhythm is carried by the macros below.
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\tolerance=2000
+\emergencystretch=2em
+\raggedbottom
+
+% Dialogue block geometry, measured from the left text edge.
+\newlength{\CueIndent}\setlength{\CueIndent}{1.05in}
+\newlength{\DlgIndent}\setlength{\DlgIndent}{0.62in}
+\newlength{\DlgRight}\setlength{\DlgRight}{0.62in}
+
+\fancypagestyle{scriptmain}{
+  \fancyhf{}
+  \fancyhead[L]{\sffamily\fontsize{7.6}{10}\selectfont\color{SecondaryInk}\leftmark}
+  \fancyhead[R]{\sffamily\fontsize{7.6}{10}\selectfont\color{SecondaryInk}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\fancypagestyle{plainfoot}{
+  \fancyhf{}
+  \fancyfoot[C]{\sffamily\fontsize{7.6}{10}\selectfont\color{SecondaryInk}\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\makeatletter
+
+% Reserve vertical space so a heading is never orphaned at a page bottom.
+% Stands in for the needspace package, which this TeX Live cannot install.
+\newcommand{\KeepTogether}[1]{%
+  \begingroup
+  \setlength{\dimen@}{#1}%
+  \vskip 0pt plus \dimen@
+  \penalty -100
+  \vskip 0pt plus -\dimen@
+  \vskip 0.0001pt
+  \endgroup
+}
+
+% --- Front matter ---------------------------------------------------------
+
+% \CoverPage{kicker}{title}{chinese title}{format line}{tagline}
+\newcommand{\CoverPage}[5]{%
+  \pagecolor{CoverInk}\color{CoverPaper}\thispagestyle{empty}%
+  \sffamily
+  \vspace*{0.30in}
+  {\fontsize{8.4}{12}\selectfont\color{CoverAccent}#1\par}
+  \vspace{7pt}
+  {\color{CoverRule}\hrule height 0.5pt}
+  \vfill
+  {\bfseries\fontsize{34}{41}\selectfont\raggedright #2\par}
+  \vspace{20pt}
+  {\bfseries\fontsize{20}{27}\selectfont\color{CoverAccent}#3\par}
+  \vspace{16pt}
+  {\fontsize{9.6}{15}\selectfont\color{CoverPaper}#4\par}
+  \vfill
+  {\color{CoverRule}\hrule height 0.5pt}
+  \vspace{9pt}
+  {\fontsize{9}{13}\selectfont\color{CoverAccent}#5\par}
+  \vspace*{0.30in}
+  \clearpage
+  \pagecolor{white}\color{PrimaryInk}\rmfamily
+}
+
+\newenvironment{SpecPage}{%
+  \thispagestyle{empty}%
+  \vspace*{0.55in}
+  {\noindent\sffamily\fontsize{8.4}{12}\selectfont\color{AccentInk}PROJECT SPECIFICATION\par}
+  \vspace{7pt}
+  {\color{RuleInk}\hrule height 0.5pt}
+  \vspace{18pt}
+}{%
+  \clearpage
+}
+
+\newcommand{\SpecRow}[2]{%
+  \par\addvspace{10pt}%
+  {\parindent=0pt \hangindent=76pt \hangafter=1 \noindent
+   \hb@xt@ 76pt{\sffamily\bfseries\fontsize{9}{14}\selectfont\color{SecondaryInk}#1\hfil}%
+   {\rmfamily\fontsize{9.6}{15.4}\selectfont\color{PrimaryInk}#2}\par}%
+}
+
+\newcommand{\TableOfContents}{%
+  \clearpage
+  \pagenumbering{roman}
+  \pagestyle{plainfoot}\thispagestyle{plainfoot}%
+  \vspace*{0.15in}
+  {\noindent\sffamily\bfseries\fontsize{19}{25}\selectfont\color{PrimaryInk}目录\par}
+  \vspace{8pt}
+  {\color{AccentInk}\hrule height 1.6pt width 34pt}
+  \vspace{16pt}
+  \setcounter{tocdepth}{1}%
+  {\sffamily\fontsize{9.4}{14}\selectfont\@starttoc{toc}}%
+  \clearpage
+}
+
+\newcommand{\StartBody}{%
+  \clearpage
+  \pagenumbering{arabic}
+  \pagestyle{scriptmain}%
+}
+
+% --- Structure ------------------------------------------------------------
+
+\newcommand{\PartPage}[2]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{#1　#2}%
+  \markboth{#1　#2}{}%
+  \thispagestyle{empty}%
+  \vspace*{2.5in}
+  {\noindent\sffamily\fontsize{9.5}{13}\selectfont\color{AccentInk}#1\par}
+  \vspace{12pt}
+  {\noindent\sffamily\bfseries\fontsize{27}{34}\selectfont\color{PrimaryInk}#2\par}
+  \vspace{16pt}
+  {\color{AccentInk}\hrule height 2pt width 54pt}
+  \clearpage
+}
+
+\newcommand{\Episode}[2]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{section}{EP#1\texorpdfstring{\quad}{ }#2}%
+  \markboth{EPISODE #1 — #2}{}%
+  \thispagestyle{plainfoot}%
+  \vspace*{0.10in}
+  {\noindent\sffamily\fontsize{8.6}{12}\selectfont\color{AccentInk}EPISODE #1\par}
+  \vspace{5pt}
+  {\noindent\sffamily\bfseries\fontsize{20}{26}\selectfont\color{PrimaryInk}#2\par}
+  \vspace{10pt}
+  {\color{AccentInk}\hrule height 1.6pt width 34pt}
+  \vspace{15pt}
+}
+
+\newcommand{\SectionHead}[1]{%
+  \par\addvspace{20pt}%
+  \KeepTogether{5\baselineskip}%
+  \phantomsection
+  \addcontentsline{toc}{section}{#1}%
+  {\noindent\sffamily\bfseries\fontsize{13}{18}\selectfont\color{PrimaryInk}#1\par}%
+  \nobreak\vspace{9pt}\nobreak
+}
+
+\newcommand{\SubHead}[1]{%
+  \par\addvspace{14pt}%
+  \KeepTogether{4\baselineskip}%
+  {\noindent\sffamily\bfseries\fontsize{10.6}{15}\selectfont\color{AccentInk}#1\par}%
+  \nobreak\vspace{6pt}\nobreak
+}
+
+% --- Screenplay elements --------------------------------------------------
+
+\newcommand{\Scene}[2]{%
+  \par\addvspace{16pt}%
+  \KeepTogether{5\baselineskip}%
+  {\noindent\sffamily\bfseries\fontsize{9.6}{13.5}\selectfont\color{PrimaryInk}%
+   \textcolor{AccentInk}{#1}\hspace{8pt}#2\par}%
+  \nobreak\vspace{3pt}%
+  {\color{RuleInk}\hrule height 0.5pt}%
+  \nobreak\vspace{10pt}\nobreak
+}
+
+\newcommand{\Action}[1]{%
+  \par{\rmfamily\fontsize{10}{16.6}\selectfont\color{PrimaryInk}#1\par}%
+  \addvspace{6.5pt}%
+}
+
+\newcommand{\CueBody}[2]{%
+  \par\addvspace{8pt}%
+  \KeepTogether{3\baselineskip}%
+  {\leftskip=\CueIndent
+   \noindent\sffamily\bfseries\fontsize{9}{13}\selectfont\color{AccentInk}#1#2\par}%
+  \nobreak\vspace{1.5pt}\nobreak
+}
+\newcommand{\Cue}[1]{\CueBody{#1}{}}
+\newcommand{\CueP}[2]{%
+  \CueBody{#1}{\normalfont\sffamily\fontsize{8.2}{13}\selectfont\color{SecondaryInk}（#2）}%
+}
+
+\newcommand{\Dialogue}[1]{%
+  {\leftskip=\DlgIndent \rightskip=\DlgRight
+   \noindent\rmfamily\fontsize{10}{15.2}\selectfont\color{PrimaryInk}#1\par}%
+  \addvspace{6.5pt}%
+}
+
+\newcommand{\Transition}[1]{%
+  \par\addvspace{12pt}%
+  {\raggedleft\sffamily\bfseries\fontsize{8.4}{12}\selectfont\color{SecondaryInk}#1\par}%
+  \addvspace{4pt}%
+}
+
+\newcommand{\Insert}[1]{%
+  \par\addvspace{11pt}%
+  \KeepTogether{3\baselineskip}%
+  {\centering\sffamily\bfseries\fontsize{9.6}{14}\selectfont\color{AccentInk}#1\par}%
+  \addvspace{11pt}%
+}
+
+\newcommand{\EpisodeMeta}[2]{%
+  \par\addvspace{4pt}%
+  {\leftskip=12pt
+   \sffamily\fontsize{8.8}{13.8}\selectfont\color{SecondaryInk}%
+   \noindent\llap{\raisebox{0.4pt}{\textcolor{AccentInk}{\rule{2pt}{8.4pt}}}\hspace{6pt}}%
+   \textbf{#1}\hspace{5pt}#2\par}%
+  \addvspace{4pt}%
+}
+
+\newcommand{\Beat}[2]{%
+  \par\addvspace{6pt}%
+  \KeepTogether{2\baselineskip}%
+  {\rmfamily\fontsize{9.7}{15.8}\selectfont\color{PrimaryInk}%
+   \hangindent=15pt \hangafter=1 \noindent
+   {\sffamily\bfseries\fontsize{9.3}{15.8}\selectfont\color{AccentInk}#1}\hspace{7pt}#2\par}%
+  \addvspace{6pt}%
+}
+
+% --- Lists (plain LaTeX; enumitem is unavailable in this TeX Live) ---------
+
+\newenvironment{Bullets}{%
+  \begin{list}{\raisebox{1.4pt}{\textcolor{AccentInk}{\rule{3.4pt}{3.4pt}}}}{%
+    \setlength{\leftmargin}{17pt}%
+    \setlength{\labelwidth}{9pt}%
+    \setlength{\labelsep}{8pt}%
+    \setlength{\itemsep}{4pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{7pt}%
+    \setlength{\partopsep}{0pt}%
+    \setlength{\itemindent}{0pt}%
+    \setlength{\listparindent}{0pt}%
+    \rmfamily\fontsize{9.7}{15.6}\selectfont\color{PrimaryInk}}%
+}{\end{list}}
+
+\newcounter{NumItem}
+\newenvironment{Numbers}{%
+  \begin{list}{\sffamily\bfseries\color{AccentInk}\arabic{NumItem}.}{%
+    \usecounter{NumItem}%
+    \setlength{\leftmargin}{20pt}%
+    \setlength{\labelwidth}{14pt}%
+    \setlength{\labelsep}{6pt}%
+    \setlength{\itemsep}{4pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{7pt}%
+    \setlength{\partopsep}{0pt}%
+    \setlength{\itemindent}{0pt}%
+    \setlength{\listparindent}{0pt}%
+    \rmfamily\fontsize{9.7}{15.6}\selectfont\color{PrimaryInk}}%
+}{\end{list}}
+
+\makeatother
+
+\begin{document}
+\CoverPage
+  {SHOWRUNNER DEVELOPMENT DRAFT}
+  {THE BILLIONAIRE'S \$50 MILLION BRIDE}
+  {《五千万美元新娘》}
+  {60 集海外竖屏短剧｜Showrunner Development Draft v1.0}
+  {LOVE BEGINS WHERE OWNERSHIP ENDS}
+
+\begin{SpecPage}
+  \SpecRow{规格}{60 Episodes × 100–125 sec｜英文对白｜中文动作与导演提示}
+  \SpecRow{类型}{Billionaire Romance / Celebrity Scandal / Toxic Love / Revenge / Mystery}
+  \SpecRow{核心受众}{18–44 岁女性}
+  \SpecRow{基调}{奢华、危险、性感、情感高压；每集都必须有新信息或权力逆转}
+  \SpecRow{创作说明}{本稿面向中文主创团队开发。动作、调度与节奏提示使用中文；人物对白直接按北美英语口语撰写，方便英语演员围读和后续本土化。每集以 2–4 个低转场场景完成，结尾均设置硬钩子。}
+\end{SpecPage}
+
+\TableOfContents
+
+\StartBody
+\PartPage{第一部分}{修订后的创作总纲}
+\SectionHead{1. 一句话故事}
+\Action{十九年前，皇后区穷小子 SUN GE 发给少女明星 AVA VANCE 的好友申请石沉大海；十九年后，他成了全美最招恨的加密货币亿万富翁，也终于成了她的未婚夫\CNdash{}直到 Ava 在取卵前索要五千万美元、拒绝解释，而 Sun 人生第一次没有说 Yes。她随即消失，他才发现她要买回的不是奢侈品，而是被父母和制片人偷走了十五年的名字、面孔与未来。}
+\SectionHead{2. 本版的六项核心修订}
+\SubHead{2.1 “五千万”提前兑现}
+\Action{EP01 先用 20 秒冷开场亮出 ultimatum，随后回到七个月前；EP41 正式回到同一时刻，EP44 完成分手。观众不需要等待五十集才拿到首集承诺。}
+\SubHead{2.2 女主保持争议，但不能被写死}
+\Action{Ava 仍会提出荒谬要求、撒谎、逃避和伤人；但从 EP10 起，观众会持续看到她对镜头、合同、签字和数字替身的异常恐惧。观众可以怀疑她“捞”，却会知道钱背后一定有别的东西。}
+\SubHead{2.3 反派必须从前段持续施压}
+\Action{GRANT REDDICK 不再是后段才出现的说明性人物。他从慈善晚宴就注意到 Sun，并逐步利用 Ava 的父母、媒体与 AI 项目逼迫 Ava。五千万不是临时巧合，而是他看准 Sun 后设计的赎金。}
+\SubHead{2.4 Sun 的成长不是“查到真相”，而是“改变解决方式”}
+\Action{旧 Sun 会买下 Ava 的权利，再把合同送给她。新 Sun 最后选择把证据和选择权无条件交给 Ava，由她亲手夺回自己。他的高潮动作是克制，而不是炫富。}
+\SubHead{2.5 终局证据链具体化}
+\Action{反杀建立在三项可视化证据上：伪造的监护人签字、未进入 Coogan Trust 的童星收入、Grant 向投资人隐瞒权利争议的录音与财务流水。这样发布会翻盘既有爽点，也不会只靠一段演讲。}
+\SubHead{2.6 三角关系以“谁更懂她”推进，而不是争宠}
+\Action{MAYA CROSS 是情敌、前任和真相守门人。她赢 Sun 的方式是看懂 Ava；Sun 最终赢得关系的方式，则是学会不占有 Ava。Maya 的结局不是输掉女人，而是停止用等待证明自己的爱。}
+\SectionHead{3. 竖屏执行规则}
+\begin{Bullets}
+  \item 每集开场 3–5 秒必须有冲突中的人脸、金额、秘密或动作，不用空镜起戏。
+  \item 每集只完成一个主问题，同时至少制造一个更大的新问题。
+  \item 每 3 集一个小反转；每 10–12 集一个付费级大爆点。
+  \item 对白以短句、压迫式问答和可剪成投流素材的 punch line 为主。
+  \item 奢华场面必须服务权力关系：空影院、空机舱、空酒店层、空豪宅反复构成“昂贵的空”。
+  \item 同一集尽量控制在 1–2 个主场景，避免两分钟内频繁换景。
+  \item 亲密戏以欲望、试探和边界为核心，不以裸露替代剧情。
+  \item Ava 的测试越来越昂贵；Sun 的 Yes 越来越轻；直到最昂贵的一次，他沉默。
+\end{Bullets}
+\SectionHead{4. 核心角色升级}
+\SubHead{SUN GE｜36}
+\Action{Chinese American，HELIOS NETWORK 创始人。公开人格锋利、擅长逆风翻盘；私人层面却把“给予”当成唯一安全的亲密语言。他的致命误区不是有钱，而是认为没有任何关系需要承受不确定性。}
+\SubHead{AVA VANCE｜34}
+\Action{America's Sweetheart。聪明、有欲望、有操控性，也长期被父母和公司控制。她用要求测试爱，因为从小每一份“爱”后面都有一张账单。她不是等待被拯救的受害者；最终必须由她亲自公开真相。}
+\SubHead{MAYA CROSS｜35}
+\Action{WNBA 传奇、三届 MVP、两枚奥运金牌得主，公开出柜。她曾替 Ava 扛下被曝光的舆论，却被 Ava 留在记者会现场。她比 Sun 更懂 Ava 的创伤，也比 Ava 更懂“离开也是爱”。}
+\SubHead{GRANT REDDICK｜58}
+\Action{塑造 Ava 的制片人，也是 VANCE LEGACY HOLDINGS 的实际控制人。他不把自己视为恶人：他坚信“Ava Vance”是自己投资出来的知识产权。AVA FOREVER 是他的终极产品。}
+\SubHead{ELAINE / VICTOR VANCE｜60s}
+\Action{Ava 的母亲兼财务控制人、父亲兼长期经理人。他们既爱女儿，也确实把她当成家庭公司。最危险之处是他们永远能把剥削说成牺牲。}
+\SubHead{LENA PARK｜38}
+\Action{Sun 的首席法务兼最信任的危机处理人。她负责替观众说出“这不是浪漫，是风险”，也在后段阻止 Sun 用最熟悉的收购方式解决 Ava。}
+\SubHead{RUBY / PETER GE｜60s}
+\Action{Sun 的父母，仍经营 Queens 洗衣店。Ruby 早就知道儿子保存了 Ava 的照片，却从没把那叫爱情；她称之为“你用十九年没回答的问题”。}
+\SectionHead{5. 五幕结构与付费节点}
+\SubHead{ACT I｜EP01–12：THE GIRL ON THE SCREEN}
+\Action{冷开场五千万；七个月前相遇；穷少年旧照；买空影院；指甲锉；Maya 登场；Grant 的“所有权”第一次被点破。EP12 以 Maya 的警告进入第一付费强点。}
+\SubHead{ACT II｜EP13–24：EVERY YES FEELS LIKE LOVE}
+\Action{私人飞机、豪宅、公开护爱、前任角力、金额升级。Ava 的要求越来越荒谬，Sun 的满足越来越迅速。两人逃到 Lanai，第一次接近普通生活。EP24 以“Let's have a baby”升级承诺。}
+\SubHead{ACT III｜EP25–40：THE PERFECT LIFE IS A TRAP}
+\Action{生育、求婚、旧照、48 页调查档案、三千万家庭信托、Queens 洗衣店。Grant 收紧 AVA FOREVER 交易；Ava 知道 Sun 十九年的执念后既感动又恐惧。EP40，72 小时赎回窗口开启。}
+\SubHead{ACT IV｜EP41–52：THE FIRST NO}
+\Action{五千万 ultimatum；ORACLE 建议拒绝；Ava 消失；HELIOS 崩盘；旧恋情曝光；Maya 与 Sun 结盟；数字 Ava 上线。Sun 即将花钱买断时终于停手，改为追查真正的犯罪证据。}
+\SubHead{ACT V｜EP53–60：BUY YOURSELF}
+\Action{Sun 找到 Ava，却不要求她回来；把证据无条件交给她。Ava 在 AVA FOREVER 发布会亲手反杀 Grant 和父母。Maya 放下，Sun 失去部分公司控制权却得到真正的选择。最终回到 Queens，小空间里第一次没有交易。}
+\PartPage{第二部分}{60 集节拍总表}
+\SectionHead{EP01–10｜欲望入口}
+\Beat{EP01 — FIFTY MILLION}{取卵前，Ava 索要五千万且拒绝解释；Sun 第一次说 “Let me think”。倒回七个月前，他在慈善晚宴花 620 万美元买下一颗胶带橙子，Ava 主动搭话。尾钩：她问他要不要一起看电影。}
+\Beat{EP02 — HI}{2007 年，17 岁 Sun 的 MySpace 好友申请被忽略；当下，他为 Ava 买空影院。尾钩：一个小女孩因清场哭了，Sun 第一次发现自己的“浪漫”伤到了别人。}
+\Beat{EP03 — THE EMPTY THEATER}{Sun 让观众回来，Ava 却问他究竟是在弥补女孩，还是在收买自己的内疚。两人在满场陌生人中第一次真正看电影。尾钩：Ava 在黑暗里牵住他的手。}
+\Beat{EP04 — THE NAIL FILE}{第一次亲密被一根刮疼她的指甲打断；Ava 花很久替他磨指甲，留下“Everybody goes somewhere”。尾钩：狗仔拍到她凌晨离开 Sun 的酒店。}
+\Beat{EP05 — AMERICA'S MOST HATED BOYFRIEND}{绯闻爆炸，Sun 的团队要否认；Sun 反而公开承认约会。尾钩：Grant 看见新闻，对 Elaine 说，“Now she finally has a buyer.”}
+\Beat{EP06 — THE PICTURE}{Sun 回 Queens，Ruby 揭穿他十九年没换过 Ava 的旧截图。Ava 无意看见 Sun 手机里的同一张图。尾钩：她问，“Did you fall for me—or the girl on that screen?”}
+\Beat{EP07 — COURTSIDE}{Sun 陪 Ava 看 WNBA 总决赛；Maya 绝杀后越过所有记者走向 Ava。尾钩：“How much did she cost you?”}
+\Beat{EP08 — THE WOMAN BEFORE YOU}{Ava 承认 Maya 是前任，却拒绝讲分手原因；Sun 用挑衅掩饰嫉妒。尾钩：Maya 单独对 Sun 说，“Ask her why she still has my initials on her back.”}
+\Beat{EP09 — THIRTY THOUSAND}{Ava 无缘由索要 30,000 美元；Sun 秒转。观众随后看见她把钱交给被父母辞退的老助理。尾钩：Ava 删除转账说明，像在故意让自己看起来更坏。}
+\Beat{EP10 — PROPERTY}{Grant 在片场要求扫描 Ava 的脸；她惊恐拒绝，却被父亲拿旧合同逼迫。尾钩：屏幕上生成一个年轻十岁的数字 Ava，朝真人微笑。}
+\SectionHead{EP11–20｜每一个 Yes 都有代价}
+\Beat{EP11 — THE DOSSIER}{Lena 告诉 Sun，Vance 家族资金结构异常；Sun 下令调查，又要求 Ava 永远不能知道。尾钩：调查第一页标题\CNdash{}VANCE LEGACY HOLDINGS。}
+\Beat{EP12 — OWN HER}{Maya 与 Sun 正面冲突，指出 Ava 会主动把自己变成商品，只为比别人先控制结局。尾钩：“Ask what happened the last time a rich man tried to own her.”}
+\Beat{EP13 — TURN THE PLANE AROUND}{Ava 因忘带母亲遗物要求私人飞机返航；Sun 不顾董事会会议照做。尾钩：她打开盒子，里面不是遗物，而是一张空白支票。}
+\Beat{EP14 — THE BLANK CHECK}{Ava 承认她在测试他；Sun 不怒反笑，在支票上签名。尾钩：她没有填金额，却第一次害怕这个永远说 Yes 的男人。}
+\Beat{EP15 — A HOUSE FOR LOVE}{Elaine 诱导 Ava 向 Sun 索要 500 万美元豪宅；Sun 买下后直接写 Ava 名字。尾钩：Victor 偷偷把产权文件送给 Grant。}
+\Beat{EP16 — PUBLIC PROPERTY}{红毯上记者用同性旧情羞辱 Ava，Sun 当众反击；Maya 却指出 Sun 只是换一种方式替 Ava 发言。尾钩：Ava 甩开两人，“Stop speaking for me.”}
+\Beat{EP17 — THE PRICE OF A NAME}{Grant 私下告诉 Ava，她的名字、脸和声音都在 VANCE LEGACY 旗下；他给她看 AVA FOREVER 的投资简报。尾钩：回购价最初写着 30M，Grant 看见 Sun 来电后改成 50M。}
+\Beat{EP18 — MANHATTAN}{Ava 要一套只属于她的纽约住所；Sun 花 1800 万美元买下顶层公寓。尾钩：电子门锁的 Owner 一栏仍显示 VANCE LEGACY HOLDINGS。}
+\Beat{EP19 — TEN FINGERS}{Sun 送 Ava 一切，她只回送一把廉价指甲锉；她说这是他唯一不能升值的礼物。尾钩：Sun 把锉刀锁进装有 620 万美元艺术品证书的保险柜。}
+\Beat{EP20 — SAY NO}{Ava 要 Sun 放弃一场决定 HELIOS 生死的会议陪她首映；他仍说 Yes。首映后台，她崩溃质问：“Why won't you ever choose yourself?” 尾钩：Sun 回答，“Because then you might leave.”}
+\SectionHead{EP21–30｜完美生活}
+\Beat{EP21 — THE LEAK}{Maya 与 Ava 的旧照泄露；Grant 暗中推波助澜。Sun 花钱压新闻，Maya 拒绝被再次藏起来。尾钩：Maya 宣布将公开讲述那段关系。}
+\Beat{EP22 — HER TRUTH}{直播前，Ava 主动承认曾爱过 Maya，却没有说是谁逼她放弃。Maya临时取消爆料。尾钩：Grant 告诉 Elaine，“If she learns to speak, we lose everything.”}
+\Beat{EP23 — LANAI}{Sun 带 Ava 逃到没有狗仔的小岛；餐厅里无人认出她。她起初不安，随后笑着吃掉一整盘薯条。尾钩：一个小女孩盯着她，却只问能否借番茄酱。}
+\Beat{EP24 — A BABY}{两人体验最普通的一天；Ava 突然提出通过代孕要孩子。尾钩：Sun 又一次不思考便说 “Okay”，Ava 的笑意消失。}
+\Beat{EP25 — HER BODY}{生殖医生解释取卵与代孕；Ava 要求所有胚胎和医疗文件只能由她本人控制。尾钩：诊所授权书上自动预填了 VANCE LEGACY 的名字。}
+\Beat{EP26 — TOO SMALL}{Sun 仓促求婚，Ava 看着戒指说 “Too small”。Sun 立刻承诺更大的。尾钩：她将戒指放回盒中，“I wasn't talking about the diamond.”}
+\Beat{EP27 — BIGGER}{Sun 送来更大的戒指和直播求婚，Ava 被迫说 Yes；镜头关掉后她摘下戒指。尾钩：Grant 拿着直播截图向投资人宣布，“The billionaire will fund the buyout.”}
+\Beat{EP28 — THE TATTOO}{Maya 给 Sun 看年轻时的合照和 Ava 背上的 M 字纹身，揭示 Ava 当年没有跟她离开。尾钩：“She isn't waiting for your biggest yes. She's waiting for your first no.”}
+\Beat{EP29 — FORTY-EIGHT PAGES}{调查报告完成。Sun 读到 Grant、旧合同、Maya 和异常转账，却把报告锁起。尾钩：Ava 站在保险柜外，听见 Lena说，“Page forty-eight proves she lied.”}
+\Beat{EP30 — THE LIE}{Ava 主动讲述过去，却把 Grant 说成恩人、Maya 说成普通朋友。Sun 明知不真仍吻她。尾钩：Ava 看见保险柜反光，意识到他早已调查自己。}
+\SectionHead{EP31–40｜牢笼收紧}
+\Beat{EP31 — NO QUESTIONS}{Ava 要 Sun 承诺，将来她若要一笔钱，他不能问原因。Sun 说可以。尾钩：Grant 发来加密消息\CNdash{}“Your buyback window opens in ten days.”}
+\Beat{EP32 — THE SIGNATURE}{Elaine 强迫 Ava 签新的家族信托修订；Ava 拒绝。Victor 拿出她 16 岁时“签过”的原件。尾钩：Ava 发现签名笔迹不是自己的。}
+\Beat{EP33 — THIRTY MILLION}{父母声称家族债务会毁掉所有员工，Ava 向 Sun 索要 3000 万美元；他付款，却把资金放进独立托管。尾钩：Elaine 得知自己无法动钱，第一次露出真面目。}
+\Beat{EP34 — THE COST OF YES}{HELIOS 董事会因 Sun 的私人转账和监管危机逼他暂时退位；他拒绝。尾钩：董事之一向 Grant 发送消息，“Keep him distracted.”}
+\Beat{EP35 — BILLIONAIRE VS. BASKETBALL QUEEN}{Sun 与 Maya 在慈善赛上公开针锋相对，媒体狂欢；私下 Maya 却提醒他 Ava 的恐慌发作越来越频繁。尾钩：Ava 在洗手间砸碎了会模仿她表情的广告屏。}
+\Beat{EP36 — THE FACE IN THE MIRROR}{Ava 看见未授权的年轻数字分身广告；Sun 想立刻买下公司。她失控：“Buying the cage doesn't open it.” 尾钩：她第一次承认，“My face doesn't belong to me.”}
+\Beat{EP37 — QUEENS}{Ava 躲到 Ge 家洗衣店，Ruby 不追问，只让她折衣服。她第一次进入 Sun 的真实童年。尾钩：Ruby 拿出 2007 年打印的 Ava 广告图。}
+\Beat{EP38 — NINETEEN YEARS}{Ava 知道 Sun 保存照片十九年，既被爱意击中又被物化感刺痛。尾钩：“Maybe you never met me. Maybe you just finally bought the picture.”}
+\Beat{EP39 — THE CONTRACT}{Sun 主动烧掉调查报告的副本，承诺不再查；Ava 差点说出真相，却被 Grant 用父母犯罪证据封口。尾钩：Grant 发来 72 小时倒计时和最终价格\CNdash{}\$50,000,000。}
+\Beat{EP40 — BEFORE THE RETRIEVAL}{Laguna Beach，取卵准备。Ava 告诉医生推迟操作，随后给 Sun 打电话。尾钩：“Fifty million. Today.”}
+\SectionHead{EP41–50｜第一次拒绝}
+\Beat{EP41 — LET ME THINK}{完整重演首集电话；Sun 问用途，Ava 坚持无合同、无问题。尾钩：十九年来第一次，他说 “Let me think.”}
+\Beat{EP42 — ORACLE}{Sun 把所有数据交给 AI 财务代理；机器建议不转。真正击中他的不是风险，而是 AI 将“Ava 是否离开”判定为无关变量。尾钩：转账页面倒计时只剩 11 小时。}
+\Beat{EP43 — ELEVEN SECONDS}{Ava 最后一次来电；Sun 沉默十一秒。她只说 “Okay. I know.” 尾钩：她摘掉婚戒，诊所监控中随即消失。}
+\Beat{EP44 — SHE'S GONE}{Sun 冲到 Laguna，酒店整层空无一人，只剩指甲锉和未使用的取卵腕带。尾钩：电视突发新闻\CNdash{}Ava 与 Maya 的旧情全面曝光。}
+\Beat{EP45 — CORNERED}{HELIOS 币价暴跌、监管调查重启、董事会夺权，媒体嘲笑 Sun 被抛弃。他拒绝辞职。尾钩：Maya 闯进会议室，“Ava isn't with me. She's missing.”}
+\Beat{EP46 — TWO IDIOTS}{Sun 与 Maya 被迫结盟；Maya带他去 Ava 多年前藏身的廉价公寓。尾钩：墙上贴满同一张脸\CNdash{}不同年龄的 AI Ava。}
+\Beat{EP47 — AVA FOREVER}{他们找到项目资料、烧毁一半的合同和 50M 回购函。屏幕自动播放数字 Ava：“I never say no.” 尾钩：发布会将在五天后进行。}
+\Beat{EP48 — WHAT SHE BOUGHT}{Lena 拼出 VANCE LEGACY 的权利结构，Sun 终于理解五千万的真正用途。尾钩：他命令 Lena 准备收购全部权利。}
+\Beat{EP49 — EIGHTY MILLION}{Grant 临时涨价到 8000 万并要求 Sun 永久保密；Sun 准备签字。Maya质问：“After all this, you still need to own the key?” 尾钩：Sun 的笔停在签名上。}
+\Beat{EP50 — DON'T BUY HER}{Sun 撕掉收购协议，转而追查童星信托和签字原件。尾钩：银行档案显示，Ava 数百万童星收入从未进入她的 Coogan Trust。}
+\SectionHead{EP51–60｜把自己买回来}
+\Beat{EP51 — THE FORGERY}{Lena 找到签字鉴定和 Grant 的秘密录音；Victor 承认曾代签，但声称一切为了 Ava。尾钩：Elaine说出 Ava 的藏身处，条件是 Sun 保住她。}
+\Beat{EP52 — NO DEAL}{Sun 拒绝和 Elaine 交易，却通过 Ava 每次恐慌都会去的旧海边汽车旅馆找到她。尾钩：Ava 开门第一句，“Did you bring the money?”}
+\Beat{EP53 — BUY YOURSELF}{Sun 没带钱，也没求复合；他把全部证据和一支只属于 Ava 的法律团队交给她。尾钩：“I'm not buying you. Buy yourself.”}
+\Beat{EP54 — HER CHOICE}{Ava 恐惧公开父母罪行会毁掉自己的美国甜心形象；Maya 告诉她，当年自己替她出柜不是勇敢，是替她做了选择。尾钩：Ava 穿上发布会礼服。}
+\Beat{EP55 — THE LAUNCH}{Grant 向全球发布永不衰老、永不拒绝的 AVA FOREVER。倒计时结束前，真人 Ava 走上台。尾钩：“You forgot to invite me.”}
+\Beat{EP56 — YOU DON'T OWN ME}{Grant试图切断直播；Ava 逐条公开伪造签名、被盗信托和隐瞒权利争议。尾钩：Elaine冲上台说，“Everything we did was for you.”}
+\Beat{EP57 — NOT YOUR INVESTMENT}{Ava 当众与父母切割；投资人撤资、警方/监管人员带走 Grant 的设备。与此同时 Sun 被 HELIOS 董事会罢免 CEO。尾钩：记者问 Ava 是否会回到那个为她失去公司的男人身边。}
+\Beat{EP58 — I DON'T NEED HER BACK}{Maya 完成最后一场主场比赛；她告诉 Sun 自己仍爱 Ava，但不再需要回应。尾钩：她把那张旧合照交给 Sun，“This was never yours to win.”}
+\Beat{EP59 — ASK ME}{数月后，Ava独自走进 Queens 洗衣店。指甲锉回到两人手中。Sun 不再命令她留下，而是问：“Will you stay?” 尾钩：Ava回答，“Maybe.”}
+\Beat{EP60 — NOBODY KNOWS}{两人没有婚礼、孩子或公开声明，只在关店后吃外卖。Sun 发现无人知道 Ava 在这里；她第一次不再恐惧隐形。终句：“Not anymore.”}
+\PartPage{第三部分}{完整分集剧本}
+\Episode{01}{FIFTY MILLION}
+\EpisodeMeta{本集目标}{先交出全剧最大金额钩子，再用一场相遇建立欲望入口。}
+\EpisodeMeta{尾钩}{Ava 主动邀请 Sun 看电影。}
+\Scene{1}{INT. LAGUNA BEACH FERTILITY CLINIC — DAY}
+\Action{极近景：一支针。透明药液被缓慢推出。}
+\Action{Ava 穿着诊所袍，手腕上有姓名环。Sun 站在玻璃门外，手机贴耳。两人隔着玻璃通话，像隔着一份合同。}
+\Cue{AVA}
+\Dialogue{Fifty million dollars. Today.}
+\Cue{SUN}
+\Dialogue{For what?}
+\Cue{AVA}
+\Dialogue{No contract. No questions.}
+\Cue{SUN}
+\Dialogue{Ava, that's not how fifty million works.}
+\Action{她看着他，眼里不是贪婪，是恐惧。}
+\Cue{AVA}
+\Dialogue{It's how love works.}
+\Action{护士在后方示意：时间到了。}
+\Cue{AVA}
+\Dialogue{If it isn't in my account before the retrieval, I walk.}
+\Action{Sun 的拇指悬在手机银行的 TRANSFER 上。}
+\Cue{SUN}
+\Dialogue{Let me think.}
+\Action{Ava 的脸瞬间空了。}
+\Scene{2}{TITLE CARD — SEVEN MONTHS EARLIER}
+\Scene{3}{INT. HOLLYWOOD CHARITY GALA — NIGHT}
+\Action{一颗普通橙子被银色胶带贴在墙上。竞拍屏幕：\$6,200,000。宾客窃笑。}
+\Cue{AUCTIONEER}
+\Dialogue{Sold to Mr. Sun Ge.}
+\Action{Sun 举杯，像刚赢下一场战争。Ava 走到橙子前。}
+\Cue{AVA}
+\Dialogue{What happens when it rots?}
+\Cue{SUN}
+\Dialogue{We replace it.}
+\Cue{AVA}
+\Dialogue{Then what exactly did you buy?}
+\Action{Sun 第一次答不上来。}
+\Cue{SUN}
+\Dialogue{Your attention, apparently.}
+\Action{Ava 终于看他。}
+\Cue{AVA}
+\Dialogue{Forget the orange. Wanna watch a movie?}
+\Action{Sun 的少年时代，在这一秒从屏幕里活了过来。}
+\Action{Ava 把橙子放回托盘，没有拿走。}
+\Cue{AVA}
+\Dialogue{One condition. I pick the movie.}
+\Cue{SUN}
+\Dialogue{Deal.}
+\Cue{AVA}
+\Dialogue{That was fast. You don't even know what I want.}
+\Cue{SUN}
+\Dialogue{I know you stayed.}
+\Cue{AVA}
+\Dialogue{For a movie. Don't turn it into a lifetime.}
+\Action{Sun 的笑意停了半拍。Ava 按下片名：《RUNAWAY》。}
+\Transition{CUT TO BLACK.}
+\Episode{02}{HI}
+\EpisodeMeta{本集目标}{建立十九年执念与“用钱清场”的爱情模式。}
+\EpisodeMeta{尾钩}{被赶走的小女孩质问 Sun。}
+\Scene{1}{INT. QUEENS APARTMENT ABOVE LAUNDROMAT — NIGHT — 2007}
+\Action{17 岁的 Sun 坐在旧电脑前。屏幕上，少女 Ava 出现在游戏启动广告里。}
+\Action{MySpace 好友申请框。Sun 打了一段很长的话，删掉；再打，再删。}
+\Action{最终只剩一个词：}
+\Insert{ON SCREEN: HI.}
+\Action{鼠标点击 SEND。}
+\Action{状态：PENDING。}
+\Scene{2}{INT. PRIVATE CINEMA LOBBY — NIGHT — PRESENT}
+\Action{Lena 把一叠现金递给原本买了票的观众。}
+\Cue{LENA}
+\Dialogue{Mr. Ge has purchased tonight's screening. Double refunds for everyone.}
+\Action{一个父亲收下钱。小女孩抱着爆米花不肯走。}
+\Cue{GIRL}
+\Dialogue{But I don't want money. I want the movie.}
+\Action{Sun 的笑僵了一下。Ava 已经走进影厅。}
+\Scene{3}{INT. CINEMA — CONTINUOUS}
+\Action{两百个空座位。Ava 坐在正中央，摘下墨镜。}
+\Cue{AVA}
+\Dialogue{Does this make you feel powerful?}
+\Cue{SUN}
+\Dialogue{No.}
+\Cue{AVA}
+\Dialogue{Then why do it?}
+\Cue{SUN}
+\Dialogue{Because you asked.}
+\Action{小女孩突然出现在门口，眼圈通红。}
+\Cue{GIRL}
+\Dialogue{Why does she get every seat?}
+\Action{Sun 看向满场的空。}
+\Action{女孩被母亲牵走前，回头看向孤零零的 Ava。}
+\Cue{GIRL}
+\Dialogue{Did he buy you too?}
+\Cue{AVA}
+\Dialogue{No.}
+\Cue{SUN}
+\Dialogue{No.}
+\Action{两人的答案同时响起，却像两个完全不同的意思。}
+\Cue{AVA}
+\Dialogue{You bought the room. That's not the same as earning my time.}
+\Cue{SUN}
+\Dialogue{Then tell me how to earn the next two hours.}
+\Cue{AVA}
+\Dialogue{Start by sitting somewhere you didn't choose.}
+\Action{她指向最后一排。Sun 第一次走向最差的座位。}
+\Transition{CUT TO BLACK.}
+\Episode{03}{THE EMPTY THEATER}
+\EpisodeMeta{本集目标}{第一次让 Sun 意识到“买到选择”也会剥夺别人。}
+\EpisodeMeta{尾钩}{Ava 在人群中主动牵手。}
+\Scene{1}{INT. CINEMA — CONTINUOUS}
+\Action{Sun 蹲到小女孩面前。}
+\Cue{SUN}
+\Dialogue{Because I made a bad call.}
+\Action{他看向 Lena。}
+\Cue{SUN}
+\Dialogue{Bring everyone back. Same seats. They keep the money.}
+\Cue{AVA}
+\Dialogue{You don't have to perform goodness for me.}
+\Cue{SUN}
+\Dialogue{I'm not. I'm correcting a transaction.}
+\Cue{AVA}
+\Dialogue{That's the problem. You think those are the same thing.}
+\Scene{2}{INT. CINEMA — LATER}
+\Action{观众重新坐满。Sun 和 Ava 被挤在普通座位中间，左右都是陌生人。电影开场。}
+\CueP{SUN}{低声}
+\Dialogue{I could buy the theater next door.}
+\Cue{AVA}
+\Dialogue{Try surviving two hours without owning the room.}
+\Action{灯光熄灭。一个陌生人的可乐越过 Sun 递过去，他笨拙帮忙。}
+\Cue{SUN}
+\Dialogue{Is this your idea of a test?}
+\Cue{AVA}
+\Dialogue{Everything is a test.}
+\Action{黑暗中，她的手覆上他的手。Sun 不敢动。}
+\Cue{AVA}
+\Dialogue{Don't make me regret it.}
+\Action{Ava 没有走。她从包里拿出两张皱巴巴的普通电影票。}
+\Cue{AVA}
+\Dialogue{I bought these before your staff emptied the theater.}
+\Cue{SUN}
+\Dialogue{Keep them.}
+\Cue{AVA}
+\Dialogue{Why?}
+\Cue{SUN}
+\Dialogue{Proof I ruined something you chose.}
+\Cue{AVA}
+\Dialogue{Proof isn't an apology.}
+\Action{Sun 接过一张票，小心抚平折角。}
+\Cue{SUN}
+\Dialogue{Then let me owe you one.}
+\Cue{AVA}
+\Dialogue{You already owe everyone in this room.}
+\Action{空座位像证人一样围住他。}
+\Transition{CUT TO BLACK.}
+\Episode{04}{THE NAIL FILE}
+\EpisodeMeta{本集目标}{创造两人的核心爱情信物，并把“离开”植入最亲密时刻。}
+\EpisodeMeta{尾钩}{狗仔拍到 Ava 离开。}
+\Scene{1}{INT. SUN'S MANHATTAN PENTHOUSE — NIGHT}
+\Action{窗外是整座城市。室内却安静得像无人居住。两人接吻。Ava 忽然吸气，推开他。}
+\Cue{SUN}
+\Dialogue{Did I hurt you?}
+\Cue{AVA}
+\Dialogue{Your nails did.}
+\Action{Sun 下意识看自己的手。Ava 从包里拿出廉价指甲锉。}
+\Cue{SUN}
+\Dialogue{I can have someone—}
+\Cue{AVA}
+\Dialogue{Sit.}
+\Action{她把他的手放在腿上，一根一根磨。时间慢下来。}
+\Cue{SUN}
+\Dialogue{No one's ever done this for me.}
+\Cue{AVA}
+\Dialogue{If I'm gone one day, nobody will.}
+\Cue{SUN}
+\Dialogue{You're not going anywhere.}
+\Cue{AVA}
+\Dialogue{Everybody goes somewhere.}
+\Action{他反握住她的手。}
+\Cue{SUN}
+\Dialogue{Then I'll buy wherever you go.}
+\Action{Ava 没有笑。}
+\Scene{2}{EXT. SUN'S BUILDING — PRE-DAWN}
+\Action{Ava 戴上墨镜离开。街对面，长焦镜头连闪。}
+\Action{相机屏幕里：Ava 回头望向 Sun 顶层的灯。}
+\Cue{PHOTOGRAPHER}
+\Dialogue{Got you.}
+\Action{摄影师检查照片，放大 Ava 回望顶楼灯光的眼神。}
+\Cue{PHOTOGRAPHER}
+\Dialogue{That's not the face of a woman in love.}
+\Action{Grant 从阴影里伸手，拿走相机存储卡。}
+\Cue{GRANT}
+\Dialogue{No. It's the face of a woman calculating an exit.}
+\Cue{PHOTOGRAPHER}
+\Dialogue{Who are you?}
+\Cue{GRANT}
+\Dialogue{The man who knows what that look is worth.}
+\Cue{PHOTOGRAPHER}
+\Dialogue{She'll know you took it.}
+\Cue{GRANT}
+\Dialogue{By then, the world will have decided what it means.}
+\Action{他把存储卡装进口袋。街对面，Ava 已消失在人群里。}
+\Transition{CUT TO BLACK.}
+\Episode{05}{AMERICA'S MOST HATED BOYFRIEND}
+\EpisodeMeta{本集目标}{将私人欲望变成公共战争，并让 Grant 锁定 Sun。}
+\EpisodeMeta{尾钩}{Grant 称 Sun 为“买家”。}
+\Scene{1}{INT. HELIOS BOARDROOM — MORNING}
+\Action{大屏铺满标题：AMERICA'S SWEETHEART SLEEPS WITH CRYPTO VILLAIN。}
+\Action{Lena 把否认声明放到 Sun 面前。}
+\Cue{LENA}
+\Dialogue{One post. “We are friends.” Her studio is asking for it.}
+\Cue{SUN}
+\Dialogue{We're not friends.}
+\Action{他直接打开直播。}
+\CueP{SUN}{对镜头}
+\Dialogue{Yes, Ava Vance spent the night. No, she is not ashamed. Anyone calling her a gold digger should check which one of us made the first billion.}
+\Action{Lena 掐掉直播。}
+\Cue{LENA}
+\Dialogue{You just turned a date into a market event.}
+\Cue{SUN}
+\Dialogue{Attention is leverage.}
+\Scene{2}{INT. GRANT REDDICK'S SCREENING ROOM — SAME}
+\Action{Grant 看着直播。Elaine 坐在阴影里。}
+\Cue{ELAINE}
+\Dialogue{He'll ruin her image.}
+\Cue{GRANT}
+\Dialogue{No. He'll monetize it.}
+\Action{他放大 Sun 的估值资料：\$8.4 BILLION。}
+\Cue{GRANT}
+\Dialogue{After all these years, Ava finally found us a buyer.}
+\Action{Grant 把橙子照片和 Sun 的公开声明并排投上大屏。}
+\Cue{ELAINE}
+\Dialogue{She'll see this as protection.}
+\Cue{GRANT}
+\Dialogue{Protection is just ownership with better lighting.}
+\Cue{ELAINE}
+\Dialogue{And what do you call what you're doing?}
+\Cue{GRANT}
+\Dialogue{Asset management.}
+\Action{他点击发送。标题变成：AVA VANCE — THE BILLIONAIRE'S PURCHASE。}
+\Cue{ELAINE}
+\Dialogue{You promised not to hurt her.}
+\Cue{GRANT}
+\Dialogue{I promised to preserve her value.}
+\Transition{CUT TO BLACK.}
+\Episode{06}{THE PICTURE}
+\EpisodeMeta{本集目标}{把少年迷恋暴露给 Ava，制造浪漫与恐怖的双重感。}
+\EpisodeMeta{尾钩}{她质问他爱的是谁。}
+\Scene{1}{INT. GE FAMILY LAUNDROMAT — DAY}
+\Action{Ruby 一边折衬衫，一边看手机新闻。}
+\Cue{RUBY}
+\Dialogue{Nineteen years staring at that picture. Now the picture stares back.}
+\Cue{SUN}
+\Dialogue{It wasn't nineteen years.}
+\Action{Peter 从旧抽屉里拿出一张打印褪色的少女 Ava 广告图。}
+\Cue{PETER}
+\Dialogue{Eighteen and eleven months.}
+\Action{Sun 抢走照片。}
+\Cue{RUBY}
+\Dialogue{A person is not a wish you win by waiting.}
+\Scene{2}{INT. SUN'S CAR — LATER}
+\Action{Ava 上车，无意瞥见 Sun 解锁手机。壁纸正是 2007 年的她。}
+\Cue{AVA}
+\Dialogue{Where did you get that?}
+\Cue{SUN}
+\Dialogue{You were in an ad for a game.}
+\Cue{AVA}
+\Dialogue{I was seventeen.}
+\Cue{SUN}
+\Dialogue{So was I.}
+\Action{他给她看仍显示 PENDING 的旧好友申请截图。}
+\Cue{AVA}
+\Dialogue{Did you fall for me… or the girl on that screen?}
+\Action{Sun 看着真实的她，答不出来。}
+\Action{Ruby 从柜台下拿出一个铁皮盒，推到 Sun 面前。}
+\Cue{RUBY}
+\Dialogue{Every birthday, you printed a new picture of her.}
+\Action{盒内，Ava 从童星长成今天的样子。}
+\Cue{SUN}
+\Dialogue{I was waiting for the real one.}
+\Cue{RUBY}
+\Dialogue{Real people don't arrive finished.}
+\Cue{PETER}
+\Dialogue{And they don't owe you for waiting.}
+\Action{Sun 看向门外车里的 Ava。她正把那张 2007 年的照片反扣在腿上。}
+\Cue{RUBY}
+\Dialogue{If you love the picture more, leave the woman alone.}
+\Transition{CUT TO BLACK.}
+\Episode{07}{COURTSIDE}
+\EpisodeMeta{本集目标}{让真正有资格挑战 Sun 的情敌登场。}
+\EpisodeMeta{尾钩}{Maya 问 Ava 值多少钱。}
+\Scene{1}{INT. BASKETBALL ARENA — NIGHT}
+\Action{最后三秒。Maya 接球、起跳、绝杀。全场爆炸。}
+\Action{Ava 从座位上站起，忘了伪装，眼里全是旧日骄傲。Sun 看见了。}
+\Cue{SUN}
+\Dialogue{You never cheer like that for my interviews.}
+\Cue{AVA}
+\Dialogue{Try doing something difficult.}
+\Scene{2}{COURTSIDE — MOMENTS LATER}
+\Action{记者围住 Maya。她却穿过人群，径直走到 Ava 面前。}
+\Cue{MAYA}
+\Dialogue{You happy?}
+\Cue{AVA}
+\Dialogue{Yeah.}
+\Action{Maya 看了她很久。}
+\Cue{MAYA}
+\Dialogue{Good.}
+\Action{她终于转向 Sun，上下打量。}
+\Cue{SUN}
+\Dialogue{Congratulations.}
+\Cue{MAYA}
+\Dialogue{How much did she cost you?}
+\Action{闪光灯疯狂亮起。}
+\Action{Maya 上前一步，挡住 Sun 看 Ava 的视线。}
+\Cue{MAYA}
+\Dialogue{She used to hate courtside seats.}
+\Cue{SUN}
+\Dialogue{People change.}
+\Cue{MAYA}
+\Dialogue{No. People learn which complaints are expensive.}
+\Action{Ava 走回来，正好听见。}
+\Cue{AVA}
+\Dialogue{Are you two discussing my price or my taste?}
+\Cue{MAYA}
+\Dialogue{Your survival.}
+\Cue{SUN}
+\Dialogue{Our relationship.}
+\Cue{AVA}
+\Dialogue{Interesting. Neither answer includes me.}
+\Cue{AVA}
+\Dialogue{So here's what happens next. I watch the game. Maya plays it. Sun, you sit somewhere I can't see you.}
+\Cue{SUN}
+\Dialogue{And after?}
+\Cue{AVA}
+\Dialogue{After belongs to whoever listens best.}
+\Action{镜头闪光把三个人困在同一张照片里。}
+\Transition{CUT TO BLACK.}
+\Episode{08}{THE WOMAN BEFORE YOU}
+\EpisodeMeta{本集目标}{确认旧恋关系，同时保留最关键的分手秘密。}
+\EpisodeMeta{尾钩}{M 字纹身。}
+\Scene{1}{INT. ARENA SERVICE HALL — NIGHT}
+\Action{Sun 把 Ava 拉进无人的通道。}
+\Cue{SUN}
+\Dialogue{How long?}
+\Cue{AVA}
+\Dialogue{Four years.}
+\Cue{SUN}
+\Dialogue{And you forgot to mention her?}
+\Cue{AVA}
+\Dialogue{I didn't forget. I survived it.}
+\Cue{SUN}
+\Dialogue{Do you still love her?}
+\Action{Ava 没回答。}
+\Cue{AVA}
+\Dialogue{Don't ask questions you plan to punish me for.}
+\Action{她离开。}
+\Scene{2}{INT. ARENA TUNNEL — CONTINUOUS}
+\Action{Maya 靠墙等 Sun。}
+\Cue{MAYA}
+\Dialogue{You think money makes you different from everyone who used her.}
+\Cue{SUN}
+\Dialogue{I am different.}
+\Cue{MAYA}
+\Dialogue{That's exactly what they all said.}
+\Action{她把一张旧照片塞进他西装口袋：年轻的 Maya 与 Ava 相拥，Ava 裸露的背上有一个小小 M。}
+\Cue{MAYA}
+\Dialogue{Ask why she still wears my name on her skin.}
+\Action{Sun 下意识想追 Maya，Ava 却按住他的手腕。}
+\Cue{AVA}
+\Dialogue{Don't chase her to explain me.}
+\Cue{SUN}
+\Dialogue{I was going to defend you.}
+\Cue{AVA}
+\Dialogue{From the truth?}
+\Cue{SUN}
+\Dialogue{From the way she used it.}
+\Cue{AVA}
+\Dialogue{Truth doesn't become yours because you package it better.}
+\Action{她拉下袖口遮住 M 形纹身。}
+\Cue{SUN}
+\Dialogue{Do you still love her?}
+\Cue{AVA}
+\Dialogue{You keep asking who owns the past. Try asking why I survived it.}
+\Transition{CUT TO BLACK.}
+\Episode{09}{THIRTY THOUSAND}
+\EpisodeMeta{本集目标}{正式启动金额升级，并让观众第一次发现 Ava 在操纵自己的坏名声。}
+\EpisodeMeta{尾钩}{她故意删除善意证据。}
+\Scene{1}{INT. AVA'S TRAILER — DAY}
+\Action{Ava 一边卸妆一边打电话。}
+\Cue{AVA}
+\Dialogue{I need thirty thousand.}
+\Cue{SUN (PHONE)}
+\Dialogue{Done.}
+\Cue{AVA}
+\Dialogue{You didn't ask why.}
+\Action{手机提示：\$30,000 RECEIVED。}
+\Cue{SUN (PHONE)}
+\Dialogue{You didn't ask me to.}
+\Action{她望着镜中的自己，测试成功，却没有轻松。}
+\Scene{2}{EXT. STUDIO PARKING LOT — LATER}
+\Action{Ava 把支票交给被 Elaine 辞退的老助理 MARA。}
+\Cue{MARA}
+\Dialogue{This covers my daughter's surgery. Let me thank him.}
+\Cue{AVA}
+\Dialogue{No.}
+\Cue{MARA}
+\Dialogue{Then at least write what it was for.}
+\Action{Ava 在转账备注里打下 MEDICAL，停住，又全部删除。}
+\Cue{AVA}
+\Dialogue{If he needs a reason, it doesn't count.}
+\Action{她按下 SAVE：无备注。}
+\Action{Mara 把手机递回给 Ava，屏幕上是到账短信。}
+\Cue{MARA}
+\Dialogue{He didn't even ask your name.}
+\Cue{AVA}
+\Dialogue{He trusts my emergencies.}
+\Cue{MARA}
+\Dialogue{Or he likes being the answer to them.}
+\Action{Ava 看见 Sun 发来的第二条消息：NEED MORE?}
+\Cue{MARA}
+\Dialogue{Tell him the truth.}
+\Cue{AVA}
+\Dialogue{Then the money becomes his story.}
+\Cue{MARA}
+\Dialogue{It already is.}
+\Cue{AVA}
+\Dialogue{Then let this part be mine: I decide who gets to know the girl that money saved.}
+\Cue{MARA}
+\Dialogue{Start by letting her thank you.}
+\Action{Ava 删除对话框，却把到账截图保存进名为 EXIT 的加密文件夹。}
+\Transition{CUT TO BLACK.}
+\Episode{10}{PROPERTY}
+\EpisodeMeta{本集目标}{让“数字人格被拥有”的主谜题第一次可视化。}
+\EpisodeMeta{尾钩}{数字 Ava 对真人微笑。}
+\Scene{1}{INT. VIRTUAL PRODUCTION STAGE — DAY}
+\Action{数十台摄像机环绕 Ava。Grant 示意技术员启动脸部扫描。}
+\Cue{AVA}
+\Dialogue{This wasn't in today's call sheet.}
+\Cue{GRANT}
+\Dialogue{Digital pickup. Ten minutes.}
+\Cue{AVA}
+\Dialogue{No.}
+\Action{Victor 递来一份发黄合同。}
+\Cue{VICTOR}
+\Dialogue{You already said yes. Fifteen years ago.}
+\Cue{AVA}
+\Dialogue{I was sixteen.}
+\Cue{GRANT}
+\Dialogue{Your parents were adults.}
+\Action{灯光像牢笼一样亮起。Ava 被迫站到扫描点上。}
+\Scene{2}{INT. CONTROL BOOTH — MOMENTS LATER}
+\Action{屏幕生成一个二十四岁的 Ava。皮肤完美，笑容甜美。}
+\Cue{DIGITAL AVA}
+\Dialogue{Anything you need, Grant.}
+\Action{真人 Ava 盯着它。}
+\Cue{AVA}
+\Dialogue{Turn it off.}
+\Action{数字 Ava 转向她，复制她的恐惧，然后露出笑容。}
+\Action{数字 Ava 在屏幕中微笑，精准复制她的呼吸与眨眼。}
+\Cue{DIGITAL AVA}
+\Dialogue{I consent.}
+\Action{真人 Ava 僵住。}
+\Cue{AVA}
+\Dialogue{I never said that.}
+\Cue{GRANT}
+\Dialogue{The model predicts what you would say.}
+\Cue{AVA}
+\Dialogue{Then teach it this.}
+\Action{她走近镜头。}
+\Cue{AVA}
+\Dialogue{No. No to the scan. No to the voice. No to forever.}
+\Action{数字 Ava 仍在笑。}
+\Cue{DIGITAL AVA}
+\Dialogue{Consent confirmed.}
+\Cue{GRANT}
+\Dialogue{See? This Ava never says no twice.}
+\Cue{AVA}
+\Dialogue{Then she isn't a replica. She's your fantasy wearing my skin.}
+\Action{她举起手机，秘密录下 Digital Ava 的回答。}
+\Transition{CUT TO BLACK.}
+\Episode{11}{THE DOSSIER}
+\EpisodeMeta{本集目标}{Sun 第一次用调查代替信任，种下关系里的第二颗炸弹。}
+\EpisodeMeta{尾钩}{VANCE LEGACY HOLDINGS。}
+\Scene{1}{INT. HELIOS EXECUTIVE OFFICE — NIGHT}
+\Action{Lena 把三张银行关系图投到屏幕上。Ava 的片酬流入十几家公司，最终都汇向 VANCE LEGACY。}
+\Cue{LENA}
+\Dialogue{She earned ninety-two million in ten years. Her personal account holds less than two.}
+\Cue{SUN}
+\Dialogue{Her parents manage it.}
+\Cue{LENA}
+\Dialogue{That's the polite word.}
+\Cue{SUN}
+\Dialogue{Find out where it went.}
+\Cue{LENA}
+\Dialogue{If we investigate your girlfriend, we may become the reason she needs investigating.}
+\Action{Sun 看着 Ava 的无备注转账。}
+\Cue{SUN}
+\Dialogue{Forty-eight hours. Nothing illegal.}
+\Cue{LENA}
+\Dialogue{And Ava?}
+\Cue{SUN}
+\Dialogue{She never knows.}
+\Scene{2}{INT. PRIVATE ELEVATOR — LATER}
+\Action{电梯门开。Ava 拿着两杯咖啡等他。}
+\Cue{AVA}
+\Dialogue{What were you doing?}
+\Cue{SUN}
+\Dialogue{Missing you.}
+\Action{他吻她。身后屏幕尚未完全熄灭：}
+\Insert{ON SCREEN: SUBJECT — VANCE LEGACY HOLDINGS.}
+\Action{电梯镜面里，Ava 看见 Sun 袖口露出写着 VANCE LEGACY 的文件角。}
+\Cue{AVA}
+\Dialogue{What's that?}
+\Cue{SUN}
+\Dialogue{Work.}
+\Cue{AVA}
+\Dialogue{My last name is work now?}
+\Cue{SUN}
+\Dialogue{Your parents moved money through a company. I'm making sure no one can hurt you.}
+\Cue{AVA}
+\Dialogue{By investigating me without asking?}
+\Cue{SUN}
+\Dialogue{By finding the knife before it reaches you.}
+\Cue{AVA}
+\Dialogue{You never notice when you're the one holding it.}
+\Action{电梯门开。她没有走进他的家。}
+\Transition{CUT TO BLACK.}
+\Episode{12}{OWN HER}
+\EpisodeMeta{本集目标}{建立首个付费级冲突，Maya 直接命中 Sun 的致命弱点。}
+\EpisodeMeta{尾钩}{上一个想拥有 Ava 的有钱男人。}
+\Scene{1}{INT. MEMBERS-ONLY CLUB — NIGHT}
+\Action{Sun 独坐。Maya 不请自来，把他的酒推远。}
+\Cue{MAYA}
+\Dialogue{She's not a collectible. Stop bidding.}
+\Cue{SUN}
+\Dialogue{She chose me.}
+\Cue{MAYA}
+\Dialogue{She chose a man who says yes before she can hear no.}
+\Cue{SUN}
+\Dialogue{You lost her. That doesn't make you an expert.}
+\Action{Maya 的笑意消失。}
+\Cue{MAYA}
+\Dialogue{I was there when she had nothing.}
+\Cue{SUN}
+\Dialogue{And where are you now?}
+\Cue{MAYA}
+\Dialogue{Standing between her and another man trying to own her.}
+\Action{Sun 站起，两人几乎贴脸。}
+\Cue{SUN}
+\Dialogue{I don't own people.}
+\Cue{MAYA}
+\Dialogue{Then ask her what happened the last time a rich man did.}
+\Action{她转身，停在门边。}
+\Cue{MAYA}
+\Dialogue{His name is Grant Reddick.}
+\Action{Maya 把一张旧照片递给 Sun：Ava 在廉价公寓里给她缝球衣。}
+\Cue{MAYA}
+\Dialogue{She had twelve dollars. She spent ten fixing my jersey.}
+\Cue{SUN}
+\Dialogue{What do you want from me?}
+\Cue{MAYA}
+\Dialogue{Stop confusing abundance with devotion.}
+\Cue{SUN}
+\Dialogue{You lost her.}
+\Cue{MAYA}
+\Dialogue{Because I made her smaller so I could feel bigger.}
+\Action{她收回照片。}
+\Cue{MAYA}
+\Dialogue{You're doing it with nicer furniture.}
+\Action{Sun 看向会员室门口。Ava 就站在那里，听见了全部。}
+\Transition{CUT TO BLACK.}
+\Episode{13}{TURN THE PLANE AROUND}
+\EpisodeMeta{本集目标}{把“宠爱”升级为影响事业的失控行为。}
+\EpisodeMeta{尾钩}{所谓母亲遗物其实是一张空白支票。}
+\Scene{1}{INT. PRIVATE JET — DAY}
+\Action{Sun 在卫星会议中面对董事会。Ava 翻包，脸色骤变。}
+\Cue{AVA}
+\Dialogue{Turn the plane around.}
+\CueP{SUN}{捂住会议麦克风}
+\Dialogue{Why?}
+\Cue{AVA}
+\Dialogue{I left my mother's silver case at the hotel.}
+\Cue{LENA (SCREEN)}
+\Dialogue{Sun, if you miss the vote, Hale takes the exchange.}
+\Action{Ava 看着他。无声计时。}
+\CueP{SUN}{对机长}
+\Dialogue{Turn around.}
+\Action{屏幕上，董事们愤怒退出。Ava 闭上眼，像被证明了什么。}
+\Scene{2}{INT. HOTEL SUITE — LATER}
+\Action{Sun 找到银盒递给她。}
+\Cue{SUN}
+\Dialogue{Your mother's?}
+\Action{Ava 打开。里面是一张空白支票，上面是 Elaine 的签名。}
+\Cue{AVA}
+\Dialogue{No. Mine.}
+\Cue{SUN}
+\Dialogue{You cost me a company for a blank check?}
+\Cue{AVA}
+\Dialogue{I needed to know if you'd come back.}
+\Action{Ava 走出飞机，Sun 跟在她身后。}
+\Cue{AVA}
+\Dialogue{You just burned a billion-dollar vote.}
+\Cue{SUN}
+\Dialogue{The company survives.}
+\Cue{AVA}
+\Dialogue{And if it doesn't?}
+\Cue{SUN}
+\Dialogue{Then I finally learn what I'm worth without it.}
+\Cue{AVA}
+\Dialogue{Don't make me responsible for that lesson.}
+\Cue{SUN}
+\Dialogue{I'm not. I'm asking for a ride back to your hotel.}
+\Action{她把银盒递给他。}
+\Cue{AVA}
+\Dialogue{Carry this. It's the only thing here you didn't buy.}
+\Transition{CUT TO BLACK.}
+\Episode{14}{THE BLANK CHECK}
+\EpisodeMeta{本集目标}{让 Sun 主动拥抱 Ava 的测试，爱情开始变成共同成瘾。}
+\EpisodeMeta{尾钩}{空白支票落在她手里。}
+\Scene{1}{INT. HOTEL SUITE — CONTINUOUS}
+\Action{Sun 接过空白支票，端详 Elaine 的签名。}
+\Cue{SUN}
+\Dialogue{Your family says love with checks?}
+\Cue{AVA}
+\Dialogue{They say everything with checks.}
+\Cue{SUN}
+\Dialogue{And you wanted to see if I would too.}
+\Cue{AVA}
+\Dialogue{I wanted to see if there was something you wouldn't lose for me.}
+\Cue{SUN}
+\Dialogue{The vote isn't the company. I can win it back.}
+\Cue{AVA}
+\Dialogue{You make losing sound cheap.}
+\Action{Sun 从口袋拿出钢笔，在支票背面签下自己的名字，递回去。}
+\Cue{SUN}
+\Dialogue{Fill in any number.}
+\Cue{AVA}
+\Dialogue{You're not angry?}
+\Cue{SUN}
+\Dialogue{I'm interested.}
+\Cue{AVA}
+\Dialogue{In me?}
+\Cue{SUN}
+\Dialogue{In where your limit is.}
+\Action{他吻她。Ava 手中的空白支票微微发抖。}
+\Action{Sun 把空白支票撕成两半，又撕成四半。}
+\Cue{SUN}
+\Dialogue{No number.}
+\Cue{AVA}
+\Dialogue{That's not what I asked.}
+\Cue{SUN}
+\Dialogue{You asked what I wouldn't lose. I don't know yet.}
+\Cue{AVA}
+\Dialogue{That's the first honest thing you've said tonight.}
+\Action{手机震动。Elaine 发来地址和一句：MAKE HIM PROVE IT。}
+\Cue{SUN}
+\Dialogue{Was that your mother?}
+\Cue{AVA}
+\Dialogue{No questions, remember?}
+\Action{她收起手机，却没有收起那四片支票。}
+\Transition{CUT TO BLACK.}
+\Episode{15}{A HOUSE FOR LOVE}
+\EpisodeMeta{本集目标}{让家庭剥削进入爱情账户，并埋下产权被转移的证据。}
+\EpisodeMeta{尾钩}{Victor 把文件交给 Grant。}
+\Scene{1}{INT. VANCE FAMILY KITCHEN — DAY}
+\Action{Elaine 把一栋 Beverly Hills 豪宅照片推给 Ava。}
+\Cue{ELAINE}
+\Dialogue{Your father can't keep climbing those stairs.}
+\Cue{AVA}
+\Dialogue{You own three houses.}
+\Cue{ELAINE}
+\Dialogue{We own three mortgages because we built your life.}
+\Action{她轻轻握住 Ava 的手。}
+\Cue{ELAINE}
+\Dialogue{If Sun sees us as family, let him prove it.}
+\Scene{2}{INT. SUN'S PENTHOUSE — NIGHT}
+\Cue{AVA}
+\Dialogue{Five million. A house for my parents.}
+\Cue{SUN}
+\Dialogue{Send Lena the address.}
+\Cue{AVA}
+\Dialogue{That's it?}
+\Cue{SUN}
+\Dialogue{Do you want a speech too?}
+\Action{她摇头。手机即刻收到产权确认。}
+\Cue{SUN}
+\Dialogue{It's in your name. No one can take it from you.}
+\Action{Ava 被这句话刺中。}
+\Scene{3}{INT. GRANT'S OFFICE — NIGHT}
+\Action{Victor 把产权副本放到 Grant 桌上。}
+\Cue{VICTOR}
+\Dialogue{She thinks it's hers.}
+\Action{Grant 翻到附页：BENEFICIAL OWNER — VANCE LEGACY HOLDINGS。}
+\Cue{GRANT}
+\Dialogue{She always does.}
+\Action{Elaine 盯着产权确认邮件，笑容慢慢消失。}
+\Cue{ELAINE}
+\Dialogue{Why can't I access the deed?}
+\Cue{AVA}
+\Dialogue{Because it's mine.}
+\Cue{ELAINE}
+\Dialogue{We're family.}
+\Cue{AVA}
+\Dialogue{Then you don't need my password.}
+\Action{Victor 把文件副本迅速压在手肘下。}
+\Cue{VICTOR}
+\Dialogue{Your mother is emotional.}
+\Cue{AVA}
+\Dialogue{And you're hiding something.}
+\Cue{VICTOR}
+\Dialogue{I'm protecting what we built.}
+\Cue{AVA}
+\Dialogue{You keep saying “we” when the contract only names me.}
+\Transition{CUT TO BLACK.}
+\Episode{16}{PUBLIC PROPERTY}
+\EpisodeMeta{本集目标}{让 Sun 与 Maya 都犯下“替 Ava 发言”的同一种错误。}
+\EpisodeMeta{尾钩}{Ava 当众拒绝两人的保护。}
+\Scene{1}{EXT. HOLLYWOOD PREMIERE RED CARPET — NIGHT}
+\Action{记者高喊。}
+\Cue{REPORTER}
+\Dialogue{Ava! Was Maya Cross your secret lesbian phase?}
+\Action{Ava 脚步僵住。Sun 抢过话筒。}
+\Cue{SUN}
+\Dialogue{Ask another question before I buy your network and fire you.}
+\Action{人群哗然。Maya 恰好从赞助区走来。}
+\Cue{MAYA}
+\Dialogue{Threatening a reporter doesn't make you brave.}
+\Cue{SUN}
+\Dialogue{Hiding behind a scandal doesn't make you relevant.}
+\Cue{MAYA}
+\Dialogue{At least I never made her stand beside me like a receipt.}
+\Action{两人隔着 Ava 交锋。镜头全部对准他们。}
+\Cue{AVA}
+\Dialogue{Stop.}
+\Action{无人听见。}
+\CueP{AVA}{大声}
+\Dialogue{Stop speaking for me!}
+\Action{她甩开 Sun，也推开 Maya，独自走向记者。}
+\Cue{AVA}
+\Dialogue{Ask me again. This time, use my name.}
+\Action{记者被保安带走，Maya 却没有离开。}
+\Cue{MAYA}
+\Dialogue{You fired a network for one question.}
+\Cue{SUN}
+\Dialogue{It wasn't a question. It was an ambush.}
+\Cue{AVA}
+\Dialogue{And you answered it for me.}
+\Cue{SUN}
+\Dialogue{I stopped them from humiliating you.}
+\Cue{AVA}
+\Dialogue{No. You stopped me from deciding whether I was humiliated.}
+\Action{她摘下 Sun 披在她肩上的西装，还给他。}
+\Cue{AVA}
+\Dialogue{Next time, stand beside me. Don't stand in front of me.}
+\Transition{CUT TO BLACK.}
+\Episode{17}{THE PRICE OF A NAME}
+\EpisodeMeta{本集目标}{明确 Ava 的名字是资产，并揭示 Grant 因 Sun 抬价。}
+\EpisodeMeta{尾钩}{30M 被改成 50M。}
+\Scene{1}{INT. GRANT'S OFFICE — DAY}
+\Action{Grant 将 AVA FOREVER 投资简报投到墙上：年轻 Ava、动作捕捉、无限续集。}
+\Cue{AVA}
+\Dialogue{You can't release this.}
+\Cue{GRANT}
+\Dialogue{I don't need you to.}
+\Cue{AVA}
+\Dialogue{It's my face.}
+\Cue{GRANT}
+\Dialogue{Your parents licensed that face before anyone knew its value. I supplied the value.}
+\Cue{AVA}
+\Dialogue{Then sell it back.}
+\Action{Grant 推来一份回购意向：\$30,000,000。}
+\Cue{GRANT}
+\Dialogue{Thirty million. Cash. Confidential. When the window opens, you get seventy-two hours.}
+\Action{Sun 的名字在 Ava 手机上闪烁。Grant 看见了。}
+\Cue{GRANT}
+\Dialogue{Is the billionaire serious about you?}
+\Cue{AVA}
+\Dialogue{He has nothing to do with this.}
+\Action{Grant 拿回文件，划掉 30，写下 50。}
+\Cue{GRANT}
+\Dialogue{Now he does.}
+\Action{Grant 关掉录音设备，推来一支笔。}
+\Cue{GRANT}
+\Dialogue{Fifty million buys back your face, voice, name, and every version of you we haven't made yet.}
+\Cue{AVA}
+\Dialogue{And if I refuse?}
+\Cue{GRANT}
+\Dialogue{We release Ava Forever before your next birthday.}
+\Cue{AVA}
+\Dialogue{My fans will know it's fake.}
+\Cue{GRANT}
+\Dialogue{Fans don't pay for truth. They pay for access.}
+\Action{Ava 拿起笔，却只在便签上写下：WHO SIGNED FOR ME?}
+\Cue{GRANT}
+\Dialogue{Ask your father.}
+\Transition{CUT TO BLACK.}
+\Episode{18}{MANHATTAN}
+\EpisodeMeta{本集目标}{表面给予 Ava 独立空间，实则展示她的资产永远被家族公司吞回。}
+\EpisodeMeta{尾钩}{门锁所有人不是她。}
+\Scene{1}{INT. MANHATTAN PENTHOUSE — DAY}
+\Action{空旷新房，落地窗俯瞰中央公园。}
+\Cue{AVA}
+\Dialogue{I want one place in New York where no one can enter without me.}
+\Cue{SUN}
+\Dialogue{This one?}
+\Cue{AVA}
+\Dialogue{I was looking, not asking.}
+\Action{Sun 向 Lena 点头。}
+\Cue{LENA}
+\Dialogue{Eighteen point two million. Closing Friday.}
+\Cue{SUN}
+\Dialogue{Close today. Her name only.}
+\Action{Ava 转过身，强忍眼泪。}
+\Cue{AVA}
+\Dialogue{You make impossible things feel like room service.}
+\Cue{SUN}
+\Dialogue{That's why you keep me around.}
+\Scene{2}{INT. PENTHOUSE ENTRY — NIGHT}
+\Action{Ava 独自设置电子门锁。屏幕显示：}
+\Insert{REGISTERED OWNER: VANCE LEGACY HOLDINGS.}
+\Action{她输入 DELETE。系统弹出：ADMIN PERMISSION REQUIRED。}
+\Action{门锁“滴”一声，自行打开。Elaine 站在门外。}
+\Cue{ELAINE}
+\Dialogue{You weren't answering.}
+\Action{Ava 试图删除登记页面，系统再次弹出：ADMIN PERMISSION REQUIRED。}
+\Cue{AVA}
+\Dialogue{Who is the administrator?}
+\Cue{LENA}
+\Dialogue{The beneficial owner account is masked.}
+\Cue{SUN}
+\Dialogue{Unmask it.}
+\Cue{LENA}
+\Dialogue{That could expose your investigation to Grant.}
+\Cue{AVA}
+\Dialogue{Your investigation?}
+\Action{Sun 沉默。}
+\Cue{AVA}
+\Dialogue{You bought the apartment in my name and searched my name behind my back.}
+\Cue{SUN}
+\Dialogue{I was trying to give you something safe.}
+\Cue{AVA}
+\Dialogue{Safety without consent is another locked room.}
+\Transition{CUT TO BLACK.}
+\Episode{19}{TEN FINGERS}
+\EpisodeMeta{本集目标}{用最廉价的礼物对抗所有昂贵交易。}
+\EpisodeMeta{尾钩}{Sun 把它与橙子证书锁在一起。}
+\Scene{1}{INT. SUN'S PENTHOUSE — NIGHT}
+\Action{桌上排着珠宝盒、车钥匙、房产文件。Ava 看都不看。}
+\Cue{SUN}
+\Dialogue{Your birthday. Pick one.}
+\Cue{AVA}
+\Dialogue{You bought all of them?}
+\Cue{SUN}
+\Dialogue{Choosing is inefficient.}
+\Action{Ava 从包里拿出那把磨旧的指甲锉。}
+\Cue{AVA}
+\Dialogue{Then here's your gift.}
+\Cue{SUN}
+\Dialogue{I already own it.}
+\Cue{AVA}
+\Dialogue{No. You kept borrowing it.}
+\Action{她把锉刀放到他掌心。}
+\Cue{AVA}
+\Dialogue{It has no resale value, no certificate, and no one will ever envy you for it.}
+\Cue{SUN}
+\Dialogue{Terrible asset.}
+\Cue{AVA}
+\Dialogue{Try not to ruin it by loving it.}
+\Scene{2}{INT. SUN'S PRIVATE VAULT — LATER}
+\Action{Sun 打开保险柜。里面是《The Orange》的真品证书。}
+\Action{他把五美元的指甲锉放在证书正中央，锁上门。}
+\Action{Sun 打开私人保险库，里面只有那张 2007 年照片和一张未送出的卡片。}
+\Cue{AVA}
+\Dialogue{What's in the card?}
+\Cue{SUN}
+\Dialogue{Something I wrote before I met you.}
+\Cue{AVA}
+\Dialogue{Read it.}
+\Cue{SUN}
+\Dialogue{“When I can afford you, I'll come find you.”}
+\Action{Ava 的脸沉下来。}
+\Cue{AVA}
+\Dialogue{You were seventeen. What's your excuse now?}
+\Action{Sun 把卡片撕掉，却保留了她送的旧指甲锉。}
+\Transition{CUT TO BLACK.}
+\Episode{20}{SAY NO}
+\EpisodeMeta{本集目标}{第一次说破两人的共同病灶：她用要求测试，他用牺牲防止离开。}
+\EpisodeMeta{尾钩}{Sun 承认害怕。}
+\Scene{1}{INT. HELIOS WAR ROOM / AVA'S DRESSING ROOM — INTERCUT}
+\Action{HELIOS 收购投票倒计时。Sun 正要签文件，Ava 来电。}
+\Cue{AVA}
+\Dialogue{Come to the premiere.}
+\Cue{SUN}
+\Dialogue{My vote closes in twelve minutes.}
+\Cue{AVA}
+\Dialogue{Then say no.}
+\Action{他看向价值十亿美元的文件。}
+\Cue{SUN}
+\Dialogue{Send the car.}
+\Scene{2}{INT. PREMIERE BACKSTAGE — NIGHT}
+\Action{Sun 赶到。Ava 没有高兴，反而把他推进空化妆间。}
+\Cue{AVA}
+\Dialogue{Why are you here?}
+\Cue{SUN}
+\Dialogue{You asked.}
+\Cue{AVA}
+\Dialogue{I gave you an exit.}
+\Cue{SUN}
+\Dialogue{I didn't want it.}
+\Cue{AVA}
+\Dialogue{Why won't you ever choose yourself?}
+\Action{Sun 的手机不断弹出：DEAL LOST。STOCK DOWN 8\%。}
+\Cue{SUN}
+\Dialogue{Because then you might leave.}
+\Action{Ava 的怒意瞬间变成悲伤。}
+\Cue{AVA}
+\Dialogue{Then none of your yeses are free.}
+\Action{Sun 把不断弹出的董事会来电全部静音。}
+\Cue{AVA}
+\Dialogue{How many people pay when you choose me?}
+\Cue{SUN}
+\Dialogue{That's my problem.}
+\Cue{AVA}
+\Dialogue{It becomes mine when you use the sacrifice as proof.}
+\Cue{SUN}
+\Dialogue{I'm here because you asked.}
+\Cue{AVA}
+\Dialogue{Then be here without making me the reason your world burns.}
+\Action{他把手机递给她。}
+\Cue{SUN}
+\Dialogue{Turn it back on if you want me to leave.}
+\Action{Ava 没碰手机。屏幕却亮起：BOARD EMERGENCY VOTE。}
+\Transition{CUT TO BLACK.}
+\Episode{21}{THE LEAK}
+\EpisodeMeta{本集目标}{让旧恋情从私密伤口变成公共商品，逼 Maya 拒绝再次被隐藏。}
+\EpisodeMeta{尾钩}{Maya 宣布直播。}
+\Scene{1}{INT. AVA'S MANHATTAN PENTHOUSE — MORNING}
+\Action{手机屏幕被旧照刷满：年轻的 Ava 亲吻 Maya。标题写着 SECRET FOUR-YEAR AFFAIR。}
+\Action{Ava 赤脚站在空客厅中央，呼吸急促。}
+\Cue{AVA}
+\Dialogue{Those were private.}
+\Cue{SUN}
+\Dialogue{They won't exist by lunch.}
+\Cue{LENA}
+\Dialogue{We can suppress the first publishers. We cannot erase the internet.}
+\Cue{SUN}
+\Dialogue{Then buy the publishers.}
+\Cue{AVA}
+\Dialogue{Stop buying rooms after I'm already trapped inside them.}
+\Scene{2}{INT. MAYA'S LOCKER ROOM — SAME}
+\Action{记者堵门。Maya 对手机直播镜头站定。}
+\Cue{REPORTER}
+\Dialogue{Did Ava Vance use you to hide her sexuality?}
+\Action{Maya 忍住怒火。}
+\Cue{MAYA}
+\Dialogue{Tonight, eight o'clock. My words. My story. No stolen photographs.}
+\Action{她按下发布。}
+\Action{Ava 的手机弹出倒计时：MAYA CROSS GOES LIVE IN 9 HOURS。}
+\Action{直播倒计时只剩一分钟。Ava 的手停在“开始直播”上。}
+\Cue{LENA}
+\Dialogue{Sun can bury this by morning.}
+\Cue{AVA}
+\Dialogue{And what does he bury with it?}
+\Cue{LENA}
+\Dialogue{Search results. Headlines. Maybe Grant.}
+\Cue{AVA}
+\Dialogue{My history too.}
+\Action{Maya 从更衣室门口走来。}
+\Cue{MAYA}
+\Dialogue{If you speak, they will call you difficult.}
+\Cue{AVA}
+\Dialogue{They already call me bought.}
+\Cue{MAYA}
+\Dialogue{Then make them learn your voice costs more than silence.}
+\Action{Ava 按下开始。}
+\Transition{CUT TO BLACK.}
+\Episode{22}{HER TRUTH}
+\EpisodeMeta{本集目标}{让 Ava 第一次主动掌控叙事，同时继续隐藏父母与 Grant。}
+\EpisodeMeta{尾钩}{Grant 决定让她闭嘴。}
+\Scene{1}{INT. HOTEL PRESS ROOM — NIGHT}
+\Action{距离 Maya 直播还有三分钟。Ava 突然独自走上记者台，没有 Sun，没有父母。}
+\Cue{AVA}
+\Dialogue{Maya Cross was not a phase. She was not confused, predatory, or chasing fame. I loved her.}
+\Action{记者瞬间沸腾。}
+\Cue{REPORTER}
+\Dialogue{Why did you hide her?}
+\Action{Ava 看见后排的 Elaine 与 Grant。}
+\Cue{AVA}
+\Dialogue{Because I was a coward.}
+\Scene{2}{INT. MAYA'S APARTMENT — SAME}
+\Action{Maya 看直播，取消自己的预约发布。}
+\CueP{MAYA}{对屏幕}
+\Dialogue{Still protecting them.}
+\Scene{3}{INT. PRESS ROOM BACK HALL — LATER}
+\Action{Grant 拦住 Elaine。}
+\Cue{GRANT}
+\Dialogue{If she learns to speak, we lose everything.}
+\Cue{ELAINE}
+\Dialogue{She's my daughter.}
+\Cue{GRANT}
+\Dialogue{Then remind her what daughters owe.}
+\Action{两人看向远处被媒体包围的 Ava。}
+\Action{Grant 的监视器上，Ava 的直播观看人数突破一千万。}
+\Cue{ELAINE}
+\Dialogue{Turn it off.}
+\Cue{GRANT}
+\Dialogue{That makes her a martyr.}
+\Cue{ELAINE}
+\Dialogue{She's my daughter.}
+\Cue{GRANT}
+\Dialogue{Then you should have read what you signed.}
+\Action{Elaine 看向他。}
+\Cue{ELAINE}
+\Dialogue{Victor said it was a standard child-performer renewal.}
+\Cue{GRANT}
+\Dialogue{Victor says many useful things.}
+\Action{屏幕里，Ava 第一次公开说出 Maya 的名字。Grant 的笑消失了。}
+\Transition{CUT TO BLACK.}
+\Episode{23}{LANAI}
+\EpisodeMeta{本集目标}{提供一集真正的情绪奖赏，并把“无人认出她”从恐惧变成可能。}
+\EpisodeMeta{尾钩}{小女孩只想借番茄酱。}
+\Scene{1}{EXT. LANAI ROADSIDE DINER — DAY}
+\Action{没有保镖，没有红毯。Sun 穿着皱衬衫，Ava 戴棒球帽。餐厅里没人抬头。}
+\Cue{AVA}
+\Dialogue{Why isn't anyone looking?}
+\Cue{SUN}
+\Dialogue{I rented the island.}
+\Action{她猛地瞪他。}
+\CueP{SUN}{笑}
+\Dialogue{Kidding.}
+\Action{服务生放下一大盘薯条。}
+\Cue{SERVER}
+\Dialogue{Anything else, ma'am?}
+\Action{Ava 等着被认出。没有。}
+\Cue{AVA}
+\Dialogue{Ketchup.}
+\Action{她摘下帽子，吃下一根薯条，又一根，忽然笑起来。}
+\Cue{SUN}
+\Dialogue{What?}
+\Cue{AVA}
+\Dialogue{Nothing happened.}
+\Action{邻桌小女孩一直盯着她，终于走来。Ava 身体绷紧。}
+\Cue{GIRL}
+\Dialogue{Can I borrow your ketchup?}
+\Action{Ava 看着番茄酱，像看见自由。}
+\Action{小女孩舔了一口番茄酱，皱眉。}
+\Cue{GIRL}
+\Dialogue{It tastes normal.}
+\Cue{AVA}
+\Dialogue{That's the point.}
+\Cue{SUN}
+\Dialogue{I can have a chef make something better.}
+\Cue{AVA}
+\Dialogue{There. You did it again.}
+\Cue{SUN}
+\Dialogue{Did what?}
+\Cue{AVA}
+\Dialogue{Tried to improve the first thing that didn't need you.}
+\Cue{GIRL}
+\Dialogue{My mom says rich people get bored.}
+\Cue{SUN}
+\Dialogue{She's right.}
+\Cue{AVA}
+\Dialogue{No. You get scared of being unnecessary.}
+\Action{女孩把番茄酱递给 Sun。}
+\Cue{GIRL}
+\Dialogue{You can borrow mine.}
+\Action{Sun 接过塑料瓶，第一次没有提出升级。}
+\Transition{CUT TO BLACK.}
+\Episode{24}{A BABY}
+\EpisodeMeta{本集目标}{把普通生活的幸福推向最大承诺，也暴露 Sun 仍不思考。}
+\EpisodeMeta{尾钩}{Ava 对那个过快的 Okay 产生恐惧。}
+\Scene{1}{EXT. LANAI BEACH — SUNSET}
+\Action{Sun 拎着廉价外卖袋，Ava 光脚走在浪边。没有人拍他们。}
+\Cue{AVA}
+\Dialogue{Today you spent thirty-eight dollars.}
+\Cue{SUN}
+\Dialogue{Worst day of my life.}
+\Cue{AVA}
+\Dialogue{Best day of mine.}
+\Action{他们坐下。远处一个父亲抱起孩子。}
+\Cue{AVA}
+\Dialogue{Let's have a baby.}
+\Action{Sun 以为听错。}
+\Cue{AVA}
+\Dialogue{Not me. Surrogate. I can't have cameras waiting for my body to change.}
+\Cue{SUN}
+\Dialogue{Okay.}
+\Cue{AVA}
+\Dialogue{You didn't think.}
+\Cue{SUN}
+\Dialogue{You want it.}
+\Cue{AVA}
+\Dialogue{What if one day I ask for something you can't give me?}
+\Cue{SUN}
+\Dialogue{There isn't anything I can't give you.}
+\Action{Ava 望向海面。刚才的幸福变得危险。}
+\Action{Sun 的一句 “Okay” 让 Ava 不知所措。}
+\Cue{AVA}
+\Dialogue{You didn't negotiate.}
+\Cue{SUN}
+\Dialogue{It's your body.}
+\Cue{AVA}
+\Dialogue{Say the rest.}
+\Cue{SUN}
+\Dialogue{Your timeline. Your doctor. Your decision.}
+\Cue{AVA}
+\Dialogue{And if I change my mind?}
+\Cue{SUN}
+\Dialogue{Then I change the future I imagined.}
+\Action{海浪推上来，冲掉他们脚边画出的婴儿名字。}
+\Cue{AVA}
+\Dialogue{You make that sound easy.}
+\Cue{SUN}
+\Dialogue{No. I make it sound yours.}
+\Transition{CUT TO BLACK.}
+\Episode{25}{HER BODY}
+\EpisodeMeta{本集目标}{把生育选择与“谁拥有身体和文件”直接连接。}
+\EpisodeMeta{尾钩}{诊所系统也被家族公司控制。}
+\Scene{1}{INT. LAGUNA FERTILITY CLINIC — DAY}
+\Action{DR. HARPER 展示流程图。Ava 反复确认文件。}
+\Cue{DR. HARPER}
+\Dialogue{We retrieve the eggs, create embryos, then transfer to your chosen surrogate.}
+\Cue{AVA}
+\Dialogue{Who owns the embryos?}
+\Cue{DR. HARPER}
+\Dialogue{You and Mr. Ge, under the consent agreement.}
+\Cue{AVA}
+\Dialogue{My medical records?}
+\Cue{DR. HARPER}
+\Dialogue{You do.}
+\Cue{AVA}
+\Dialogue{My scans, genetic data, unused tissue—none can be licensed, modeled, or transferred.}
+\Action{Sun 察觉她语气异常。}
+\Cue{SUN}
+\Dialogue{No one wants to steal your bloodwork.}
+\Cue{AVA}
+\Dialogue{You don't know what people want from me.}
+\Scene{2}{INT. CLINIC SIGNING ROOM — LATER}
+\Action{Ava 打开电子授权。预填紧急代表：VANCE LEGACY HOLDINGS。}
+\Cue{AVA}
+\Dialogue{I never entered that.}
+\Action{系统自动锁定：ADMINISTRATOR VERIFIED。}
+\Action{Dr. Harper 拿回文件，指向隐藏在附录里的授权条款。}
+\Cue{DR. HARPER}
+\Dialogue{This consent allows third-party data processing.}
+\Cue{AVA}
+\Dialogue{For medicine?}
+\Cue{DR. HARPER}
+\Dialogue{It doesn't say.}
+\Cue{SUN}
+\Dialogue{Strike it.}
+\Cue{AVA}
+\Dialogue{You don't get to edit my consent either.}
+\Action{她自己划掉整段，在旁边写下：NO COMMERCIAL USE — EVER。}
+\Cue{DR. HARPER}
+\Dialogue{The clinic may delay treatment.}
+\Cue{AVA}
+\Dialogue{Then they can wait for my yes.}
+\Transition{CUT TO BLACK.}
+\Episode{26}{TOO SMALL}
+\EpisodeMeta{本集目标}{让求婚成为一次失败的交流，而不是单纯嫌钻戒小。}
+\EpisodeMeta{尾钩}{Ava 说“小”的不是钻石。}
+\Scene{1}{INT. LANAI VILLA — NIGHT}
+\Action{暴雨导致戒指延误。Sun 焦躁走动，Lena 视频连线。}
+\Cue{LENA (SCREEN)}
+\Dialogue{The courier lands in ninety minutes.}
+\Action{Sun 看见 Ava 睡在沙发上，忽然关掉屏幕。他从桌上拿一只普通银圈\CNdash{}餐巾环。}
+\Scene{2}{EXT. COVERED TERRACE — MOMENTS LATER}
+\Action{雨声巨大。Sun 单膝跪下。}
+\Cue{SUN}
+\Dialogue{Marry me.}
+\Action{Ava 望着银圈。}
+\Cue{AVA}
+\Dialogue{Too small.}
+\Action{Sun 的脸沉下。}
+\Cue{SUN}
+\Dialogue{The real ring is coming.}
+\Cue{AVA}
+\Dialogue{Of course it is.}
+\Cue{SUN}
+\Dialogue{I'll get a bigger one.}
+\Action{她把银圈放回他手心。}
+\Cue{AVA}
+\Dialogue{I wasn't talking about the diamond.}
+\Action{她走进雨里。Sun 跪在原地，仍不明白。}
+\Action{雷声盖过远处摄影机的快门。Ava 把戒指盒合上。}
+\Cue{SUN}
+\Dialogue{Tell me the right size.}
+\Cue{AVA}
+\Dialogue{There isn't one.}
+\Cue{SUN}
+\Dialogue{For the diamond?}
+\Cue{AVA}
+\Dialogue{For a proposal made because a reporter embarrassed you.}
+\Cue{SUN}
+\Dialogue{That's not why.}
+\Cue{AVA}
+\Dialogue{Then ask when no one can applaud.}
+\Action{她把戒指盒放回他手心。}
+\Cue{AVA}
+\Dialogue{And ask a question you can survive hearing “no” to.}
+\Cue{SUN}
+\Dialogue{What if I can't?}
+\Cue{AVA}
+\Dialogue{Then you aren't asking. You're announcing.}
+\Action{雷声中，Sun 把戒指盒放进口袋，而不是再次打开。}
+\Transition{CUT TO BLACK.}
+\Episode{27}{BIGGER}
+\EpisodeMeta{本集目标}{把 Sun 对失败求婚的修复方式推到最糟\CNdash{}更贵、更公开。}
+\EpisodeMeta{尾钩}{Grant 把婚约当融资保证。}
+\Scene{1}{INT. HOLLYWOOD SOUNDSTAGE — NIGHT}
+\Action{Ava 拍完戏，巨幕突然亮起：两人的私密照片、无人机灯光、鲜花。Sun 手持更大的钻戒走来。全剧组直播。}
+\Cue{SUN}
+\Dialogue{This one isn't small.}
+\Action{Ava 看着四周手机。没有退路。}
+\Cue{CREW}
+\Dialogue{Say yes! Say yes!}
+\Action{她勉强伸手。}
+\Cue{AVA}
+\Dialogue{Yes.}
+\Action{众人欢呼。Sun 没看见她眼里的惊慌。}
+\Scene{2}{INT. EMPTY SOUNDSTAGE — LATER}
+\Action{人散尽。Ava 摘下戒指。}
+\Cue{AVA}
+\Dialogue{You turned my answer into content.}
+\Scene{3}{INT. INVESTOR DINNER — SAME}
+\Action{Grant 展示直播截图。}
+\Cue{GRANT}
+\Dialogue{The engagement changes our liquidity profile.}
+\Cue{INVESTOR}
+\Dialogue{Meaning?}
+\Cue{GRANT}
+\Dialogue{The billionaire will fund her buyout.}
+\Action{观众还在鼓掌，Ava 却摘下麦克风。}
+\Cue{SUN}
+\Dialogue{Was that a yes?}
+\Cue{AVA}
+\Dialogue{It was a line in your show.}
+\Cue{SUN}
+\Dialogue{There was no script.}
+\Cue{AVA}
+\Dialogue{There was a stage, a ring, and nowhere for me to go.}
+\Cue{SUN}
+\Dialogue{I thought bigger meant clearer.}
+\Cue{AVA}
+\Dialogue{Bigger just means more witnesses.}
+\Cue{SUN}
+\Dialogue{I wanted the world to know I chose you.}
+\Cue{AVA}
+\Dialogue{I needed to know I could choose you back.}
+\Action{她走到黑暗的空摄影棚里。}
+\Cue{AVA}
+\Dialogue{Ask me here.}
+\Action{Sun 张口。Ava 抬手制止。}
+\Cue{AVA}
+\Dialogue{Not tonight.}
+\Transition{CUT TO BLACK.}
+\Episode{28}{THE TATTOO}
+\EpisodeMeta{本集目标}{完整揭示 Maya 的旧伤，并给 Sun 最准确的预言。}
+\EpisodeMeta{尾钩}{Ava 等的不是最大 Yes，而是第一个 No。}
+\Scene{1}{INT. EMPTY BASKETBALL ARENA — NIGHT}
+\Action{Maya 训练结束。Sun 在场边等她，把订婚报道放下。}
+\Cue{SUN}
+\Dialogue{You wanted me to ask. I'm asking. Why did she leave you?}
+\Action{Maya 递来一张照片：二十多岁的两人躺在地板上大笑，Ava 背上是小小的 M。}
+\Cue{MAYA}
+\Dialogue{They found us before her biggest premiere. Her studio said America couldn't love both versions of her.}
+\Cue{SUN}
+\Dialogue{And she chose the movie.}
+\Cue{MAYA}
+\Dialogue{I said, “Come with me.” She watched me walk into that press conference alone.}
+\Cue{SUN}
+\Dialogue{Then why protect her now?}
+\Cue{MAYA}
+\Dialogue{Because I know what they taught her. Love is whatever someone is willing to lose.}
+\Action{Maya 逼近他。}
+\Cue{MAYA}
+\Dialogue{She isn't waiting for your biggest yes. She's waiting for your first no.}
+\Action{Maya 把训练用胶带缠上手腕，盖住自己对应的 A。}
+\Cue{SUN}
+\Dialogue{Why hide yours?}
+\Cue{MAYA}
+\Dialogue{Because keeping a scar visible doesn't make it honest.}
+\Cue{SUN}
+\Dialogue{You think I'm another scar.}
+\Cue{MAYA}
+\Dialogue{I think you're a man who mistakes permanence for safety.}
+\Action{场馆外传来观众呼喊 Maya 的名字。}
+\Cue{MAYA}
+\Dialogue{She doesn't need a forever. She needs a door that opens from the inside.}
+\Action{Sun 看向 Ava 离开的方向，第一次没有追。}
+\Transition{CUT TO BLACK.}
+\Episode{29}{FORTY-EIGHT PAGES}
+\EpisodeMeta{本集目标}{让 Sun 获得事实，却选择用隐瞒维持爱情。}
+\EpisodeMeta{尾钩}{Ava 听见第 48 页证明她撒谎。}
+\Scene{1}{INT. SUN'S PRIVATE OFFICE — NIGHT}
+\Action{Lena 放下厚厚的调查报告。}
+\Cue{LENA}
+\Dialogue{Forty-eight pages. Her parents control the holdings. Grant controls the parents. Payments vanish through six shells.}
+\Action{Sun 翻页：Maya、合同、秘密公寓、签字样本。}
+\Cue{LENA}
+\Dialogue{Page forty-eight proves Ava lied about the original deal.}
+\Cue{SUN}
+\Dialogue{Does it prove why?}
+\Cue{LENA}
+\Dialogue{No.}
+\Cue{SUN}
+\Dialogue{Then it proves nothing.}
+\Action{他把报告锁进保险柜。}
+\Scene{2}{INT. OFFICE HALL — CONTINUOUS}
+\Action{门外，Ava 端着晚餐，听见最后一句。}
+\Cue{LENA (O.S.)}
+\Dialogue{She lied to your face.}
+\Cue{SUN (O.S.)}
+\Dialogue{And I chose the face.}
+\Action{Ava 看向保险柜键盘，记住 Sun 按下的最后四位数字。}
+\Action{Ava 把第四十八页从报告中抽出来。}
+\Cue{AVA}
+\Dialogue{“Payments correlate with emotional distress.” That's a polite way to say you trained me.}
+\Cue{SUN}
+\Dialogue{I didn't know I was doing it.}
+\Cue{AVA}
+\Dialogue{You knew I stopped asking questions.}
+\Cue{SUN}
+\Dialogue{I thought that meant trust.}
+\Cue{AVA}
+\Dialogue{Trust makes questions safer. You made them expensive.}
+\Action{她把那页折成一架纸飞机，飞向垃圾桶，却没有投进去。}
+\Cue{AVA}
+\Dialogue{Keep the report. I need the evidence.}
+\Transition{CUT TO BLACK.}
+\Episode{30}{THE LIE}
+\EpisodeMeta{本集目标}{两人同时知道对方不诚实，却选择继续表演亲密。}
+\EpisodeMeta{尾钩}{Ava 确认自己被调查。}
+\Scene{1}{INT. SUN'S BEDROOM — NIGHT}
+\Action{Ava 坐在床边，主动开口。}
+\Cue{AVA}
+\Dialogue{Grant gave me my first real role. My parents protected the money. Maya and I were… intense, but brief.}
+\Action{Sun 看着她。每句都与报告不同。}
+\Cue{SUN}
+\Dialogue{Anything else?}
+\Action{她有机会说真话。}
+\Cue{AVA}
+\Dialogue{No.}
+\Action{Sun 俯身吻她。}
+\Cue{SUN}
+\Dialogue{Then I believe you.}
+\Scene{2}{INT. SUN'S PRIVATE OFFICE — LATER}
+\Action{Sun 睡着后，Ava 输入那四位数字。保险柜打开。}
+\Action{她看到报告封面：CONFIDENTIAL SUBJECT DOSSIER — AVA VANCE。}
+\Action{第一页夹着她 17 岁的截图。}
+\Action{Sun 的声音从门口传来。}
+\Cue{SUN}
+\Dialogue{Find what you were looking for?}
+\Action{Ava 回头。两人第一次都无处可躲。}
+\Action{Ava 把旧照片和报告第四十八页并排放在桌上。}
+\Cue{AVA}
+\Dialogue{Which version do you believe—the girl you imagined or the woman your investigator measured?}
+\Cue{SUN}
+\Dialogue{The woman standing here.}
+\Cue{AVA}
+\Dialogue{You don't know her.}
+\Cue{SUN}
+\Dialogue{Then let me be wrong in front of you.}
+\Cue{AVA}
+\Dialogue{No fixing?}
+\Cue{SUN}
+\Dialogue{No fixing.}
+\Action{她伸手拿回照片。}
+\Cue{AVA}
+\Dialogue{Good. Start with why my father signed my name.}
+\Transition{CUT TO BLACK.}
+\Episode{31}{NO QUESTIONS}
+\EpisodeMeta{本集目标}{调查事件后，两人不解决信任，只签下一张更危险的情感空白支票。}
+\EpisodeMeta{尾钩}{十天后的回购窗口。}
+\Scene{1}{INT. SUN'S PRIVATE OFFICE — CONTINUOUS}
+\Action{Ava 把报告摔在桌上。}
+\Cue{AVA}
+\Dialogue{Forty-eight pages. Did you miss anything?}
+\Cue{SUN}
+\Dialogue{The truth, apparently.}
+\Cue{AVA}
+\Dialogue{You didn't ask for truth. You purchased surveillance.}
+\Cue{SUN}
+\Dialogue{You asked for millions with no reasons.}
+\Cue{AVA}
+\Dialogue{And you loved it. Every payment made you feel safe.}
+\Cue{SUN}
+\Dialogue{Every secret made you feel free.}
+\Action{两人沉默，精准刺中彼此。}
+\Cue{AVA}
+\Dialogue{One day, I may ask for money. A lot. If you ask why, I can't take it.}
+\Cue{SUN}
+\Dialogue{How much?}
+\Cue{AVA}
+\Dialogue{You already broke the rule.}
+\Action{Sun 把报告合上。}
+\Cue{SUN}
+\Dialogue{Fine. No questions.}
+\Scene{2}{INT. ELEVATOR — MOMENTS LATER}
+\Action{Ava 独自下楼。加密消息弹出：}
+\Cue{GRANT (TEXT)}
+\Dialogue{YOUR BUYBACK WINDOW OPENS IN 10 DAYS.}
+\Action{电梯数字缓慢下降。Sun 把 Ava 的包递给她，没有替她拿着。}
+\Cue{AVA}
+\Dialogue{You want to know what I'll ask for?}
+\Cue{SUN}
+\Dialogue{No questions.}
+\Cue{AVA}
+\Dialogue{That rule protects you too.}
+\Cue{SUN}
+\Dialogue{From what?}
+\Cue{AVA}
+\Dialogue{From hearing why I need the money.}
+\Action{Sun 看向电梯镜面里的自己。}
+\Cue{SUN}
+\Dialogue{Then change the rule.}
+\Cue{AVA}
+\Dialogue{Not yet.}
+\Action{电梯到达。Grant 的短信再次亮起：TEN DAYS。}
+\Transition{CUT TO BLACK.}
+\Episode{32}{THE SIGNATURE}
+\EpisodeMeta{本集目标}{把父母的控制从情感勒索升级为可证明的伪造。}
+\EpisodeMeta{尾钩}{Ava 发现十六岁签名并非本人所写。}
+\Scene{1}{INT. VANCE FAMILY OFFICE — DAY}
+\Action{Elaine 推来一份信托修订。Victor 递笔。}
+\Cue{ELAINE}
+\Dialogue{This keeps the family protected after you marry.}
+\Cue{AVA}
+\Dialogue{Protected from what?}
+\Cue{VICTOR}
+\Dialogue{From a man who can buy your whole life before breakfast.}
+\Cue{AVA}
+\Dialogue{You did that before I could drive.}
+\Action{她推开笔。}
+\Cue{ELAINE}
+\Dialogue{Don't be ungrateful.}
+\Cue{AVA}
+\Dialogue{That word paid for this room.}
+\Action{Victor 怒而抽出原始合同。}
+\Cue{VICTOR}
+\Dialogue{You agreed to all of it.}
+\Scene{2}{INT. AVA'S CAR — LATER}
+\Action{Ava 放大十六岁时的签名，又在纸上重写自己的名字。}
+\Action{旧签名的 V 转折方式，与 Elaine 在支票上的签名完全一样。}
+\CueP{AVA}{低声}
+\Dialogue{I never signed this.}
+\Action{车窗外，Elaine 正站在门口看她。}
+\Action{Elaine 伸手去拿伪造的签名页，Ava 先一步抽走。}
+\Cue{ELAINE}
+\Dialogue{Your father was under pressure.}
+\Cue{AVA}
+\Dialogue{So he became me?}
+\Cue{VICTOR}
+\Dialogue{You were sixteen. We saved the production.}
+\Cue{AVA}
+\Dialogue{You saved your house.}
+\Action{Victor 的视线下意识移向桌上的房贷文件。}
+\Cue{AVA}
+\Dialogue{How much did Grant pay you?}
+\Cue{VICTOR}
+\Dialogue{Nothing.}
+\Cue{AVA}
+\Dialogue{Then why are you more afraid of him than of losing me?}
+\Action{Victor 无法回答。}
+\Transition{CUT TO BLACK.}
+\Episode{33}{THIRTY MILLION}
+\EpisodeMeta{本集目标}{完成五千万前最大的金额升级，并让 Sun 第一次对付款设置保护边界。}
+\EpisodeMeta{尾钩}{Elaine 无法控制资金。}
+\Scene{1}{INT. AVA'S PENTHOUSE — NIGHT}
+\Action{Elaine 哭着展示家族公司债务和员工名单。}
+\Cue{ELAINE}
+\Dialogue{Two hundred people lose their jobs if the loan defaults.}
+\Cue{AVA}
+\Dialogue{How much?}
+\Cue{ELAINE}
+\Dialogue{Thirty million.}
+\Scene{2}{INT. SUN'S PENTHOUSE — LATER}
+\Cue{AVA}
+\Dialogue{I need thirty million for my family's trust.}
+\Action{Sun 看着她，想起“无问题”承诺。}
+\Cue{SUN}
+\Dialogue{Okay.}
+\Action{Lena 立刻插话。}
+\Cue{LENA}
+\Dialogue{Independent escrow. Funds release only to verified creditors.}
+\Cue{AVA}
+\Dialogue{I said no contract.}
+\Cue{SUN}
+\Dialogue{This protects you, not me.}
+\Action{她盯着他，第一次听见温和的边界。}
+\Cue{AVA}
+\Dialogue{Do it.}
+\Scene{3}{INT. VANCE FAMILY OFFICE — SAME}
+\Action{Elaine 点击转账，屏幕报错：BENEFICIARY ACCESS DENIED。}
+\Action{她的眼泪瞬间停了。}
+\Cue{ELAINE}
+\Dialogue{He locked me out.}
+\Action{Grant 在电话那端轻笑。}
+\Cue{GRANT (PHONE)}
+\Dialogue{Then ask for more.}
+\Action{Sun 的银行 App 弹出风险警告：UNUSUAL TRANSFER。}
+\Cue{LENA}
+\Dialogue{If you authorize this, compliance will flag both of you.}
+\Cue{SUN}
+\Dialogue{Good.}
+\Cue{AVA}
+\Dialogue{Good?}
+\Cue{SUN}
+\Dialogue{Money should leave a trail when someone is using you.}
+\Cue{AVA}
+\Dialogue{That includes you.}
+\Cue{SUN}
+\Dialogue{Especially me.}
+\Action{他把确认键转向 Ava。}
+\Cue{SUN}
+\Dialogue{You press it.}
+\Action{Ava 没按。她截图保存了账户和托管条件。}
+\Transition{CUT TO BLACK.}
+\Episode{34}{THE COST OF YES}
+\EpisodeMeta{本集目标}{让 Sun 的情感失控在事业上产生不可逆代价。}
+\EpisodeMeta{尾钩}{董事会内鬼与 Grant 联手。}
+\Scene{1}{INT. HELIOS BOARDROOM — DAY}
+\Action{屏幕列出：MISSED VOTE、PRIVATE TRANSFERS、REGULATORY EXPOSURE。}
+\Action{董事长 MARCUS HALE 推来暂时停职协议。}
+\Cue{MARCUS}
+\Dialogue{Ninety days away from operations. Keep the title. Lose the keys.}
+\Cue{SUN}
+\Dialogue{No.}
+\Cue{MARCUS}
+\Dialogue{You spent fifty-three million in six months on one relationship.}
+\Cue{SUN}
+\Dialogue{My money.}
+\Cue{MARCUS}
+\Dialogue{Your judgment is company property.}
+\Action{Sun 把协议撕成两半。}
+\Cue{SUN}
+\Dialogue{I play better cornered.}
+\Scene{2}{INT. BOARDROOM — MOMENTS LATER}
+\Action{众人离开。Marcus 留下，拿出另一部手机。}
+\Cue{MARCUS (TEXT TO GRANT)}
+\Dialogue{KEEP HIM DISTRACTED. TWO MORE VOTES AND HE'S OUT.}
+\Action{回复立刻出现：}
+\Cue{GRANT (TEXT)}
+\Dialogue{SHE'LL ASK FOR FIFTY.}
+\Action{Marcus 把辞职信放在 Sun 面前。}
+\Cue{MARCUS}
+\Dialogue{The board doesn't fear the scandal. It fears you can't say no to her.}
+\Cue{SUN}
+\Dialogue{They're right.}
+\Cue{MARCUS}
+\Dialogue{Then you're not fit to lead.}
+\Cue{SUN}
+\Dialogue{Maybe leadership isn't keeping every key.}
+\Cue{MARCUS}
+\Dialogue{Investors don't pay for philosophy.}
+\Cue{SUN}
+\Dialogue{They paid for my judgment. This is it.}
+\Action{Marcus 离开。Lena 看见辞职信背面印着 Grant 公司的水印。}
+\Cue{LENA}
+\Dialogue{He isn't just watching the board. He's writing it.}
+\Transition{CUT TO BLACK.}
+\Episode{35}{BILLIONAIRE VS. BASKETBALL QUEEN}
+\EpisodeMeta{本集目标}{给投流一个高冲突公共名场面，同时让 Maya 暗中递出关键信息。}
+\EpisodeMeta{尾钩}{Ava 砸碎复制她的广告屏。}
+\Scene{1}{INT. CHARITY BASKETBALL COURT — NIGHT}
+\Action{Sun 穿球衣站在罚球线，连续投丢。Maya 单手抢走球。}
+\Cue{MAYA}
+\Dialogue{You buy buildings.}
+\Cue{SUN}
+\Dialogue{You throw balls.}
+\Cue{MAYA}
+\Dialogue{And somehow I'm better at boundaries.}
+\Action{她在他面前投中三分。观众高喊 MAYA。Sun 抢过主持人话筒。}
+\Cue{SUN}
+\Dialogue{Double every donation if she misses the next shot.}
+\Cue{MAYA}
+\Dialogue{Triple it when I make it.}
+\Action{她背对篮筐投球，空心命中。全场爆炸。}
+\Scene{2}{INT. ARENA HALL — LATER}
+\Action{Maya 擦汗经过 Sun，压低声音。}
+\Cue{MAYA}
+\Dialogue{Her panic attacks are back. Mirrors. Cameras. Anything that copies her.}
+\Action{巨响传来。}
+\Scene{3}{INT. WOMEN'S RESTROOM — CONTINUOUS}
+\Action{一块互动广告屏模仿 Ava 的表情。Ava 用奖杯砸碎屏幕。}
+\Action{破裂画面仍在微笑。}
+\Action{Maya 把篮球丢给 Sun。他没接住。}
+\Cue{MAYA}
+\Dialogue{That's what happens when you stare at the scoreboard.}
+\Cue{SUN}
+\Dialogue{What do you want?}
+\Cue{MAYA}
+\Dialogue{For you to stop making Ava referee your guilt.}
+\Cue{SUN}
+\Dialogue{You came here to insult me?}
+\Cue{MAYA}
+\Dialogue{I came to tell you Grant offered me ten million for our private photos.}
+\Action{Sun 的神色骤变。}
+\Cue{MAYA}
+\Dialogue{I said no. Now ask yourself why everyone assumes your answer would be a number.}
+\Transition{CUT TO BLACK.}
+\Episode{36}{THE FACE IN THE MIRROR}
+\EpisodeMeta{本集目标}{让 Ava 说出主谜题的一半，并拒绝 Sun 的收购式拯救。}
+\EpisodeMeta{尾钩}{她的脸不属于她。}
+\Scene{1}{INT. ARENA RESTROOM — CONTINUOUS}
+\Action{Sun 冲进来。屏幕碎片里有几十张 Ava 的脸。}
+\Cue{SUN}
+\Dialogue{Who made this?}
+\Cue{AVA}
+\Dialogue{It doesn't matter.}
+\Cue{SUN}
+\Dialogue{I'll buy the company and kill it.}
+\Cue{AVA}
+\Dialogue{Buying the cage doesn't open it!}
+\Action{她手掌被碎片划伤。Sun 想碰，Ava 后退。}
+\Cue{SUN}
+\Dialogue{Tell me what you're afraid of.}
+\Cue{AVA}
+\Dialogue{That you'll solve me.}
+\Cue{SUN}
+\Dialogue{I'm trying to protect you.}
+\Cue{AVA}
+\Dialogue{So are they. That's what every owner calls it.}
+\Scene{2}{INT. ARENA HALL — MOMENTS LATER}
+\Action{Ava 看见广告屏恢复，年轻的数字自己正在售卖香水。}
+\Cue{AVA}
+\Dialogue{My name isn't mine. My house isn't mine.}
+\Action{她直视 Sun。}
+\Cue{AVA}
+\Dialogue{My face doesn't belong to me.}
+\Action{数字 Ava 与真人同时转头，延迟不到一帧。}
+\Cue{DIGITAL AVA}
+\Dialogue{Everything I am was given freely.}
+\Cue{AVA}
+\Dialogue{Stop.}
+\Cue{GRANT}
+\Dialogue{The audience tested that line highest for warmth.}
+\Cue{AVA}
+\Dialogue{Ask it what I fear.}
+\Cue{GRANT}
+\Dialogue{It doesn't model fear.}
+\Cue{AVA}
+\Dialogue{Exactly. You copied the product and deleted the person.}
+\Action{她拔掉动作捕捉主机。备用屏幕却自动亮起上百个 Digital Ava。}
+\Cue{DIGITAL AVAS}
+\Dialogue{I consent.}
+\Transition{CUT TO BLACK.}
+\Episode{37}{QUEENS}
+\EpisodeMeta{本集目标}{用最小、最真实的空间承接 Ava 的崩溃，并把两人的过去真正连接。}
+\EpisodeMeta{尾钩}{Ruby 拿出 2007 年打印图。}
+\Scene{1}{INT. GE FAMILY LAUNDROMAT — NIGHT}
+\Action{卷帘门已经拉下。Ava 戴帽子坐在折衣台后，远处狗仔车来回经过。Ruby 递给她一筐毛巾。}
+\Cue{AVA}
+\Dialogue{You're not going to ask why I'm here?}
+\Cue{RUBY}
+\Dialogue{If you wanted questions, you'd go on television.}
+\Action{她示范折毛巾。Ava 做得一团糟。}
+\Cue{PETER}
+\Dialogue{Sun folded like that. We made him redo the whole bag.}
+\Action{Ava 第一次笑出声。}
+\Cue{AVA}
+\Dialogue{He says reality is negotiable.}
+\Cue{RUBY}
+\Dialogue{Laundry is not.}
+\Scene{2}{INT. LAUNDROMAT BACK ROOM — LATER}
+\Action{Ruby 打开旧纸箱，拿出褪色的 Ava 游戏广告打印图。}
+\Cue{RUBY}
+\Dialogue{He spent our color ink on you. We were very poor.}
+\Action{Ava 接过照片。背面写着少年 Sun 的字：SOMEDAY SHE'LL KNOW MY NAME。}
+\Action{Ruby 把洗衣机的硬币槽拉开，里面藏着一把旧钥匙。}
+\Cue{RUBY}
+\Dialogue{Your mother left this when you were seventeen.}
+\Cue{SUN}
+\Dialogue{What does it open?}
+\Cue{RUBY}
+\Dialogue{The apartment upstairs. The one you promised you'd never sell.}
+\Cue{SUN}
+\Dialogue{I can buy the whole building.}
+\Cue{RUBY}
+\Dialogue{That is not what I said.}
+\Action{Ava 接过钥匙。}
+\Cue{AVA}
+\Dialogue{May I see it?}
+\Action{Ruby 点头，却看着 Sun。}
+\Cue{RUBY}
+\Dialogue{Only if he asks like a guest.}
+\Transition{CUT TO BLACK.}
+\Episode{38}{NINETEEN YEARS}
+\EpisodeMeta{本集目标}{将最浪漫的执念翻转成最令人窒息的物化感。}
+\EpisodeMeta{尾钩}{Ava 指控他终于买到了那张图片。}
+\Scene{1}{INT. GE FAMILY LAUNDROMAT — NIGHT}
+\Action{Sun 赶来，看见 Ava 手里的旧图。}
+\Cue{SUN}
+\Dialogue{Mom.}
+\Cue{RUBY}
+\Dialogue{She asked who you were.}
+\Action{Ruby 和 Peter 识趣离开。洗衣机转动。}
+\Cue{AVA}
+\Dialogue{Nineteen years?}
+\Cue{SUN}
+\Dialogue{It wasn't like that every day.}
+\Cue{AVA}
+\Dialogue{How many phones?}
+\Cue{SUN}
+\Dialogue{All of them.}
+\Cue{AVA}
+\Dialogue{How many women did you compare to a seventeen-year-old picture?}
+\Cue{SUN}
+\Dialogue{None of them were you.}
+\Cue{AVA}
+\Dialogue{Neither am I.}
+\Action{Sun 伸手。她后退。}
+\Cue{AVA}
+\Dialogue{Maybe you never met me. Maybe you just got rich enough to buy the picture.}
+\Action{洗衣机停下，空间突然死寂。}
+\Action{Ava 翻过那张保存十九年的照片，背面有少年 Sun 的字：WHEN I CAN AFFORD HER。}
+\Cue{AVA}
+\Dialogue{You weren't waiting for me. You were waiting to feel worthy.}
+\Cue{SUN}
+\Dialogue{Is there a difference?}
+\Cue{AVA}
+\Dialogue{I became the receipt.}
+\Cue{SUN}
+\Dialogue{I was a kid.}
+\Cue{AVA}
+\Dialogue{And now you're a man who can buy every room except the one where you're ordinary.}
+\Action{她把照片放回相框，正面朝下。}
+\Cue{AVA}
+\Dialogue{Meet me there someday.}
+\Transition{CUT TO BLACK.}
+\Episode{39}{THE CONTRACT}
+\EpisodeMeta{本集目标}{让两人差一点说出真相，再由 Grant 的倒计时强行切断。}
+\EpisodeMeta{尾钩}{最终价格 50M，72 小时。}
+\Scene{1}{INT. SUN'S PRIVATE OFFICE — NIGHT}
+\Action{Sun 把 48 页报告投入壁炉。纸张卷曲。}
+\Cue{SUN}
+\Dialogue{No more investigations.}
+\Cue{AVA}
+\Dialogue{Burning proof doesn't create trust.}
+\Cue{SUN}
+\Dialogue{Then tell me one true thing.}
+\Action{Ava 看向他。}
+\Cue{AVA}
+\Dialogue{When I was sixteen, my parents—}
+\Action{她手机震动。Grant 发来 Victor 代签的监控截帧和一段话：TELL HIM, AND YOUR FATHER GOES TO PRISON BEFORE THE WINDOW OPENS。}
+\Cue{SUN}
+\Dialogue{Your parents what?}
+\Cue{AVA}
+\Dialogue{Loved me.}
+\Action{Sun 知道这不是答案。}
+\Scene{2}{INSERT — PHONE SCREEN}
+\Cue{GRANT (TEXT)}
+\Dialogue{72 HOURS. \$50,000,000. NO THIRD-PARTY PURCHASE. FINAL.}
+\Action{倒计时开始：71:59:59。}
+\Action{Ava 看着报告化为灰烬。}
+\Action{Grant 将倒计时投到墙上：71:59:59。}
+\Cue{GRANT}
+\Dialogue{At zero, Ava Forever launches worldwide.}
+\Cue{AVA}
+\Dialogue{Without my consent.}
+\Cue{GRANT}
+\Dialogue{With the consent your father gave us.}
+\Cue{AVA}
+\Dialogue{He forged it.}
+\Cue{GRANT}
+\Dialogue{Prove that before the market opens.}
+\Action{他把回购合同推近。}
+\Cue{GRANT}
+\Dialogue{Fifty million is not a price. It's a deadline.}
+\Action{Ava 手机响起，诊所提示：RETRIEVAL TOMORROW。两个倒计时同时开始。}
+\Cue{AVA}
+\Dialogue{If I sign, you delete every copy.}
+\Cue{GRANT}
+\Dialogue{Every copy you can prove exists.}
+\Action{Ava 听懂了这句话里的陷阱。}
+\Transition{CUT TO BLACK.}
+\Episode{40}{BEFORE THE RETRIEVAL}
+\EpisodeMeta{本集目标}{将生育、身份与五千万彻底锁在同一时刻。}
+\EpisodeMeta{尾钩}{正式提出五千万。}
+\Scene{1}{INT. LAGUNA FERTILITY CLINIC — MORNING}
+\Action{护士核对腕带。Dr. Harper 递来最终同意书。}
+\Cue{DR. HARPER}
+\Dialogue{Once we begin sedation, we cannot stop midway.}
+\Action{Ava 手机倒计时：03:18:22。Grant 的律师发来回购账户。}
+\Cue{NURSE}
+\Dialogue{Ready?}
+\Action{Ava 望向同意书上自己的名字，想起伪造签名。}
+\Cue{AVA}
+\Dialogue{Give me five minutes.}
+\Scene{2}{INT. CLINIC GLASS CORRIDOR — MOMENTS LATER}
+\Action{Sun 在纽约屏幕中参加 HELIOS 紧急会议。Ava 打过去，他立刻退出会议。}
+\Cue{SUN}
+\Dialogue{Are you scared?}
+\Cue{AVA}
+\Dialogue{Yes.}
+\Action{这是她极少数的诚实。}
+\Cue{SUN}
+\Dialogue{Tell me what you need.}
+\Action{Ava 看着玻璃里自己的倒影。}
+\Cue{AVA}
+\Dialogue{Fifty million dollars. Today.}
+\Action{Sun 在电话另一端听见海浪，也听见 Ava 的呼吸。}
+\Cue{SUN}
+\Dialogue{Where are you?}
+\Cue{AVA}
+\Dialogue{Somewhere no one knows my room number.}
+\Cue{SUN}
+\Dialogue{Are you safe?}
+\Cue{AVA}
+\Dialogue{Don't send security.}
+\Cue{SUN}
+\Dialogue{I asked if you're safe.}
+\Cue{AVA}
+\Dialogue{And I'm telling you what safety costs.}
+\Action{她看着账户页面，又看向 Grant 的合同。}
+\Cue{AVA}
+\Dialogue{Tomorrow, I'm going to ask you for something that may end us.}
+\Cue{SUN}
+\Dialogue{Will you tell me why?}
+\Cue{AVA}
+\Dialogue{If I have to explain my freedom before you respect it, we're already over.}
+\Action{电话断线。Sun 没有回拨，却打开了 Vance Legacy 的全部调查档案。}
+\Transition{CUT TO BLACK.}
+\Episode{41}{LET ME THINK}
+\EpisodeMeta{本集目标}{兑现首集场景；让最小的一句迟疑成为全剧最大爆炸。}
+\EpisodeMeta{尾钩}{Ava 将 Yes 解释成爱，将思考解释成拒绝。}
+\Scene{1}{INT. LAGUNA CLINIC / HELIOS OFFICE — INTERCUT}
+\Cue{SUN}
+\Dialogue{For what?}
+\Cue{AVA}
+\Dialogue{No questions. We made a promise.}
+\Cue{SUN}
+\Dialogue{We made a bad promise.}
+\Cue{AVA}
+\Dialogue{No contract. No loan. The account has to be mine.}
+\Cue{SUN}
+\Dialogue{You're asking me to wire fifty million to an account I've never seen, before a medical procedure.}
+\Cue{AVA}
+\Dialogue{I'm asking whether one thing in my life can belong to me without a man reading the terms.}
+\Action{Sun 打开转账页。Lena 站在门口，看到金额，缓慢摇头。}
+\Cue{SUN}
+\Dialogue{Give me the name of whoever is threatening you.}
+\Cue{AVA}
+\Dialogue{If you have to understand it, don't pay it.}
+\Action{护士再次示意。倒计时两小时。}
+\Cue{SUN}
+\Dialogue{Let me think.}
+\Action{Ava 像听见判决。}
+\Cue{AVA}
+\Dialogue{You just did.}
+\Action{她挂断。}
+\Action{十一秒像被拉长。Ava 慢慢把手从 Sun 的手里抽走。}
+\Cue{AVA}
+\Dialogue{You thought I was testing your love.}
+\Cue{SUN}
+\Dialogue{Weren't you?}
+\Cue{AVA}
+\Dialogue{I was testing whether your yes belonged to me or to you.}
+\Cue{SUN}
+\Dialogue{I need to know where it goes.}
+\Cue{AVA}
+\Dialogue{Then it isn't a gift. It's an inspection.}
+\Cue{SUN}
+\Dialogue{Fifty million isn't a normal request.}
+\Cue{AVA}
+\Dialogue{Neither is owning a woman you haven't met yet.}
+\Action{她把诊所腕带摘下，放在合同上。}
+\Transition{CUT TO BLACK.}
+\Episode{42}{ORACLE}
+\EpisodeMeta{本集目标}{让机器说出 Sun 不敢说的 No，并揭露他真正计算的是被离开的风险。}
+\EpisodeMeta{尾钩}{倒计时十一小时。}
+\Scene{1}{INT. HELIOS OFFICE — NIGHT}
+\Action{城市灯火下，Sun 独自打开 AI 财务代理 ORACLE。}
+\Cue{SUN}
+\Dialogue{Analyze all transfers to Ava Vance and related entities.}
+\Action{屏幕飞速滚动。}
+\Cue{ORACLE}
+\Dialogue{TRANSFER NOT RECOMMENDED. HIGH FRAUD PROBABILITY. BENEFICIAL OWNER UNKNOWN.}
+\Cue{SUN}
+\Dialogue{What if it's not fraud?}
+\Cue{ORACLE}
+\Dialogue{PURPOSE REQUIRED.}
+\Cue{SUN}
+\Dialogue{What if she leaves?}
+\Cue{ORACLE}
+\Dialogue{IRRELEVANT TO FINANCIAL RISK ASSESSMENT.}
+\Action{Sun 冷笑，又忽然发怒。}
+\Cue{SUN}
+\Dialogue{Does she love me?}
+\Cue{ORACLE}
+\Dialogue{UNKNOWN.}
+\Cue{SUN}
+\Dialogue{Would she stay if I transfer it?}
+\Cue{ORACLE}
+\Dialogue{PAYMENT CANNOT VERIFY AFFECTION.}
+\Action{屏幕最后弹出：DO NOT TRANSFER \$50,000,000。}
+\Action{手机上另一倒计时跳动：11:00:00。}
+\Action{Oracle 的计时器在屏幕上继续跳动。}
+\Cue{ORACLE}
+\Dialogue{Question: Will Ava Vance leave Sun Ge?}
+\Cue{SUN}
+\Dialogue{Stop.}
+\Cue{ORACLE}
+\Dialogue{Probability increased after hesitation: eighty-seven percent.}
+\Action{Sun 拔掉电源，屏幕却切换到备用电池。}
+\Cue{ORACLE}
+\Dialogue{Recommended action: immediate transfer.}
+\Cue{SUN}
+\Dialogue{No.}
+\Cue{ORACLE}
+\Dialogue{Clarify: no transfer, or no departure?}
+\Action{Sun 第一次无法向自己的系统下命令。屏幕映出 Grant 上传的合同倒计时。}
+\Transition{CUT TO BLACK.}
+\Episode{43}{ELEVEN SECONDS}
+\EpisodeMeta{本集目标}{用一场极简电话完成分手，让沉默成为动作。}
+\EpisodeMeta{尾钩}{Ava 从诊所监控中消失。}
+\Scene{1}{INT. LAGUNA HOTEL SUITE / SUN'S PENTHOUSE — INTERCUT — DAWN}
+\Action{Ava 已换回便服，行李箱在门边。Sun 面前是已填好的转账页面。}
+\Cue{AVA}
+\Dialogue{Did you decide?}
+\Action{Sun 看着 SEND。}
+\Action{第一秒。Ava 闭眼。}
+\Action{第四秒。Sun 想开口。}
+\Action{第七秒。倒计时归零。}
+\Action{第十一秒。}
+\Cue{AVA}
+\Dialogue{Okay.}
+\Cue{SUN}
+\Dialogue{Ava—}
+\Cue{AVA}
+\Dialogue{I know.}
+\Cue{SUN}
+\Dialogue{No, you don't.}
+\Cue{AVA}
+\Dialogue{It's the first honest answer you ever gave me.}
+\Action{她挂断，摘下婚戒放在桌上。}
+\Scene{2}{INT. LAGUNA CLINIC SECURITY DESK — LATER}
+\Action{保安回放监控。Ava 戴帽子走入电梯。电梯门打开后，里面空无一人。}
+\Cue{SECURITY GUARD}
+\Dialogue{She never came out.}
+\Action{Ava 把手机反扣在床上，另一台一次性手机却响起。}
+\Cue{GRANT (PHONE)}
+\Dialogue{Eleven seconds. I expected less.}
+\Cue{AVA}
+\Dialogue{Were you listening?}
+\Cue{GRANT (PHONE)}
+\Dialogue{I was measuring.}
+\Cue{AVA}
+\Dialogue{The deal is off.}
+\Cue{GRANT (PHONE)}
+\Dialogue{Then Ava Forever goes live in sixty hours.}
+\Cue{AVA}
+\Dialogue{You don't own my future.}
+\Cue{GRANT (PHONE)}
+\Dialogue{No. Your past sold it to me.}
+\Action{门外传来脚步。Ava 关灯，抓起文件袋。}
+\Cue{AVA}
+\Dialogue{Who's there?}
+\Cue{MAYA (O.S.)}
+\Dialogue{Someone who knows you hate being rescued.}
+\Cue{AVA}
+\Dialogue{Then don't rescue me.}
+\Cue{MAYA (O.S.)}
+\Dialogue{Open the door and rescue yourself.}
+\Transition{CUT TO BLACK.}
+\Episode{44}{SHE'S GONE}
+\EpisodeMeta{本集目标}{把奢华空间变成失去的证据，并引爆公共羞辱。}
+\EpisodeMeta{尾钩}{Maya 旧情全网爆炸。}
+\Scene{1}{INT. LAGUNA HOTEL FLOOR — DAY}
+\Action{整层酒店被 Sun 包下，却没有任何人。套房门全部敞开，海风穿堂。Sun 一间间寻找。}
+\Cue{SUN}
+\Dialogue{Ava!}
+\Action{Lena 拿着定位记录。}
+\Cue{LENA}
+\Dialogue{Phone off. Cards untouched. The clinic never completed retrieval.}
+\Action{主卧桌上是婚戒。旁边压着取卵腕带和指甲锉。}
+\Action{Sun 拿起锉刀，手掌被边缘划出一道红痕。}
+\Cue{SUN}
+\Dialogue{She doesn't leave this.}
+\Cue{LENA}
+\Dialogue{She did.}
+\Scene{2}{INT. HOTEL SUITE — CONTINUOUS}
+\Action{电视自动切入娱乐新闻。更多 Ava 与 Maya 的私照、视频流出。}
+\Cue{ANCHOR (TV)}
+\Dialogue{Was the billionaire fiancé merely a cover? Sources claim Ava Vance has returned to WNBA icon Maya Cross.}
+\Action{Sun 看向空床。屏幕上 Maya 正抱着年轻 Ava。}
+\Action{Sun 打开衣柜，Ava 的礼服都在，只有她最便宜的外套不见了。}
+\Cue{LENA}
+\Dialogue{She left every piece you bought.}
+\Cue{SUN}
+\Dialogue{Track the coat.}
+\Cue{LENA}
+\Dialogue{Listen to yourself.}
+\Action{Sun 看见梳妆台上的旧指甲锉。}
+\Cue{SUN}
+\Dialogue{She left this too.}
+\Cue{LENA}
+\Dialogue{No. She returned the symbol.}
+\Cue{SUN}
+\Dialogue{Call Maya.}
+\Cue{LENA}
+\Dialogue{And if Maya knows?}
+\Cue{SUN}
+\Dialogue{Ask her what Ava wants. Not where Ava is.}
+\Cue{LENA}
+\Dialogue{And if what she wants is never to see you again?}
+\Action{Sun 把旧照片面朝下扣在桌上。}
+\Cue{SUN}
+\Dialogue{Then make sure she never has to hide from me.}
+\Transition{CUT TO BLACK.}
+\Episode{45}{CORNERED}
+\EpisodeMeta{本集目标}{同时剥夺 Sun 的爱情、财富、名誉与控制，让他进入最擅长也最危险的逆风局。}
+\EpisodeMeta{尾钩}{Maya 证实 Ava 失踪。}
+\Scene{1}{INT. HELIOS BOARDROOM — DAY}
+\Action{屏幕红成一片：HELIOS -37\%。监管传票堆在桌上。记者在玻璃外拍摄。}
+\Cue{MARCUS}
+\Dialogue{The engagement collapsed, reserves are under attack, and federal investigators reopened the file. Resign today.}
+\Cue{SUN}
+\Dialogue{No.}
+\Cue{MARCUS}
+\Dialogue{You have no leverage.}
+\Cue{SUN}
+\Dialogue{I don't play better when I'm winning. I play better cornered.}
+\Action{董事们投票。Lena 悄声说：}
+\Cue{LENA}
+\Dialogue{You're one vote from removal.}
+\Action{门被猛地推开。Maya 穿训练服走入。}
+\Cue{MAYA}
+\Dialogue{Everyone out.}
+\Cue{SUN}
+\Dialogue{Come to enjoy the crash?}
+\Cue{MAYA}
+\Dialogue{Ava isn't with me.}
+\Action{Sun 的表情第一次裂开。}
+\Cue{MAYA}
+\Dialogue{She's missing.}
+\Action{董事会屏幕上，Grant 展示 Ava Forever 的预测营收。}
+\Cue{GRANT}
+\Dialogue{She can perform in forty languages, twenty-four hours a day, without scandal, pregnancy, or age.}
+\Cue{MARCUS}
+\Dialogue{And without consent?}
+\Cue{GRANT}
+\Dialogue{Consent is documented.}
+\Action{Sun 走进会议室。}
+\Cue{SUN}
+\Dialogue{Forged documents don't become real because they're profitable.}
+\Cue{GRANT}
+\Dialogue{Can you prove that?}
+\Cue{SUN}
+\Dialogue{Not yet.}
+\Cue{GRANT}
+\Dialogue{Then your missing girlfriend is our best-performing asset.}
+\Transition{CUT TO BLACK.}
+\Episode{46}{TWO IDIOTS}
+\EpisodeMeta{本集目标}{完成情敌结盟，并打开 Ava 从未让 Sun 进入的隐秘空间。}
+\EpisodeMeta{尾钩}{墙上全是不同年龄的数字 Ava。}
+\Scene{1}{INT. HELIOS PRIVATE ELEVATOR — DAY}
+\Action{Sun 与 Maya 并肩，彼此都不看对方。}
+\Cue{SUN}
+\Dialogue{Why should I believe you?}
+\Cue{MAYA}
+\Dialogue{Because you're not the only idiot who ever loved her.}
+\Cue{SUN}
+\Dialogue{Where would she go?}
+\Cue{MAYA}
+\Dialogue{Somewhere nobody expects an expensive woman to survive.}
+\Scene{2}{INT. CHEAP LOS ANGELES APARTMENT — NIGHT}
+\Action{Maya 用旧钥匙开门。房内只有折叠床、罐头和一台离线电脑。}
+\Cue{SUN}
+\Dialogue{You knew about this?}
+\Cue{MAYA}
+\Dialogue{I helped rent it after the press conference. She comes here when being Ava is too loud.}
+\Action{墙上贴着打印图：童星 Ava、成年 Ava、衰老模拟、动作模型。每张脸都标着权利编号。}
+\Action{Sun 触碰其中一张。}
+\Cue{SUN}
+\Dialogue{What did they do to her?}
+\Action{电脑忽然自动亮起。几十个数字 Ava 同时转头看他。}
+\Action{Maya 把一台旧录音机扔到桌上。}
+\Cue{MAYA}
+\Dialogue{Ava recorded every time Grant called after midnight.}
+\Cue{SUN}
+\Dialogue{Why didn't she tell me?}
+\Cue{MAYA}
+\Dialogue{Because you turn danger into a purchase order.}
+\Cue{SUN}
+\Dialogue{And you turn guilt into wisdom.}
+\Cue{MAYA}
+\Dialogue{Good. Be angry. Just don't make anger the next cage.}
+\Action{录音机里传出 Victor 的声音：I SIGNED WHAT YOU GAVE ME。}
+\Cue{SUN}
+\Dialogue{That could destroy Grant.}
+\Cue{MAYA}
+\Dialogue{Or Ava. That's why she hid it.}
+\Transition{CUT TO BLACK.}
+\Episode{47}{AVA FOREVER}
+\EpisodeMeta{本集目标}{完整展示反派产品，将“永不说 No”变成恐怖广告语。}
+\EpisodeMeta{尾钩}{全球发布会五天后举行。}
+\Scene{1}{INT. SECRET APARTMENT — CONTINUOUS}
+\Action{屏幕播放内部宣传片。数字 Ava 从十六岁切换到三十四岁，再永远停在二十四岁。}
+\Cue{DIGITAL AVA (VIDEO)}
+\Dialogue{I never age. I never need a trailer. I never say no.}
+\Action{Sun 关掉声音。}
+\Cue{MAYA}
+\Dialogue{Now you know why that word scares her.}
+\Action{他们找到烧毁一半的合同。Lena 通过视频读残页。}
+\Cue{LENA (SCREEN)}
+\Dialogue{Name, likeness, voice, biometric performance, synthetic derivative rights—perpetual.}
+\Action{Sun 找到一封回购函。}
+\Cue{SUN}
+\Dialogue{Fifty million wasn't for her parents.}
+\Cue{MAYA}
+\Dialogue{It was for her.}
+\Action{屏幕恢复倒计时：AVA FOREVER GLOBAL LAUNCH — 5 DAYS。}
+\Action{一个数字 Ava 对 Sun 微笑。}
+\Cue{DIGITAL AVA}
+\Dialogue{Anything you want, Mr. Ge.}
+\Action{Grant 按下发布测试键。全球地图逐一亮起。}
+\Cue{DIGITAL AVA}
+\Dialogue{I belong to everyone who loves me.}
+\Action{技术员不安地看向 Grant。}
+\Cue{TECHNICIAN}
+\Dialogue{That line wasn't in the approved script.}
+\Cue{GRANT}
+\Dialogue{The model generated it.}
+\Cue{TECHNICIAN}
+\Dialogue{From what data?}
+\Action{屏幕闪过 Ava 的私人语音、诊疗表和童年录像。}
+\Cue{GRANT}
+\Dialogue{Everything her family gave us.}
+\Action{Digital Ava 的笑容出现短暂故障，变成无声尖叫。}
+\Cue{TECHNICIAN}
+\Dialogue{The model is searching restricted memory.}
+\Cue{GRANT}
+\Dialogue{Delete the memory.}
+\Cue{TECHNICIAN}
+\Dialogue{It's copying itself.}
+\Transition{CUT TO BLACK.}
+\Episode{48}{WHAT SHE BOUGHT}
+\EpisodeMeta{本集目标}{拼全谜底，让 Sun 首次真正理解 Ava 对“被拥有”的恐惧。}
+\EpisodeMeta{尾钩}{他仍本能选择收购。}
+\Scene{1}{INT. HELIOS LEGAL WAR ROOM — NIGHT}
+\Action{Lena 在玻璃墙绘出公司链条。}
+\Cue{LENA}
+\Dialogue{Her parents put every identity right into Vance Legacy. Grant owns the voting shares. The AI license activates at launch.}
+\Cue{SUN}
+\Dialogue{Why didn't she tell me?}
+\Cue{MAYA}
+\Dialogue{Because then you would do exactly what you're about to do.}
+\Cue{SUN}
+\Dialogue{Save her?}
+\Cue{MAYA}
+\Dialogue{Own the rescue.}
+\Action{Lena 展示回购条款。}
+\Cue{LENA}
+\Dialogue{The buyer must be Ava personally. No third-party title. She asked you for cash because she refused to move from Grant's balance sheet to yours.}
+\Action{Sun 终于理解那句“无合同”。}
+\Cue{SUN}
+\Dialogue{Get Grant on the phone.}
+\Cue{LENA}
+\Dialogue{For evidence?}
+\Cue{SUN}
+\Dialogue{For a price.}
+\Action{Lena 把权利链图摊开，每一条线最终都指向同一份伪造签名。}
+\Cue{LENA}
+\Dialogue{If we expose this, Victor faces prison. Elaine may lose everything.}
+\Cue{SUN}
+\Dialogue{And Ava?}
+\Cue{LENA}
+\Dialogue{She gets her name back. Publicly, painfully.}
+\Cue{SUN}
+\Dialogue{Can we buy Grant out first?}
+\Action{Lena 沉默看他。}
+\Cue{SUN}
+\Dialogue{Right. Wrong question.}
+\Cue{LENA}
+\Dialogue{The right question is whether Ava chooses the truth when it costs her family.}
+\Action{Sun 把证据装进没有 Helios 标志的信封。}
+\Transition{CUT TO BLACK.}
+\Episode{49}{EIGHTY MILLION}
+\EpisodeMeta{本集目标}{把 Sun 推到旧模式的终极诱惑前，再由 Maya 击停他的笔。}
+\EpisodeMeta{尾钩}{签名停住。}
+\Scene{1}{INT. GRANT'S OFFICE — DAY}
+\Action{Grant、Sun、律师相对而坐。合同金额：\$80,000,000。}
+\Cue{SUN}
+\Dialogue{You offered fifty.}
+\Cue{GRANT}
+\Dialogue{To Ava. You are a strategic buyer.}
+\Cue{SUN}
+\Dialogue{I pay eighty. Every right transfers to her.}
+\Cue{GRANT}
+\Dialogue{To you. What you gift afterward is your romance.}
+\Action{Grant 推笔。}
+\Cue{GRANT}
+\Dialogue{She'll hate you. But she'll be yours to be hated by.}
+\Action{Sun 握住笔。}
+\Scene{2}{INT. GRANT'S OUTER OFFICE — CONTINUOUS}
+\Action{Maya 闯入，被保安拦住。}
+\Cue{MAYA}
+\Dialogue{Sun! If you sign, he wins.}
+\Cue{SUN}
+\Dialogue{She gets free.}
+\Cue{MAYA}
+\Dialogue{No. She changes owners.}
+\Action{保安拖走 Maya。她喊出最后一句：}
+\Cue{MAYA}
+\Dialogue{After all this, you still need to own the key?}
+\Action{Sun 的笔尖停在签名线上。}
+\Action{Grant 把八千万的付款证明推到 Ava 面前。}
+\Cue{GRANT}
+\Dialogue{Wire clears tonight. Your parents keep their homes. Maya stays out of the press.}
+\Cue{AVA}
+\Dialogue{And you keep my face forever.}
+\Cue{GRANT}
+\Dialogue{You keep the life everyone thinks you wanted.}
+\Cue{AVA}
+\Dialogue{They think I wanted Sun's money too.}
+\Cue{GRANT}
+\Dialogue{Didn't you?}
+\Action{Ava 拿起笔。Grant 放松下来。}
+\Cue{AVA}
+\Dialogue{Once. Then I learned money can open a cage without teaching you how to walk out.}
+\Action{她把笔尖按断。}
+\Transition{CUT TO BLACK.}
+\Episode{50}{DON'T BUY HER}
+\EpisodeMeta{本集目标}{完成 Sun 的关键行为转折：从买权利到找证据。}
+\EpisodeMeta{尾钩}{被盗的童星信托。}
+\Scene{1}{INT. GRANT'S OFFICE — CONTINUOUS}
+\Action{Sun 抬头看 Grant。}
+\Cue{SUN}
+\Dialogue{You spent fifteen years teaching her freedom has a price.}
+\Cue{GRANT}
+\Dialogue{Everything does.}
+\Action{Sun 将合同从签名处撕开。}
+\Cue{SUN}
+\Dialogue{Then keep your product.}
+\Action{Grant 的笑意第一次消失。}
+\Cue{GRANT}
+\Dialogue{Launch is in four days. She'll be ours forever.}
+\Cue{SUN}
+\Dialogue{Four days is a long time when I'm cornered.}
+\Scene{2}{INT. HELIOS LEGAL WAR ROOM — NIGHT}
+\Action{Lena 调出加州童星信托记录。}
+\Cue{LENA}
+\Dialogue{If the original minor contract was properly approved, we may not break it. But her earnings were legally protected.}
+\Action{搜索结果返回：AVA VANCE COOGAN TRUST — BALANCE \$0。}
+\Cue{SUN}
+\Dialogue{She made millions before eighteen.}
+\Cue{LENA}
+\Dialogue{And none of it reached her trust.}
+\Action{屏幕映在 Sun 眼中。}
+\Cue{SUN}
+\Dialogue{Don't buy her. Prove they stole her.}
+\Action{Sun 把转账页面关掉，Oracle 立刻警告：DEAL WINDOW CLOSING。}
+\Cue{MAYA}
+\Dialogue{You can still save her company.}
+\Cue{SUN}
+\Dialogue{Or make her company mine.}
+\Cue{MAYA}
+\Dialogue{You finally hear it.}
+\Cue{SUN}
+\Dialogue{I hate hearing it.}
+\Cue{MAYA}
+\Dialogue{Good. Growth should embarrass you.}
+\Action{Sun 打开证据文件，而不是银行账户。}
+\Cue{SUN}
+\Dialogue{If I give her this, she may choose a life without me.}
+\Cue{MAYA}
+\Dialogue{Then give her something you've never given anyone—the right to disappoint you.}
+\Transition{CUT TO BLACK.}
+\Episode{51}{THE FORGERY}
+\EpisodeMeta{本集目标}{组成可在发布会公开的三件硬证据，并逼父母承认代签。}
+\EpisodeMeta{尾钩}{Elaine 用 Ava 的位置换自保。}
+\Scene{1}{INT. VANCE FAMILY OFFICE — NIGHT}
+\Action{Sun 与 Lena 突然进入。桌上摊着银行原件、笔迹鉴定和录音设备。}
+\Cue{LENA}
+\Dialogue{Nine million in protected childhood earnings diverted to Vance Legacy. A forged signature. And this.}
+\Action{她播放 Grant 的秘密录音。}
+\Cue{GRANT (RECORDING)}
+\Dialogue{Investors don't need to know Ava disputes the rights. After launch, litigation becomes a cost of business.}
+\Action{Victor 面如死灰。}
+\Cue{SUN}
+\Dialogue{Who signed for her?}
+\Cue{VICTOR}
+\Dialogue{I did.}
+\Action{Elaine猛地看他。}
+\Cue{VICTOR}
+\Dialogue{She was sixteen. One movie could save all of us.}
+\Cue{SUN}
+\Dialogue{So you saved the family and sold the child.}
+\Cue{ELAINE}
+\Dialogue{We made her Ava Vance!}
+\Cue{SUN}
+\Dialogue{She was a person first.}
+\Scene{2}{INT. OFFICE HALL — MOMENTS LATER}
+\Action{Elaine 偷偷追上 Sun。}
+\Cue{ELAINE}
+\Dialogue{I know where she is. Protect me from the fraud case, and I'll tell you.}
+\Cue{SUN}
+\Dialogue{You still think she's a deal.}
+\Action{录音继续。Victor 的声音发抖。}
+\Cue{VICTOR (RECORDING)}
+\Dialogue{Ava was sedated. She couldn't sign. You said the renewal couldn't wait.}
+\Cue{GRANT (RECORDING)}
+\Dialogue{I said the asset couldn't wait.}
+\Action{Lena 停止播放。}
+\Cue{LENA}
+\Dialogue{That's fraud, unlawful exploitation, and securities misrepresentation.}
+\Cue{SUN}
+\Dialogue{It's also her father confessing.}
+\Cue{LENA}
+\Dialogue{She may burn the evidence to protect him.}
+\Cue{SUN}
+\Dialogue{Then we don't choose for her.}
+\Action{他复制出唯一一份未加密文件，收件人只写 AVA。}
+\Transition{CUT TO BLACK.}
+\Episode{52}{NO DEAL}
+\EpisodeMeta{本集目标}{让 Sun 拒绝用交易寻找 Ava，再凭真正理解找到她。}
+\EpisodeMeta{尾钩}{Ava 开门问他是否带钱。}
+\Scene{1}{INT. VANCE FAMILY HALL — CONTINUOUS}
+\Cue{ELAINE}
+\Dialogue{Without me, you may never find her.}
+\Cue{SUN}
+\Dialogue{Then I find her without you.}
+\Action{他离开。Elaine 的筹码第一次失效。}
+\Scene{2}{INT. HELIOS OFFICE — NIGHT}
+\Action{Sun、Maya、Lena 面对地图。}
+\Cue{SUN}
+\Dialogue{Where did she go after your press conference?}
+\Cue{MAYA}
+\Dialogue{The cheap apartment.}
+\Cue{SUN}
+\Dialogue{Before that. The first night she disappeared from everyone.}
+\Action{Maya 想起。}
+\Cue{MAYA}
+\Dialogue{An ocean motel near Santa Monica. No mirrors. Cash only.}
+\Scene{3}{EXT. OLD OCEAN MOTEL — PRE-DAWN}
+\Action{Sun 独自站在褪色房门前，没有保镖。敲门。}
+\Action{门开一条缝。Ava 消瘦、没化妆，像终于不是任何人的产品。}
+\Cue{AVA}
+\Dialogue{Did you bring the money?}
+\Action{Ava 把门链扣着，只留一道缝。}
+\Cue{AVA}
+\Dialogue{Did Sun send you?}
+\Cue{LENA}
+\Dialogue{He sent the evidence. I chose to bring it.}
+\Cue{AVA}
+\Dialogue{What's the difference?}
+\Cue{LENA}
+\Dialogue{He doesn't know your address.}
+\Action{Ava 第一次松动。}
+\Cue{AVA}
+\Dialogue{What does he want?}
+\Cue{LENA}
+\Dialogue{Nothing written on a contract.}
+\Cue{AVA}
+\Dialogue{That's not an answer.}
+\Cue{LENA}
+\Dialogue{It's the first answer he didn't ask me to control.}
+\Action{Ava 解开门链，但没有邀请 Lena 进屋。}
+\Transition{CUT TO BLACK.}
+\Episode{53}{BUY YOURSELF}
+\EpisodeMeta{本集目标}{完成 Sun 的人物高潮\CNdash{}给予能力，但不购买结果。}
+\EpisodeMeta{尾钩}{“Buy yourself.”}
+\Scene{1}{INT. OCEAN MOTEL ROOM — PRE-DAWN}
+\Action{房间很小，所有镜子都盖着毛巾。Sun 将一个文件袋放在桌上。}
+\Cue{SUN}
+\Dialogue{No money.}
+\Cue{AVA}
+\Dialogue{Then why are you here?}
+\Cue{SUN}
+\Dialogue{Your father's confession. The trust records. Grant lying to investors. A legal team with one instruction: they work for you.}
+\Action{Ava 不碰文件。}
+\Cue{AVA}
+\Dialogue{What do you want?}
+\Cue{SUN}
+\Dialogue{Nothing.}
+\Cue{AVA}
+\Dialogue{You always want something.}
+\Cue{SUN}
+\Dialogue{I wanted you to stay because I paid. I wanted you to tell the truth because I investigated. I wanted every answer before you could leave.}
+\Action{他把指甲锉放在文件袋上。}
+\Cue{SUN}
+\Dialogue{I'm done turning love into collateral.}
+\Cue{AVA}
+\Dialogue{If I use this, my parents could go to prison.}
+\Cue{SUN}
+\Dialogue{Your choice.}
+\Action{他走到门口。}
+\Cue{AVA}
+\Dialogue{Sun.}
+\Action{他停，却没有回头索要回应。}
+\Cue{SUN}
+\Dialogue{I'm not buying you. Buy yourself.}
+\Action{门关上。Ava 看向只属于自己的证据。}
+\Action{Ava 接过证据，却没有立刻打开。}
+\Cue{AVA}
+\Dialogue{If I use this, my father goes to prison.}
+\Cue{SUN}
+\Dialogue{Maybe.}
+\Cue{AVA}
+\Dialogue{My mother loses the houses.}
+\Cue{SUN}
+\Dialogue{Maybe.}
+\Cue{AVA}
+\Dialogue{And Grant destroys every private thing he has on me.}
+\Cue{SUN}
+\Dialogue{Probably.}
+\Cue{AVA}
+\Dialogue{You're supposed to tell me you can stop all of that.}
+\Cue{SUN}
+\Dialogue{I can try. But the choice stays ugly, and it stays yours.}
+\Action{她终于打开文件。第一页就是自己的伪造签名。}
+\Transition{CUT TO BLACK.}
+\Episode{54}{HER CHOICE}
+\EpisodeMeta{本集目标}{把最终行动权完整交还 Ava，并让 Maya 承认自己当年也替她做了选择。}
+\EpisodeMeta{尾钩}{Ava 穿上战袍。}
+\Scene{1}{INT. OCEAN MOTEL ROOM — MORNING}
+\Action{Ava 一页页翻证据。电视预告 AVA FOREVER 发布会。数字 Ava 朝观众飞吻。}
+\Action{Maya 进门，停在远处。}
+\Cue{AVA}
+\Dialogue{Did he send you to convince me?}
+\Cue{MAYA}
+\Dialogue{He didn't send me.}
+\Cue{AVA}
+\Dialogue{If I expose them, America sees what I let happen.}
+\Cue{MAYA}
+\Dialogue{What they did to a child.}
+\Cue{AVA}
+\Dialogue{You asked me to leave once. I didn't.}
+\Cue{MAYA}
+\Dialogue{And I punished you by being brave for both of us. I walked into that press conference and made your choice in public.}
+\Action{Ava 看她。}
+\Cue{MAYA}
+\Dialogue{I'm not doing that again. Hide. Fight. Go back to him. Never see either of us. This one is yours.}
+\Scene{2}{INT. MOTEL BATHROOM — LATER}
+\Action{Ava 扯下盖住镜子的毛巾。她直视素颜的自己。}
+\Action{随后穿上黑色发布会礼服，把证据盘藏进手包。}
+\CueP{AVA}{对镜子}
+\Dialogue{My name is Ava Vance.}
+\Action{这一次不是台词，是确认。}
+\Action{Maya 把 Ava 的两部手机摆在床上：一部连着 Sun，一部连着 Grant。}
+\Cue{MAYA}
+\Dialogue{Pick neither.}
+\Cue{AVA}
+\Dialogue{Silence is still a choice.}
+\Cue{MAYA}
+\Dialogue{Then choose loudly.}
+\Cue{AVA}
+\Dialogue{My father will say I ruined him.}
+\Cue{MAYA}
+\Dialogue{He used your name to save himself.}
+\Cue{AVA}
+\Dialogue{And Sun will think the evidence won me back.}
+\Cue{MAYA}
+\Dialogue{Only if you go back as a prize.}
+\Action{Ava 拿起第三部干净手机，拨给联邦检察官。}
+\Transition{CUT TO BLACK.}
+\Episode{55}{THE LAUNCH}
+\EpisodeMeta{本集目标}{把反派胜利推到最高点，再让真人以最简单的出场夺回画面。}
+\EpisodeMeta{尾钩}{“You forgot to invite me.”}
+\Scene{1}{INT. AVA FOREVER GLOBAL LAUNCH — NIGHT}
+\Action{巨型弧幕上，数字 Ava 从少女变成女王，再变回永恒的二十四岁。Grant 站在台中央。}
+\Cue{GRANT}
+\Dialogue{Stars age. Schedules fail. Human talent says no. Tonight, cinema becomes forever.}
+\Action{数字 Ava 走到虚拟舞台边缘。}
+\Cue{DIGITAL AVA}
+\Dialogue{I'll be anything you want me to be.}
+\Action{投资人起立鼓掌。后台，技术员完成 RIGHTS ACTIVATION 倒计时。}
+\Cue{TECH}
+\Dialogue{Ten… nine…}
+\Action{Sun 与 Lena 在远处观看直播。他没有动作。}
+\Cue{LENA}
+\Dialogue{If she doesn't come, we can't choose for her.}
+\Action{倒计时：THREE… TWO…}
+\Action{会场大门打开。真人 Ava 独自走入，踩过投影中自己的脸。}
+\Cue{AVA}
+\Dialogue{You forgot to invite me.}
+\Action{全场死寂。}
+\Action{Ava Forever 的数字替身站在巨幕上，与真人一模一样。}
+\Cue{DIGITAL AVA}
+\Dialogue{You cannot delete me.}
+\Cue{AVA}
+\Dialogue{I don't have to. I just have to name who made you.}
+\Cue{GRANT}
+\Dialogue{Security.}
+\Action{没有人动。Lena 已把证据同步到会场每部手机。}
+\Cue{AVA}
+\Dialogue{This is not an AI scandal. It's an ownership scandal.}
+\Cue{GRANT}
+\Dialogue{You signed.}
+\Cue{AVA}
+\Dialogue{Then zoom in.}
+\Action{巨幕放大两个签名。笔画完全一致，连同一个错误都复制了。}
+\Cue{GRANT}
+\Dialogue{Coincidence.}
+\Action{Ava 播放 Victor 的录音。会场听见：“YOU SAID SHE'D NEVER KNOW.”}
+\Cue{AVA}
+\Dialogue{Still a coincidence?}
+\Transition{CUT TO BLACK.}
+\Episode{56}{YOU DON'T OWN ME}
+\EpisodeMeta{本集目标}{由 Ava 亲手完成证据反杀，并让直播无法被 Grant 关掉。}
+\EpisodeMeta{尾钩}{Elaine 用“为了你”做最后勒索。}
+\Scene{1}{INT. GLOBAL LAUNCH — CONTINUOUS}
+\Action{Grant 迅速恢复笑容。}
+\Cue{GRANT}
+\Dialogue{Ava, what a surprise. Security—}
+\Cue{AVA}
+\Dialogue{You can own my old movies. You can own photographs you paid for. But you sold investors rights you knew were disputed.}
+\Action{她将证据盘插入台上电脑。巨幕切成银行流水。}
+\Cue{AVA}
+\Dialogue{Nine million dollars stolen from my childhood trust.}
+\Action{下一页：两份签名叠加，明显不同。}
+\Cue{AVA}
+\Dialogue{A contract signed by my father, using my name.}
+\Action{Grant 示意切直播。技术员按键，无效。}
+\Scene{2}{INT. HELIOS SERVER ROOM — SAME}
+\Action{Lena 维持多平台镜像直播。}
+\Cue{LENA}
+\Dialogue{Try buying this room.}
+\Scene{3}{INT. GLOBAL LAUNCH — CONTINUOUS}
+\Action{录音响彻会场：“Investors don't need to know Ava disputes the rights.”}
+\Action{投资人开始离席。}
+\Action{Elaine 冲上台抓住 Ava。}
+\Cue{ELAINE}
+\Dialogue{Everything we did was for you!}
+\Action{Ava 望着母亲，眼泪终于落下。}
+\Action{直播评论飞速滚动：LIAR、GOLD DIGGER、WE BELIEVE AVA。}
+\Cue{GRANT}
+\Dialogue{Turn off the feed.}
+\Cue{AVA}
+\Dialogue{No. You wanted an audience.}
+\Cue{GRANT}
+\Dialogue{They'll tear your family apart.}
+\Cue{AVA}
+\Dialogue{My family did that when they sold my name.}
+\Action{Victor 站起来，想离场。执法人员堵住出口。}
+\Cue{VICTOR}
+\Dialogue{Ava, please.}
+\Cue{AVA}
+\Dialogue{You used my yes before I understood the word.}
+\Action{她看向镜头。}
+\Cue{AVA}
+\Dialogue{Today, you hear my no.}
+\Transition{CUT TO BLACK.}
+\Episode{57}{NOT YOUR INVESTMENT}
+\EpisodeMeta{本集目标}{完成家庭切割与事业代价；让两位主角都失去旧身份的一部分。}
+\EpisodeMeta{尾钩}{记者问 Ava 是否会回到 Sun 身边。}
+\Scene{1}{INT. GLOBAL LAUNCH — CONTINUOUS}
+\Cue{ELAINE}
+\Dialogue{We gave you everything.}
+\Cue{AVA}
+\Dialogue{No. I gave you everything. I was sixteen.}
+\Action{Victor 站起。}
+\Cue{VICTOR}
+\Dialogue{We made you a star.}
+\Cue{AVA}
+\Dialogue{You were my parents. I was not your investment.}
+\Action{她拿下母亲的手。}
+\Cue{AVA}
+\Dialogue{From this moment, neither of you speaks for me.}
+\Action{监管调查人员进入会场，封存 Grant 的设备。投资人撤掉签约牌。数字 Ava 在巨幕上故障、重复：I NEVER SAY— I NEVER—}
+\Scene{2}{INT. HELIOS BOARDROOM — SAME}
+\Action{Sun 看手机直播。董事会投票结果出现：REMOVED AS CEO，保留创始人席位。}
+\Cue{MARCUS}
+\Dialogue{You lost the company for her.}
+\Cue{SUN}
+\Dialogue{No. I lost control of it. There's a difference.}
+\Scene{3}{EXT. LAUNCH VENUE — LATER}
+\Action{记者包围 Ava。}
+\Cue{REPORTER}
+\Dialogue{Will you go back to the billionaire who lost his company helping you?}
+\Action{Ava 看向远处，却没有看见 Sun。}
+\Action{Helios 股东会屏幕显示 Sun 的罢免票数不断上升。}
+\Cue{MARCUS}
+\Dialogue{Withdraw the evidence and the board restores you tonight.}
+\Cue{SUN}
+\Dialogue{The evidence isn't mine to withdraw.}
+\Cue{MARCUS}
+\Dialogue{You gave away control for a woman who left you.}
+\Cue{SUN}
+\Dialogue{No. I stopped using control to keep her.}
+\Action{Ava 在直播后台听见这段话，却没有走进会场。}
+\Cue{MARCUS}
+\Dialogue{Will she come back?}
+\Cue{SUN}
+\Dialogue{That's still the wrong question.}
+\Action{投票定格：SUN GE — REMOVED AS CEO。}
+\Transition{CUT TO BLACK.}
+\Episode{58}{I DON'T NEED HER BACK}
+\EpisodeMeta{本集目标}{给 Maya 一个完整、尊严且不依附主角爱情的结局。}
+\EpisodeMeta{尾钩}{这从来不是 Sun 能赢的比赛。}
+\Scene{1}{INT. BASKETBALL ARENA — NIGHT}
+\Action{Maya 完成最后一场主场比赛。终场哨响，全场高喊她的名字。她把球送给看台上的小女孩。}
+\Scene{2}{INT. EMPTY ARENA — LATER}
+\Action{观众散去。Sun 坐在场边，领带松开。Maya 走来，把那张年轻时合照递给他。}
+\Cue{SUN}
+\Dialogue{You still love her?}
+\Cue{MAYA}
+\Dialogue{Of course.}
+\Action{Sun 看她。}
+\Cue{MAYA}
+\Dialogue{I just don't need her to love me back anymore.}
+\Cue{SUN}
+\Dialogue{How do you do that?}
+\Cue{MAYA}
+\Dialogue{Stop calling possession a happy ending.}
+\Action{她把照片放在他身边。}
+\Cue{SUN}
+\Dialogue{Why give me this?}
+\Cue{MAYA}
+\Dialogue{I'm not. Give it to her.}
+\Action{Maya 转身走向球员通道。}
+\Cue{MAYA}
+\Dialogue{This was never yours to win.}
+\Action{全场清洁灯一盏盏熄灭。}
+\Action{Maya 把那张旧合照从手机里永久删除。}
+\Cue{AVA}
+\Dialogue{You didn't have to do that.}
+\Cue{MAYA}
+\Dialogue{I kept it because I wanted proof we were real.}
+\Cue{AVA}
+\Dialogue{We were.}
+\Cue{MAYA}
+\Dialogue{And we ended. Both can be true.}
+\Action{她把一张新照片递给 Ava：两人此刻，没有滤镜。}
+\Cue{MAYA}
+\Dialogue{Keep this if you want. Delete it if you want.}
+\Cue{AVA}
+\Dialogue{That's new for us.}
+\Cue{MAYA}
+\Dialogue{Choice usually is.}
+\Transition{CUT TO BLACK.}
+\Episode{59}{ASK ME}
+\EpisodeMeta{本集目标}{在最小的空间完成无交易重逢，并让 Sun 第一次真正提出问题。}
+\EpisodeMeta{尾钩}{Ava 的 Maybe。}
+\Scene{1}{INT. GE FAMILY LAUNDROMAT — EVENING — MONTHS LATER}
+\Action{Sun 穿普通衬衫替父亲修收银机。门铃响。Ava 独自进来，没有司机、助理或墨镜。}
+\Cue{AVA}
+\Dialogue{You still have that picture?}
+\Cue{SUN}
+\Dialogue{What picture?}
+\Cue{AVA}
+\Dialogue{The one from 2007.}
+\Cue{SUN}
+\Dialogue{I gave it to the person in it.}
+\Action{她从包里拿出旧图和 Maya 的合照，都放在柜台上。}
+\Cue{AVA}
+\Dialogue{You should've sent another friend request.}
+\Cue{SUN}
+\Dialogue{You would've accepted?}
+\Cue{AVA}
+\Dialogue{No.}
+\Action{Sun 终于笑了。他拿指甲钳，方向又错。Ava 看不下去，拿过指甲锉替他轻磨一下，又停住。}
+\Cue{SUN}
+\Dialogue{Stay.}
+\Cue{AVA}
+\Dialogue{Don't tell me what to do.}
+\Cue{SUN}
+\Dialogue{Then what do I say?}
+\Cue{AVA}
+\Dialogue{Ask me.}
+\Action{Sun 第一次允许答案不确定。}
+\Cue{SUN}
+\Dialogue{Will you stay?}
+\Cue{AVA}
+\Dialogue{Maybe.}
+\Action{洗衣机轰鸣。Sun 没有拿出戒指，只把一枚洗衣币放在桌上。}
+\Cue{SUN}
+\Dialogue{Can I sit?}
+\Cue{AVA}
+\Dialogue{You already are.}
+\Cue{SUN}
+\Dialogue{Habit.}
+\Cue{AVA}
+\Dialogue{Dangerous one.}
+\Cue{SUN}
+\Dialogue{Can I ask if you're happy?}
+\Cue{AVA}
+\Dialogue{You can ask.}
+\Cue{SUN}
+\Dialogue{Are you?}
+\Cue{AVA}
+\Dialogue{Some days.}
+\Cue{SUN}
+\Dialogue{Can I be here on the other days?}
+\Action{Ava 把另一枚洗衣币推给他，没有回答。}
+\Transition{CUT TO BLACK.}
+\Episode{60}{NOBODY KNOWS}
+\EpisodeMeta{本集目标}{以“有人在的小空间”完成对全剧昂贵空房间的回答。}
+\EpisodeMeta{终钩/余味}{她不再需要被全世界看见，才能确认自己存在。}
+\Scene{1}{MONTAGE — MONTHS LATER}
+\begin{Bullets}
+  \item 娱乐新闻猜测：秘密婚礼、分手、怀孕、再度分手。
+  \item Sun 拒绝所有采访，仍作为创始人参加 HELIOS 听证。
+  \item Ava 以本人名义注册新公司，权利栏只有一个名字：AVA VANCE。
+  \item AVA FOREVER 网站关闭；Grant 的案件进入审理。
+  \item 曾经选定的代孕计划正式取消，文件由 Ava 亲手碎掉。
+\end{Bullets}
+\Scene{2}{INT. GE FAMILY LAUNDROMAT — NIGHT}
+\Action{卷帘门落下。洗衣机转动。Sun 和 Ava 坐在折衣台旁吃中餐外卖。}
+\Cue{SUN}
+\Dialogue{For the record, I can afford plates.}
+\Cue{AVA}
+\Dialogue{For the record, these are plates.}
+\Action{她举起纸盒。窗外公交车经过，车上的人没有一个看向店内。}
+\Cue{SUN}
+\Dialogue{Nobody knows you're here.}
+\Cue{AVA}
+\Dialogue{I know.}
+\Cue{SUN}
+\Dialogue{Does that bother you?}
+\Action{Ava 想了很久。她看着窗玻璃中的自己\CNdash{}只是一个坐在爱人身边的女人。}
+\Action{她摇头。}
+\Cue{AVA}
+\Dialogue{Not anymore.}
+\Action{Sun 没有说 Yes。}
+\Action{他只是把最后一个饺子夹到她纸盒里。}
+\Action{洗衣机继续转。小空间里，终于有人。}
+\Action{门外，记者的车驶过，没有认出他们。Sun 帮一个陌生人抬起洗衣篮，没报名字。}
+\Cue{AVA}
+\Dialogue{You didn't tell him who you are.}
+\Cue{SUN}
+\Dialogue{He didn't ask.}
+\Cue{AVA}
+\Dialogue{That used to bother you.}
+\Cue{SUN}
+\Dialogue{Being unknown is cheaper than I thought.}
+\Cue{AVA}
+\Dialogue{Careful. You might start liking ordinary things.}
+\Cue{SUN}
+\Dialogue{Can I like this?}
+\Action{他看向两人之间的洗衣币。}
+\Cue{AVA}
+\Dialogue{You can stay until the cycle ends.}
+\Action{洗衣机剩余时间：00:02。数字归零，Ava 没有起身。}
+\Cue{SUN}
+\Dialogue{The cycle ended.}
+\Cue{AVA}
+\Dialogue{I know.}
+\Cue{SUN}
+\Dialogue{May I stay anyway?}
+\Action{Ava 把空洗衣篮推给他。}
+\Cue{AVA}
+\Dialogue{Carry your half.}
+\Transition{END.}
+\PartPage{第四部分}{编剧室执行备忘}
+\SectionHead{1. 每集时长控制}
+\begin{Bullets}
+  \item 100–125 秒为目标；本稿英语对白约 70–140 词/集、平均约 95 词，按短剧表演语速处理；动作、停顿、反应镜头与竖屏特写约占 40–60 秒。
+  \item EP01、EP12、EP24、EP41、EP44、EP55–60 可放宽至 125–140 秒，作为节点集。
+  \item 若平台强制 90 秒，优先删解释句，不删开场冲突、关系反应和尾钩。
+\end{Bullets}
+\SectionHead{2. 表演口径}
+\begin{Bullets}
+  \item Sun 的台词要短、快、像报价；只有 EP20、EP53、EP59 允许明显停顿。
+  \item Ava 不是冷脸捞女。每次提出金额后都要给一个 0.5–1 秒的观察反应：她在等待的不是到账提示，而是对方是否迟疑。
+  \item Maya 永远不演嫉妒。她攻击 Sun 时是在保护边界，攻击 Ava 时是在要求诚实。
+  \item Grant 不咆哮。他越把剥削说成正常商业，越危险。
+  \item Elaine 的眼泪可以真；真实的爱与真实的剥削能同时存在，这才是 Ava 最难切割的原因。
+\end{Bullets}
+\SectionHead{3. 视觉复沓}
+\begin{Bullets}
+  \item **空**：空影院、空机舱、空顶层、空酒店层、空球馆；越贵越空。
+  \item **镜面**：Ava 早期避开镜子，中段砸镜面屏，EP54 主动揭开镜子，EP60 能平静看见倒影。
+  \item **手**：转账拇指、签字、戒指、指甲锉。关系变化尽量通过手部特写表达。
+  \item **橙色**：橙子艺术品、HELIOS 品牌灯、诊所日落、最终外卖盒；从昂贵概念回到日常实物。
+  \item **Yes / No / Ask**：前段 Yes 是毒品，中段 No 是分手，结尾 Ask 才是爱。
+\end{Bullets}
+\SectionHead{4. 投流素材优先集}
+\begin{Bullets}
+  \item EP01：“Fifty million. Today.”
+  \item EP07：“How much did she cost you?”
+  \item EP12：“Ask her what happened the last time a rich man tried to own her.”
+  \item EP20：“Because then you might leave.”
+  \item EP28：“She's waiting for your first no.”
+  \item EP36：“Buying the cage doesn't open it.”
+  \item EP41：“Let me think.”
+  \item EP47：数字 Ava “I never say no.”
+  \item EP53：“I'm not buying you. Buy yourself.”
+  \item EP56：“You don't own me.”
+  \item EP59：“Ask me.”
+  \item EP60：“Not anymore.”
+\end{Bullets}
+\SectionHead{5. 本土化注意}
+\begin{Bullets}
+  \item WNBA、Coogan Trust、SEC/投资人披露等术语在正式法务定稿时需由美国娱乐法与证券律师复核。
+  \item 不直接影射现实加密行业人物、现役运动员或演员；HELIOS、TORRENT-X、Warren Hale 等必须维持虚构。
+  \item 若拍摄预算受限，Lanai 可由加州海边与封闭餐厅替代；全球发布会可用 LED 影棚完成。
+  \item 竖屏构图避免大远景依赖：奢华通过材质、服务动作、金额屏幕和人物反应呈现。
+  \item 英文台词为开发稿，正式开机前建议由美籍编剧进行一次地域口语 polish，重点处理 Sun 的 Chinese American 语感与 Maya 的体育圈表达。
+\end{Bullets}
+\SectionHead{6. 下一版优先打磨清单}
+\begin{Numbers}
+  \item 按目标发行平台确认单集是 90 秒还是 120 秒，再做逐集词数锁定。
+  \item 确认拍摄州与法律顾问意见，微调未成年人合同、Coogan Trust 和发布会调查流程。
+  \item 围读重点检查 EP14、EP20、EP31、EP41、EP53 的心理逻辑，这五集决定两位主角是否“疯得可信”。
+  \item 由 casting 反馈微调 Maya 戏份；她必须有独立明星气场，不能沦为功能性前任。
+  \item 对 EP01、EP07、EP41、EP55 各制作一版 15 秒广告剪辑脚本，用于素材测试后反哺正片。
+\end{Numbers}
+
+\end{document}
