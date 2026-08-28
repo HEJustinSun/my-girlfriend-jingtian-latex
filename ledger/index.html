@@ -33,9 +33,9 @@ body{
   line-height:1.75;
 }
 .page{
-  max-width:720px;
+  max-width:900px;
   margin:24px auto 64px;
-  padding:56px clamp(18px,5vw,56px) 48px;
+  padding:56px clamp(18px,5vw,64px) 48px;
   background:var(--paper);
   border:1px solid var(--line);
   box-shadow:0 1px 3px rgba(33,32,28,.06);
@@ -161,7 +161,7 @@ h2{
   letter-spacing:.06em;
   color:var(--sea);
 }
-.t-body p{margin:2px 0 0;font-size:14px}
+.t-body p{margin:2px 0 0;font-size:14px;max-width:640px}
 .t-ref{display:block;margin-top:2px;font-size:11px;color:var(--muted)}
 
 /* ---------- 三、流水明细 ---------- */
@@ -281,7 +281,7 @@ td.ref,th.ref{width:70px;color:var(--muted);font-size:11.5px}
   font-size:13px;
   color:var(--gray);
 }
-.notes li{margin-bottom:10px}
+.notes li{margin-bottom:10px;max-width:640px}
 .notes li:last-child{margin-bottom:0}
 
 /* ---------- 页脚 ---------- */
@@ -295,6 +295,7 @@ footer{
   font-size:14.5px;
   line-height:2;
   color:var(--ink);
+  max-width:640px;
 }
 .audit .src{
   display:block;
