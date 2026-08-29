@@ -11,3 +11,8 @@ mkdir -p build
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 xelatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
 ```
+
+
+## 社区衍生项目
+
+* [cinematic-confessional-writing](https://github.com/5ysy/cinematic-confessional-writing) — 将本文的叙事技法整理为可供 Codex、Claude Code 等 Agent 使用的中文写作 Skill。
