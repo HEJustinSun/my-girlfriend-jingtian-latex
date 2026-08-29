@@ -1,0 +1,10 @@
+# 依赖与构建产物
+node_modules/
+dist/
+.wrangler/
+
+# 由 scripts/sync-bridge-assets.mjs 从 apps/bridge 生成，勿手改
+public/bridge.mjs
+public/install.sh
+public/install.ps1
+public/bridge-version.json

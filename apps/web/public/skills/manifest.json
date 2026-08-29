@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "skills": {
+    "sunge-mindset": { "name": "孙哥思维", "always": true },
+    "topic-love": {
+      "name": "爱情",
+      "samples": ["对象跟我要彩礼三千万，给吗？", "我该不该挽回前任？"]
+    },
+    "topic-career": {
+      "name": "事业",
+      "samples": ["老板画饼不给钱，跳槽还是苟着？", "我想辞职创业，孙哥怎么看？"]
+    },
+    "topic-money": {
+      "name": "搞钱",
+      "samples": ["工资五千，怎么实现财务自由？", "朋友找我借十万，借吗？"]
+    },
+    "topic-gossip": {
+      "name": "吃瓜",
+      "samples": ["孙哥，五千万的事你后悔吗？", "给我讲讲包场《疯狂动物城2》的名场面"]
+    }
+  }
+}

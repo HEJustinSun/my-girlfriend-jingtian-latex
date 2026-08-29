@@ -1,0 +1,694 @@
+/* 有事问孙哥 —— 书籍排版风格，呼应《我的女友景甜》XeLaTeX 工程：
+   思源宋体（Noto Serif SC 即其 Google 发行版）、墨色 #161618、灰 #5C5C62、封面红。 */
+
+:root {
+  --paper: #f7f4ee;
+  --paper-deep: #eee9e0;
+  --ink: #161618;
+  --ink-soft: #5c5c62;
+  --red: #c41e24;
+  --line: #ddd6c9;
+  --serif: 'Noto Serif SC', 'Songti SC', serif;
+  --sans: 'Noto Sans SC', 'PingFang SC', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  font-family: var(--serif);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 500px at 50% -10%, rgba(196, 30, 36, 0.045), transparent 60%),
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(22, 22, 24, 0.012) 2px 4px),
+    var(--paper);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 48px 24px 140px;
+  min-height: 100vh;
+}
+
+.page-chatting {
+  padding-bottom: 220px;
+}
+
+/* ---------- 封面区 ---------- */
+.masthead {
+  animation: rise 0.7s ease both;
+}
+
+.masthead-meta {
+  display: flex;
+  gap: 8px;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  border-top: 3px solid var(--ink);
+  padding-top: 14px;
+  min-height: 32px;
+}
+
+.online {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2e7d4f;
+  box-shadow: 0 0 0 3px rgba(46, 125, 79, 0.15);
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+.gh-link {
+  margin-left: auto;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--line);
+  transition: color 0.15s;
+}
+
+.gh-link:hover {
+  color: var(--red);
+  border-bottom-color: var(--red);
+}
+
+.fineprint a,
+.install-lead a {
+  color: inherit;
+}
+
+.title {
+  margin-top: 40px;
+  font-weight: 900;
+  font-size: clamp(52px, 13vw, 96px);
+  line-height: 1.12;
+  letter-spacing: 0.04em;
+}
+
+.title-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.title-ink {
+  display: block;
+  color: var(--ink);
+}
+
+.title-red {
+  display: block;
+  color: var(--red);
+}
+
+.byline {
+  margin-top: 22px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.page-chatting .masthead {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+
+.page-chatting .masthead-meta {
+  order: 2;
+  border: none;
+  padding: 0;
+  margin-left: auto;
+}
+
+.page-chatting .title {
+  margin: 0;
+  font-size: 26px;
+  display: flex;
+  gap: 2px;
+}
+
+.page-chatting .title-ink,
+.page-chatting .title-red {
+  display: inline;
+}
+
+.page-chatting .byline {
+  display: none;
+}
+
+.chat-actions {
+  order: 1;
+  display: flex;
+  gap: 8px;
+  margin-left: 18px;
+}
+
+.chat-action {
+  font-family: var(--sans);
+  font-size: 12px;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chat-action:hover:not(:disabled) {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.chat-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.resume-chat {
+  margin-top: 26px;
+  text-align: center;
+}
+
+.resume-chat-btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  border: none;
+  background: none;
+  color: var(--red);
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+
+.os-tabs {
+  display: flex;
+  gap: 2px;
+  margin-top: 14px;
+}
+
+.os-tab {
+  font-family: var(--sans);
+  font-size: 12px;
+  padding: 5px 14px;
+  border: 1px solid var(--line);
+  border-bottom: none;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.os-tab-on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.os-tabs + .terminal {
+  margin-top: 0;
+}
+
+/* ---------- 题词 ---------- */
+.epigraph {
+  margin: 56px auto 8px;
+  text-align: center;
+  animation: rise 0.7s 0.15s ease both;
+}
+
+.epigraph p {
+  white-space: pre-line;
+  font-size: 17px;
+  color: var(--ink);
+  margin: 18px 0;
+}
+
+.nbreak {
+  display: block;
+  text-align: center;
+  color: var(--ink-soft);
+  letter-spacing: 0.5em;
+  font-size: 13px;
+  user-select: none;
+}
+
+.nbreak-row {
+  margin: 30px 0;
+}
+
+/* ---------- 桥状态 / 控制台 ---------- */
+.console {
+  margin-top: 48px;
+  animation: rise 0.7s 0.3s ease both;
+}
+
+.console-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.lamp {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.lamp-checking {
+  background: #b99e46;
+  animation: blink 1.2s infinite;
+}
+
+.lamp-connected {
+  background: #2e7d4f;
+  box-shadow: 0 0 0 3px rgba(46, 125, 79, 0.15);
+}
+
+.lamp-missing {
+  background: var(--red);
+  animation: blink 1.6s infinite;
+}
+
+.console-hint {
+  font-style: normal;
+  color: #b07a1e;
+  margin-left: 6px;
+}
+
+.console-warn {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--red);
+  margin-top: 10px;
+}
+
+.agent-picker {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  align-items: center;
+}
+
+.agent-pill {
+  font-family: var(--sans);
+  font-size: 12px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.agent-pill:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.agent-pill-on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.agent-pill:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.agent-off {
+  margin-left: 4px;
+  font-size: 10px;
+  color: var(--red);
+}
+
+.agent-rescan {
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  font-size: 15px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.agent-rescan:hover {
+  color: var(--red);
+}
+
+/* ---------- 安装面板 ---------- */
+.install {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.5);
+  padding: 22px 24px;
+}
+
+.install-lead {
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.terminal {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--ink);
+  color: #e8e6e1;
+  padding: 13px 16px;
+  font-size: 13px;
+  overflow-x: auto;
+}
+
+.terminal code {
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  white-space: nowrap;
+}
+
+.terminal .copy {
+  margin-left: auto;
+  flex: none;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--paper);
+  background: var(--red);
+  border: none;
+  padding: 5px 14px;
+  cursor: pointer;
+}
+
+.install-steps {
+  margin: 14px 0 0 18px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+  display: grid;
+  gap: 6px;
+}
+
+.install-steps code {
+  background: var(--paper-deep);
+  padding: 1px 6px;
+  font-size: 12px;
+}
+
+.install-safari {
+  margin-top: 14px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #b07a1e;
+}
+
+.install-safari a {
+  color: inherit;
+}
+
+/* ---------- 话题 ---------- */
+.topics {
+  margin-top: 40px;
+  animation: rise 0.7s 0.45s ease both;
+}
+
+.topic-chips {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.chip {
+  font-family: var(--serif);
+  font-size: 15px;
+  padding: 7px 22px;
+  background: transparent;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chip:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.chip-on {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.samples {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.sample {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sample:hover:not(:disabled) {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.sample:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- 对话 ---------- */
+.chat {
+  margin-top: 44px;
+}
+
+.msg-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.msg-user {
+  margin-left: 15%;
+  text-align: right;
+}
+
+.msg-user p {
+  display: inline-block;
+  text-align: left;
+  background: var(--paper-deep);
+  padding: 12px 18px;
+  font-size: 15px;
+  white-space: pre-line;
+}
+
+.msg-sun .msg-label {
+  color: var(--red);
+}
+
+.msg-sun .msg-body p {
+  font-size: 16.5px;
+  margin-bottom: 14px;
+  text-align: justify;
+  white-space: pre-line;
+}
+
+.caret {
+  color: var(--red);
+  animation: blink 1s infinite;
+  font-family: var(--sans);
+}
+
+.thinking {
+  margin-bottom: 10px;
+}
+
+.thinking-toggle {
+  border: none;
+  background: none;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+
+.thinking-text {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  border-left: 2px solid var(--line);
+  padding-left: 12px;
+  white-space: pre-line;
+}
+
+.waiting {
+  margin-top: 26px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--ink-soft);
+  animation: breathe 2s ease-in-out infinite;
+}
+
+.chat-error {
+  margin-top: 26px;
+  text-align: center;
+}
+
+.chat-error p {
+  color: var(--red);
+  font-family: var(--sans);
+  font-size: 13px;
+  margin: 12px 0;
+}
+
+/* ---------- 输入区 ---------- */
+.composer-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 14px 24px 18px;
+  background: linear-gradient(transparent, var(--paper) 30%);
+}
+
+.composer {
+  max-width: 632px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  background: #fffdf9;
+  border: 1px solid var(--ink);
+  padding: 10px 10px 10px 18px;
+  box-shadow: 4px 4px 0 rgba(22, 22, 24, 0.9);
+}
+
+.composer textarea {
+  flex: 1;
+  border: none;
+  background: none;
+  resize: none;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  outline: none;
+  max-height: 120px;
+}
+
+.composer textarea::placeholder {
+  color: #a9a49a;
+}
+
+.send {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.send:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+}
+
+.send:disabled {
+  background: var(--line);
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.send-stop {
+  background: var(--ink);
+}
+
+.fineprint {
+  max-width: 632px;
+  margin: 10px auto 0;
+  font-family: var(--sans);
+  font-size: 11px;
+  color: #a9a49a;
+  text-align: center;
+}
+
+/* ---------- 动画 ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes breathe {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (max-width: 520px) {
+  .page {
+    padding: 28px 16px 150px;
+  }
+
+  .agent-picker {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .msg-user {
+    margin-left: 8%;
+  }
+}

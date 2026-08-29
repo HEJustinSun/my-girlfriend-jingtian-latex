@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sunge",
+  "main": "./src/worker/index.ts",
+  "compatibility_date": "2026-08-01",
+  "routes": [{ "pattern": "sunge.app", "custom_domain": true }],
+  "durable_objects": {
+    "bindings": [{ "name": "PRESENCE", "class_name": "Presence" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Presence"] }],
+  "assets": {
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // /install.sh(.ps1) 与 /bridge.mjs 需要 Worker 注入站点 origin；/api/* 走 Worker（在线人数等）
+    "run_worker_first": ["/install.sh", "/install.ps1", "/bridge.mjs", "/api/*"]
+  },
+  "observability": { "enabled": true }
+}
