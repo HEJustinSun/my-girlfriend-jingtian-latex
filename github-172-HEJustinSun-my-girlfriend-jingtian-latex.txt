@@ -1,0 +1,6 @@
+% Corrected calculation: $50M = 50,000,000
+% Monthly: 50,000,000 / 24 ≈ 2,083,333.33
+% Yearly: 50,000,000 / 24 / 12 ≈ 173,611.11
+% The original claim of "20,833 yr" appears to be off by a factor of ~8.33 (likely miscomputed as 50M / 24 / 12 / 100)
+% Fixed expression:
+$50\,\text{M} = 50{,}000{,}000 = 2{,}083{,}333.\overline{3}\,\text{mo} \approx 173{,}611.11\,\text{yr}$
